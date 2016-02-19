@@ -1,4 +1,4 @@
-# SFBIExplorer
+# SFBIStats
 
 ## CONTENT
 
@@ -101,19 +101,22 @@ Some programming languages have been chosen to illustrate it.
 
 The project is easier to setup in a conda environment.
 Create the environment:
-conda create -n sfbi_stats_env python=2.7
+conda create -n myenv python=2.7
 
 Install the requirements:
 conda install matplotlib
 conda install pandas
-conda install pymongo
+conda install pymongo OR pip install bson
 pip install wordcloud
 conda install PIL
 conda install basemap
 pip install geopy
 
+Create the project's directory (ex: SFBIStats) and clone the repository there.
+You should end up with something like myenv/SFBIStats/sfbistats
+
 Make the project's packages available to python:
-export PYTHONPATH="$PYTHONPATH:/path/to/the/project/SFBIStats/sfbistats"
+export PYTHONPATH="$PYTHONPATH:/path/to/the/env/myenv/SFBIStats"
 
 ### Run the script
 
