@@ -1,0 +1,3 @@
+stopwords_en.txt : list taken from http://taporware.ualberta.ca/~taporware/cgi-bin/prototype/glasgowstoplist.txt with punctuation removed
+
+stopwords_fr.txt : from http://sites.univ-provence.fr/veronis/data/antidico.txt, with "d'un" and "d'une" added
