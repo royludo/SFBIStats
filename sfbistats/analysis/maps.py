@@ -33,13 +33,14 @@ def init_france_map():
     fig = plt.figure(figsize=(15, 15))
     ax = fig.add_subplot(111)
     fr_map = Basemap(projection='tmerc', resolution='l', area_thresh=1000, epsg=2192,
-                  llcrnrlon=llcrnrlon,
-                  llcrnrlat=llcrnrlat,
-                  urcrnrlon=urcrnrlon,
-                  urcrnrlat=urcrnrlat)
+                     llcrnrlon=llcrnrlon,
+                     llcrnrlat=llcrnrlat,
+                     urcrnrlon=urcrnrlon,
+                     urcrnrlat=urcrnrlat)
     fr_map.drawcoastlines()
     fr_map.drawcountries()
     return fig, ax, fr_map
+
 
 def draw_pie(ax, ratios, X=0, Y=0, size=100):
     xy = []
@@ -251,4 +252,4 @@ def run(job_list, output_dir):
             # submapIDF_contract_type.plot(x, y, marker='o', color='m', markersize=int(location_dict[city]['count']/2), alpha=0.5)
             plt.text(x, y, city)
 
-    plt.savefig(os.path.join(output_dir, 'figure_4_32.png'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'figure_4_3.png'), bbox_inches='tight')
