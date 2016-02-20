@@ -23,7 +23,25 @@ import os
 '''
 
 
-def draw_pie(ax, ratios=[0.4, 0.3, 0.3], X=0, Y=0, size=100):
+def init_france_map():
+    # map coordinates
+    llcrnrlon = -5.2
+    llcrnrlat = 42
+    urcrnrlon = 9
+    urcrnrlat = 52.5
+
+    fig = plt.figure(figsize=(15, 15))
+    ax = fig.add_subplot(111)
+    fr_map = Basemap(projection='tmerc', resolution='l', area_thresh=1000, epsg=2192,
+                  llcrnrlon=llcrnrlon,
+                  llcrnrlat=llcrnrlat,
+                  urcrnrlon=urcrnrlon,
+                  urcrnrlat=urcrnrlat)
+    fr_map.drawcoastlines()
+    fr_map.drawcountries()
+    return fig, ax, fr_map
+
+def draw_pie(ax, ratios, X=0, Y=0, size=100):
     xy = []
     start = 0.
     for ratio in ratios:
@@ -131,33 +149,20 @@ def run(job_list, output_dir):
     '''
         drawing part
     '''
-    # map coordinates
-    big_llcrnrlon = -5.2
-    big_llcrnrlat = 42
-    big_urcrnrlon = 9
-    big_urcrnrlat = 52.5
-
-    fig = plt.figure(figsize=(15, 15))
-    ax = fig.add_subplot(111)
-    map = Basemap(projection='tmerc', resolution='l', area_thresh=1000,
-                  llcrnrlon=big_llcrnrlon, llcrnrlat=big_llcrnrlat,
-                  urcrnrlon=big_urcrnrlon, urcrnrlat=big_urcrnrlat, epsg=2192)
-
-    map.drawcoastlines()
-    map.drawcountries()
+    fig, ax, fr_map = init_france_map()
 
     for city in location_dict.iterkeys():
         if not location_dict[city]['isinIDF']:
             # print city+" "+str(location_dict[city]['count'])
-            x, y = map(location_dict[city]['longitude'], location_dict[city]['latitude'])
-            map.plot(x, y, marker='o', color='m', markersize=int(location_dict[city]['count'] / 2), alpha=0.5)
+            x, y = fr_map(location_dict[city]['longitude'], location_dict[city]['latitude'])
+            fr_map.plot(x, y, marker='o', color='m', markersize=int(location_dict[city]['count'] / 2), alpha=0.5)
             plt.text(x + location_dict[city]['count'] * 320, y + location_dict[city]['count'] * 320, city)
 
     axins = zoomed_inset_axes(ax, 3.5, loc=3)
     # NE 49.241299, 3.55852
     # SW 48.120319, 1.4467
-    axins.set_xlim(map(location_dict['IDF']['longitude'] - 0.8, location_dict['IDF']['longitude'] + 0.8))
-    axins.set_ylim(map(location_dict['IDF']['latitude'] - 0.3, location_dict['IDF']['latitude'] + 0.3))
+    axins.set_xlim(fr_map(location_dict['IDF']['longitude'] - 0.8, location_dict['IDF']['longitude'] + 0.8))
+    axins.set_ylim(fr_map(location_dict['IDF']['latitude'] - 0.3, location_dict['IDF']['latitude'] + 0.3))
 
     map2 = Basemap(projection='tmerc', resolution='l', area_thresh=1000,
                    llcrnrlon=location_dict['IDF']['longitude'] - 0.8, llcrnrlat=location_dict['IDF']['latitude'] - 0.3,
@@ -175,19 +180,12 @@ def run(job_list, output_dir):
     plt.savefig(os.path.join(output_dir, 'figure_4_1.png'), bbox_inches='tight')
 
     ########################
-    fig = plt.figure(figsize=(15, 15))
-    ax = fig.add_subplot(111)
-    map_contract_type = Basemap(projection='tmerc', resolution='l', area_thresh=1000,
-                                llcrnrlon=big_llcrnrlon, llcrnrlat=big_llcrnrlat,
-                                urcrnrlon=big_urcrnrlon, urcrnrlat=big_urcrnrlat, epsg=2192)
-
-    map_contract_type.drawcoastlines()
-    map_contract_type.drawcountries()
+    fig, ax, fr_map = init_france_map()
 
     for city in location_dict.iterkeys():
         if not location_dict[city]['isinIDF']:
             print city + " " + str(location_dict[city]['count'])
-            x, y = map_contract_type(location_dict[city]['longitude'], location_dict[city]['latitude'])
+            x, y = fr_map(location_dict[city]['longitude'], location_dict[city]['latitude'])
             ratio_list = get_contract_type_ratios(location_dict[city])
             draw_pie(ax, ratios=ratio_list, X=x, Y=y, size=600)
             # map_contract_type.plot(x, y, marker='o', color='m', markersize=int(location_dict[city]['count']/2), alpha=0.5)
@@ -196,8 +194,8 @@ def run(job_list, output_dir):
     axins = zoomed_inset_axes(ax, 3.5, loc=3)
     # NE 49.241299, 3.55852
     # SW 48.120319, 1.4467
-    axins.set_xlim(map_contract_type(location_dict['IDF']['longitude'] - 0.8, location_dict['IDF']['longitude'] + 0.8))
-    axins.set_ylim(map_contract_type(location_dict['IDF']['latitude'] - 0.3, location_dict['IDF']['latitude'] + 0.3))
+    axins.set_xlim(fr_map(location_dict['IDF']['longitude'] - 0.8, location_dict['IDF']['longitude'] + 0.8))
+    axins.set_ylim(fr_map(location_dict['IDF']['latitude'] - 0.3, location_dict['IDF']['latitude'] + 0.3))
 
     submapIDF_contract_type = Basemap(projection='tmerc', resolution='l', area_thresh=1000,
                                       llcrnrlon=location_dict['IDF']['longitude'] - 0.8,
@@ -219,19 +217,12 @@ def run(job_list, output_dir):
     plt.savefig(os.path.join(output_dir, 'figure_4_2.png'), bbox_inches='tight')
 
     ########################
-    fig = plt.figure(figsize=(15, 15))
-    ax = fig.add_subplot(111)
-    map_subcontract_type = Basemap(projection='tmerc', resolution='l', area_thresh=1000,
-                                   llcrnrlon=big_llcrnrlon, llcrnrlat=big_llcrnrlat,
-                                   urcrnrlon=big_urcrnrlon, urcrnrlat=big_urcrnrlat, epsg=2192)
-
-    map_subcontract_type.drawcoastlines()
-    map_subcontract_type.drawcountries()
+    fig, ax, fr_map = init_france_map()
 
     for city in location_dict.iterkeys():
         if not location_dict[city]['isinIDF']:
             print city + " " + str(location_dict[city]['count'])
-            x, y = map_subcontract_type(location_dict[city]['longitude'], location_dict[city]['latitude'])
+            x, y = fr_map(location_dict[city]['longitude'], location_dict[city]['latitude'])
             ratio_list = get_contract_subtype_ratios(location_dict[city])
             draw_pie(ax, ratios=ratio_list, X=x, Y=y, size=600)
             # map_contract_type.plot(x, y, marker='o', color='m', markersize=int(location_dict[city]['count']/2), alpha=0.5)
@@ -240,9 +231,8 @@ def run(job_list, output_dir):
     axins = zoomed_inset_axes(ax, 3.5, loc=3)
     # NE 49.241299, 3.55852
     # SW 48.120319, 1.4467
-    axins.set_xlim(
-        map_subcontract_type(location_dict['IDF']['longitude'] - 0.8, location_dict['IDF']['longitude'] + 0.8))
-    axins.set_ylim(map_subcontract_type(location_dict['IDF']['latitude'] - 0.3, location_dict['IDF']['latitude'] + 0.3))
+    axins.set_xlim(fr_map(location_dict['IDF']['longitude'] - 0.8, location_dict['IDF']['longitude'] + 0.8))
+    axins.set_ylim(fr_map(location_dict['IDF']['latitude'] - 0.3, location_dict['IDF']['latitude'] + 0.3))
 
     submapIDF_subcontract_type = Basemap(projection='tmerc', resolution='l', area_thresh=1000,
                                          llcrnrlon=location_dict['IDF']['longitude'] - 0.8,
