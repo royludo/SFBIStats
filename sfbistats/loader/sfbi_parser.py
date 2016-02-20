@@ -11,7 +11,6 @@ class EmlParser(object):
         """
         check encodings, categorize mails, and try to correct encodings problems
         """
-        print mail_directory
 
         # keep tabs on some encoding related stuff
         stats = dict()
@@ -35,7 +34,7 @@ class EmlParser(object):
 
         emlList = os.listdir(mail_directory)
         for filename in emlList:
-            print ">>> " + filename
+            #print ">>> " + filename
             try:
                 f = open(os.path.join(mail_directory, filename), 'r')
             except:
@@ -75,6 +74,8 @@ class EmlParser(object):
                 else:
                     stats['format']['anarchic_encoding'][charset] = 1
             else:
+                # could be corrected with:
+                # text = text.decode('latin1').encode('utf8')
                 stats['format']['recent_weird_count'] += 1
                 if charset in stats['format']['recent_weird_encoding']:
                     stats['format']['recent_weird_encoding'][charset] += 1

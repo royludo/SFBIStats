@@ -43,7 +43,7 @@ class JobSpider(scrapy.Spider):
             e = e.strip()
             if e:
                 final_list.append(e)
-        return job_offer.JobOffer(final_list, response.url).to_dict()
+        return job_offer.JobOffer.from_job_string_list(final_list, response.url).to_dict()
 
 
 class HTMLStripper(HTMLParser):
