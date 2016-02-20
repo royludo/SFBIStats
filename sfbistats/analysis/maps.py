@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
+""" Maps
 
-import pymongo
+Display city aggregated data.
+
+"""
+
 import pandas as pd
 import numpy as np
 from mpl_toolkits.basemap import Basemap
@@ -12,7 +16,7 @@ from mpl_toolkits.axes_grid1.inset_locator import mark_inset
 import math
 from pprint import pprint
 import sfbistats.analysis.utils as sfbi_utils
-
+import os
 
 '''
     utilities
@@ -48,10 +52,6 @@ def run(job_list, output_dir):
     service = geopy.Nominatim(timeout=5)# country_bias='FR',
 
     df = pd.DataFrame(job_list, columns=['city', 'submission_date', 'contract_type', 'contract_subtype', 'duration'])
-
-    submission_date_series = pd.Series(df.submission_date)
-    print "Data from "+ str(submission_date_series.min())+" to "+str(submission_date_series.max())
-
 
     '''
         city treatment part
@@ -126,16 +126,12 @@ def run(job_list, output_dir):
                         location_dict['IDF']['subtype_total'] += e[1][c]
 
 
-    '''
-        map part
-    '''
-
     fig = plt.figure()
     ax = fig.add_subplot(111)
 
-    ########
-    ## map drawing
-    #######
+    '''
+        drawing part
+    '''
     # map coordinates
     big_llcrnrlon = -5.2
     big_llcrnrlat = 42
@@ -151,7 +147,7 @@ def run(job_list, output_dir):
 
     for city in location_dict.iterkeys():
         if not location_dict[city]['isinIDF']:
-            print city+" "+str(location_dict[city]['count'])
+            #print city+" "+str(location_dict[city]['count'])
             x, y = map(location_dict[city]['longitude'],location_dict[city]['latitude'])
             map.plot(x, y, marker='o', color='m', markersize=int(location_dict[city]['count']/2), alpha=0.5)
             plt.text(x+location_dict[city]['count']*320, y+location_dict[city]['count']*320, city)
@@ -177,7 +173,7 @@ def run(job_list, output_dir):
             map2.plot(x, y, marker='o', color='m', markersize=int(location_dict[city]['count']/2), alpha=0.5)
             plt.text(x+location_dict[city]['count']*85, y+location_dict[city]['count']*85, city, va='bottom')
 
-
+    plt.savefig(os.path.join(output_dir, 'figure_4_1.png'), bbox_inches='tight')
 
     ########################
     fig = plt.figure()
@@ -221,6 +217,7 @@ def run(job_list, output_dir):
             #submapIDF_contract_type.plot(x, y, marker='o', color='m', markersize=int(location_dict[city]['count']/2), alpha=0.5)
             plt.text(x, y, city)
 
+    plt.savefig(os.path.join(output_dir, 'figure_4_2.png'), bbox_inches='tight')
 
     ########################
     fig = plt.figure()
@@ -264,5 +261,4 @@ def run(job_list, output_dir):
             #submapIDF_contract_type.plot(x, y, marker='o', color='m', markersize=int(location_dict[city]['count']/2), alpha=0.5)
             plt.text(x, y, city)
 
-
-    plt.show()
+    plt.savefig(os.path.join(output_dir, 'figure_4_32.png'), bbox_inches='tight')
