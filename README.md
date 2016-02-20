@@ -128,7 +128,7 @@ pip install wordcloud
 
 Continue with 4.1.3
 
-#### 4.1.3 Get the repository
+#### 4.1.3 Get the code
 
 Create the project's directory (ex: SFBIStats) and clone the repository there.
 You should end up with something like sfbistatsenv/SFBIStats/sfbistats containing the actual code.
@@ -140,7 +140,7 @@ export PYTHONPATH="$PYTHONPATH:/path/to/the/envs/sfbistatsenv/SFBIStats"
 
 ### 4.2 Run the script
 
-python analysis.py --json jobs.json --output_dir output_dir
+python ./sfbistats/analayze/analysis.py --json ./resources/jobs_anon.json --output_dir ./output
 
 ## 7. ACKNOWLEDGEMENTS
 
