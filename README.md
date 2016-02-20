@@ -49,10 +49,12 @@ It comes from mongodb, so there are some points to be aware of.
 More information on the specific [strict mode JSON format](https://docs.mongodb.org/manual/reference/mongodb-extended-json/).
 The data can be easily parsed nonetheless with:
 
+```python
 import json
 from bson import json_util
 
 json.loads(your_json, object_hook=json_util.object_hook)
+```
 
 See [this](http://api.mongodb.org/python/1.4/api/pymongo/json_util.html) as pointed out [on this stackoverflow thread](http://stackoverflow.com/a/11286988).
 
@@ -97,28 +99,46 @@ Some programming languages have been chosen to illustrate it.
 
 ## 4.USAGE
 
-### Environment setup
+### 4.1 Environment setup
 
-The project is easier to setup in a conda environment.
+The following procedures assume you have the [conda environment manager](http://conda.pydata.org/docs/) installed.
+Else, here is the [miniconda download page](http://conda.pydata.org/miniconda.html).
+
+#### 4.1.1 The quick way
+
+Make use of the provided environment definition file `env.yml`:
+`conda env create -f env.yml`
+
+This will setup a complete environment called sfbistatsenv with all the requirements already installed.
+Go to 4.1.3
+
+#### 4.1.2 The less quick way
+
 Create the environment:
-conda create -n myenv python=2.7
+`conda create -n sfbistatsenv python=2.7`
 
 Install the requirements:
 conda install matplotlib
 conda install pandas
 conda install pymongo OR pip install bson
-pip install wordcloud
 conda install PIL
 conda install basemap
 pip install geopy
+pip install wordcloud
+
+Continue with 4.1.3
+
+#### 4.1.3 Get the repository
 
 Create the project's directory (ex: SFBIStats) and clone the repository there.
-You should end up with something like myenv/SFBIStats/sfbistats
+You should end up with something like sfbistatsenv/SFBIStats/sfbistats containing the actual code.
+
+#### 4.1.4 Make Python aware of your directory
 
 Make the project's packages available to python:
-export PYTHONPATH="$PYTHONPATH:/path/to/the/env/myenv/SFBIStats"
+export PYTHONPATH="$PYTHONPATH:/path/to/the/envs/sfbistatsenv/SFBIStats"
 
-### Run the script
+### 4.2 Run the script
 
 python analysis.py --json jobs.json --output_dir output_dir
 
