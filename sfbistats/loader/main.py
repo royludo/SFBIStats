@@ -2,9 +2,11 @@
 
 import pymongo
 from scrapy.crawler import CrawlerProcess
+from scrapy.utils.log import configure_logging
 import argparse
 import spider
 from sfbi_parser import EmlParser
+import logging
 
 
 
@@ -45,6 +47,7 @@ if __name__ == '__main__':
     eml_dir = args['eml_dir']
     db_name = args['db_name']
     collection_name = 'jobs'
+    configure_logging({'LOG_FILE': 'loader.log'})
 
     print "Parsing mails..."
     parser = EmlParser(eml_dir)
@@ -60,7 +63,7 @@ if __name__ == '__main__':
         'COLLECTION_NAME': collection_name
     })
 
-    process.crawl(spider.JobSpider, start_urls=link_list[1:2])
+    process.crawl(spider.JobSpider, start_urls=link_list[0:1])
     process.start() # the script will block here until the crawling is finished
 
     #clear_db(mongo_client)
