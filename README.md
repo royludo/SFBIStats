@@ -18,15 +18,13 @@ This project aims to:
 The data come from the French Society of Bioinformatics (SFBI), an association who, among other things, gathers job
 offers and posts them on their [website](http://www.sfbi.fr/recherche_emplois) and mail list.
 
-You will find here information related to more than 1200 job offers that have been posted from april 2012 to this day.
+You will find here information related to more than 1200 job offers that have been posted from april 2012 onward.
 Please read the details section before using the charts.
-
-The data will be updated every month.
-
-##### Remarks
 
 This project concerns data of french origin, and was essentially destined for the french bioinformatics community. 
 English has been used for the code, but the output charts are in french.
+
+The data will be updated every month.
 
 ## 2. USAGE
 
@@ -80,8 +78,8 @@ Make the project's packages available to python:
 ### Job corpus
 
 Among the job offers posted on the SFBI mail list, only the formatted ones (posted through the SFBI website) have been
-considered, for practical reasons. The SFBI started formatting job offers through their website only in 2012. Before that,
-offers were sent and forwarded to the list as is. That is why the dataset only contains offers from april 2012 onward.
+considered, for practical reasons. The SFBI started formatting job offers through their website only in 2012. Before
+that, offers were sent and forwarded to the list as is. That is why the dataset starts in april 2012.
 
 But through 2012 and partially 2013, users could keep on sending unformatted offers to the mail list. Those offers don't
 appear here. Thus, great care must be taken regarding the interpretation of those data. The increase of job offers must
@@ -155,7 +153,21 @@ Beware that lexical_analysis.py can not be used with the provided data.
 
 ## 4. CONTRIBUTE
 
-### Tutorial
+If you want to transform the charts with your own awesome style, if you have a better way to get the data (or more 
+data), or if you feel like some different kinds of charts could be useful, then don't hesitate! Fork, code, and tell us
+about it. We will happily accept any kind of contribution to this project!
+
+### Example: creating other charts
+
+Feel like the horizontal bar chart could be better if it was... vertical? No problem.
+Create your own python module (let's say, myscript.py) and put your code inside a function that looks like:
+`def run(job_list, output_dir):`
+Now you have a list of jobs and a place to output your nice new charts!
+Process the data the way you want and save your work in output_dir.
+When you're done, open analyze.py, import your script and add
+`myscript.run(job_list, output_dir)`
+to the end of the code.
+Next time you run analyze.py, you will see your own charts added to the others.
 
 ### TODO
 
