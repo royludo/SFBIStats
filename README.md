@@ -13,18 +13,17 @@
 
 This project aims to:
  - give a programmatic access to data related to the recent bioinformatics job market in France.
- - provide some basic analysis and charts related to those data.
+ - provide some [basic analysis and charts](https://www.dropbox.com/sh/b33edivf9tuljfw/AABiurGJNg0i0EdhxoEwouc0a) related to those data.
 
-The data come from the French Society of Bioinformatics (SFBI), an association who, among other things, gathers job
+The data come from the [Société Française de Bioinformatique (SFBI)](http://www.sfbi.fr/), an association who, among other things, gathers job
 offers and posts them on their [website](http://www.sfbi.fr/recherche_emplois) and mail list.
-
 You will find here information related to more than 1200 job offers that have been posted from april 2012 onward.
-Please read the details section before using the charts.
+The data will be updated every month.
 
 This project concerns data of french origin, and was essentially destined for the french bioinformatics community. 
 English has been used for the code, but the output charts are in french.
 
-The data will be updated every month.
+Please read the details section before using the charts.
 
 ## 2. USAGE
 
@@ -35,19 +34,23 @@ If you don't, here is the [miniconda download page](http://conda.pydata.org/mini
 
 #### 2.1.1 The quick way
 
-Make use of the provided environment definition file `env.yml`:
+Make use of the provided environment definition file `env.yml`
+
 `conda env create -f env.yml`
 
 This will setup a complete environment called sfbistatsenv with all the requirements already installed.
 Don't forget `source activate sfbistatsenv`
+
 Then go to 2.1.3
 
 #### 2.1.2 The less quick way
 
 Create the environment:
+
 `conda create -n sfbistatsenv python=2.7`
 
 Install the requirements:
+
 ```bash
 conda install matplotlib
 conda install pandas
@@ -58,7 +61,7 @@ pip install geopy
 pip install wordcloud
 ```
 
-Continue with 4.1.3
+Continue with 2.1.3
 
 #### 2.1.3 Get the code
 
@@ -68,6 +71,7 @@ You should end up with something like sfbistatsenv/SFBIStats/sfbistats containin
 #### 2.1.4 Make Python aware of your project
 
 Make the project's packages available to python:
+
 `export PYTHONPATH="$PYTHONPATH:/path/to/the/envs/sfbistatsenv/SFBIStats"`
 
 ### 2.2 Run the script
@@ -100,12 +104,13 @@ Each job entry contains the following fields:
  - submission_date
  - contract_type: 'CDD', 'CDI', 'Stage', 'Thèse'
  - contract_subtype: 'PR', 'MdC', 'CR', 'IR', 'IE', 'CDI autre', 'Post-doc / IR', u'CDD Ingénieur', 'ATER', 'CDD autre'
- Stage and Thèse don't have any subtypes, so the field is empty ('')
  - duration
  - city
  - starting_date
  - limit_date
  - validity_date
+
+Stage and Thèse don't have any subtypes, so the contract_subtype field is empty.
 
 ### Dataset usage
 
@@ -126,7 +131,7 @@ The data have been scraped from web pages, and are delivered raw. Sanitization o
 
 ### Charts
 
-The charts are numbered according to the script that created it:
+You can see a sample of the output charts [here](https://www.dropbox.com/sh/b33edivf9tuljfw/AABiurGJNg0i0EdhxoEwouc0a). They are numbered according to the script that created it:
  - summary.py : 1
  - lexical_analysis.py : 2 (unusable with the provided data)
  - time_series.py : 3
@@ -134,18 +139,22 @@ The charts are numbered according to the script that created it:
 So figure_1_1 and figure_1_2 are the first two figures from summary.py, and so on...
 
 figure_1_5, 3_8 and 3_9:
+
 The education level required for a job has been inferred only from job subtypes, and concerns only CDD and CDI.
 Stage and Thèse categories have been excluded.
 The job was considered as requiring :
  - a master degree with subtypes 'CDD Ingénieur' and 'IE'
  - a PhD with subtypes 'Post-doc / IR', 'PR', 'MdC', 'CR', 'IR', 'ATER'
+
 The fuzzy subtypes 'CDD autre' and 'CDI autre' have been excluded.
 So beware that the information displayed in these charts may not be the most accurate there is. Use with caution.
 
 figure_2_1:
+
 Generated with the [word_cloud module](https://github.com/amueller/word_cloud).
 
-figure_2_2;
+figure_2_2:
+
 This is just an example of what the lexical_analysis module can do.
 Some programming languages have been chosen to illustrate it.
 
@@ -164,12 +173,16 @@ about it. We will happily accept any kind of contribution to this project!
 ### Example: creating other charts
 
 Feel like the horizontal bar chart could be better if it was... vertical? No problem.
-Create your own python module (let's say, myscript.py) and put your code inside a function that looks like:
+Create your own python module (let's say, myscript.py) and put your code inside a function that looks like
+
 `def run(job_list, output_dir):`
+
 Now you have a list of jobs and a place to output your nice new charts!
 Process the data the way you want and save your work in output_dir.
 When you're done, open analyze.py, import your script and add
+
 `myscript.run(job_list, output_dir)`
+
 to the end of the code.
 Next time you run analyze.py, you will see your own charts added to the others.
 
@@ -184,5 +197,5 @@ Next time you run analyze.py, you will see your own charts added to the others.
 
 ## 6. ACKNOWLEDGEMENTS
 
-Big thanks to the bioinfo-fr community, who lighted the sparkle of motivation for this project, and Lins` in particular.
-Credits for the original data go to the SFBI.
+Big thanks to the [bioinfo-fr](http://bioinfo-fr.net/) community, who lighted the sparkle of motivation for this project, and Lins` in particular.
+Credits for the original data go to the [SFBI](http://www.sfbi.fr/).
