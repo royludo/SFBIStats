@@ -12,15 +12,9 @@ import matplotlib.pyplot as plt
 import geopy
 import re
 from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
-from mpl_toolkits.axes_grid1.inset_locator import mark_inset
 import math
-from pprint import pprint
 import sfbistats.analysis.utils as sfbi_utils
 import os
-
-'''
-    utilities
-'''
 
 
 def init_france_map():
@@ -71,6 +65,8 @@ def get_contract_subtype_ratios(city_dict):
 
 
 def run(job_list, output_dir):
+
+    print "Running maps.py"
     service = geopy.Nominatim(timeout=5)  # country_bias='FR',
 
     df = pd.DataFrame(job_list, columns=['city', 'submission_date', 'contract_type', 'contract_subtype', 'duration'])
@@ -80,11 +76,12 @@ def run(job_list, output_dir):
         Ile-de-France is treated specially, aggregated for better visibility on national map
         and displayed as zoomed region
     '''
+    print " Getting geolocation of cities from Nominatim web service"
     df_city = pd.DataFrame(pd.Series(df.city).value_counts().head(30))
     location_dict = dict()
     IDF_total_count = 0
     for city, s in df_city.iterrows():
-        print city + " " + str(s[0])
+        #print city + " " + str(s[0])
         city = city
         count = s[0]
         if location_dict.has_key(city):
@@ -93,7 +90,7 @@ def run(job_list, output_dir):
             location_dict[city] = dict()
             location_dict[city]['count'] = count
             loc = service.geocode(city, exactly_one=True)
-            print loc.address
+            #print loc.address
             location_dict[city]['longitude'] = loc.longitude
             location_dict[city]['latitude'] = loc.latitude
             if re.search('Île-de-France', loc.address.encode('utf8')):
@@ -150,6 +147,7 @@ def run(job_list, output_dir):
     '''
         drawing part
     '''
+    print " Drawing maps"
     fig, ax, fr_map = init_france_map()
 
     for city in location_dict.iterkeys():
@@ -173,7 +171,7 @@ def run(job_list, output_dir):
 
     for city in location_dict.iterkeys():
         if location_dict[city]['isinIDF']:
-            print city + " " + str(location_dict[city]['count'])
+            #print city + " " + str(location_dict[city]['count'])
             x, y = map2(location_dict[city]['longitude'], location_dict[city]['latitude'])
             map2.plot(x, y, marker='o', color='m', markersize=int(location_dict[city]['count'] / 2), alpha=0.5)
             plt.text(x + location_dict[city]['count'] * 85, y + location_dict[city]['count'] * 85, city, va='bottom')
@@ -186,7 +184,7 @@ def run(job_list, output_dir):
 
     for city in location_dict.iterkeys():
         if not location_dict[city]['isinIDF']:
-            print city + " " + str(location_dict[city]['count'])
+            #print city + " " + str(location_dict[city]['count'])
             x, y = fr_map(location_dict[city]['longitude'], location_dict[city]['latitude'])
             ratio_list = get_contract_type_ratios(location_dict[city])
             draw_pie(ax, ratios=ratio_list, X=x, Y=y, size=600)
@@ -209,7 +207,7 @@ def run(job_list, output_dir):
 
     for city in location_dict.iterkeys():
         if location_dict[city]['isinIDF']:
-            print city + " " + str(location_dict[city]['count'])
+            #print city + " " + str(location_dict[city]['count'])
             x, y = submapIDF_contract_type(location_dict[city]['longitude'], location_dict[city]['latitude'])
             ratio_list = get_contract_type_ratios(location_dict[city])
             draw_pie(axins, ratios=ratio_list, X=x, Y=y, size=600)
@@ -224,7 +222,7 @@ def run(job_list, output_dir):
 
     for city in location_dict.iterkeys():
         if not location_dict[city]['isinIDF']:
-            print city + " " + str(location_dict[city]['count'])
+            #print city + " " + str(location_dict[city]['count'])
             x, y = fr_map(location_dict[city]['longitude'], location_dict[city]['latitude'])
             ratio_list = get_contract_subtype_ratios(location_dict[city])
             draw_pie(ax, ratios=ratio_list, X=x, Y=y, size=600)
@@ -247,7 +245,7 @@ def run(job_list, output_dir):
 
     for city in location_dict.iterkeys():
         if location_dict[city]['isinIDF']:
-            print city + " " + str(location_dict[city]['count'])
+            #print city + " " + str(location_dict[city]['count'])
             x, y = submapIDF_subcontract_type(location_dict[city]['longitude'], location_dict[city]['latitude'])
             ratio_list = get_contract_subtype_ratios(location_dict[city])
             draw_pie(axins, ratios=ratio_list, X=x, Y=y, size=600)

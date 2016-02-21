@@ -28,6 +28,7 @@ def minimal_hbar(series, output):
 
 def run(job_list, output_dir):
 
+    print "Running summary.py"
     contract_type_labels = ['CDI', 'CDD', 'Stage', u'Thèse']
     contract_subtype_labels = { 'CDI': ['PR', 'MdC', 'CR', 'IR', 'IE', 'CDI autre'],
                                 'CDD': ['Post-doc / IR', u'CDD Ingénieur', 'ATER', 'CDD autre']}

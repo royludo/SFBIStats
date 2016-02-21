@@ -73,3 +73,5 @@ if __name__ == '__main__':
     #lexical_analysis.run(job_list, output_dir) # can't be run on JobOfferAnon
     sfbi_time_series.run(job_list, output_dir)
     sfbi_maps.run(job_list, output_dir)
+
+    print "Complete"

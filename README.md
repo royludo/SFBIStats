@@ -178,6 +178,7 @@ Next time you run analyze.py, you will see your own charts added to the others.
  - finish the maps
  - more doc
  - improve hbar charts
+ - logging
 
 ## 5. CHANGELOG
 
