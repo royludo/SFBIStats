@@ -39,7 +39,8 @@ Make use of the provided environment definition file `env.yml`:
 `conda env create -f env.yml`
 
 This will setup a complete environment called sfbistatsenv with all the requirements already installed.
-Go to 2.1.3
+Don't forget `source activate sfbistatsenv`
+Then go to 2.1.3
 
 #### 2.1.2 The less quick way
 
@@ -71,7 +72,10 @@ Make the project's packages available to python:
 
 ### 2.2 Run the script
 
-`python ./sfbistats/analyze/analysis.py --json ./resources/jobs_anon.json --output_dir ./output`
+```bash
+mkdir output
+python ./sfbistats/analysis/analyze.py --json ./resources/jobs_anon.json --output_dir ./output
+```
 
 ## 3. DETAILS
 

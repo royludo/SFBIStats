@@ -56,6 +56,7 @@ def proportion_stackplot(df, output=None, xlabel='', ylabel='', title=''):
     ax.xaxis.set_minor_locator(mDates.MonthLocator(bymonth=7))
     ax.xaxis.set_minor_formatter(date_fmt_month)
     plt.savefig(output, bbox_inches='tight')
+    plt.close()
 
 def legend_displace_factor(column_names):
     """
@@ -102,6 +103,7 @@ def run(job_list, output_dir):
     ax.set_xlabel('Date')
     ax.set_ylabel("Nombre d'offres")
     plt.savefig(os.path.join(output_dir, 'figure_3_1.png'), bbox_inches='tight')
+    plt.close()
 
     # just CDD
     df3 = pd.DataFrame({'date': df.submission_date, 'type': df.contract_subtype}).reset_index().groupby(['type','date'])['index'].count().reset_index(name='count')
@@ -115,6 +117,7 @@ def run(job_list, output_dir):
     ax.set_xlabel('Date')
     ax.set_ylabel("Nombre d'offres")
     plt.savefig(os.path.join(output_dir, 'figure_3_2.png'), bbox_inches='tight')
+    plt.close()
 
     # just CDI
     df3 = pd.DataFrame({'date': df.submission_date, 'type': df.contract_subtype}).reset_index().groupby(['type','date'])['index'].count().reset_index(name='count')
@@ -128,6 +131,7 @@ def run(job_list, output_dir):
     ax.set_xlabel('Date')
     ax.set_ylabel("Nombre d'offres")
     plt.savefig(os.path.join(output_dir, 'figure_3_3.png'), bbox_inches='tight')
+    plt.close()
 
     df4 = pd.DataFrame({'date': pd.to_datetime(df.submission_date)}).reset_index().groupby('date')['index'].count()
     df4_t = df4.resample('1M', how='sum')
@@ -137,6 +141,7 @@ def run(job_list, output_dir):
     ax.set_xlabel('Date')
     ax.set_ylabel("Nombre d'offres")
     plt.savefig(os.path.join(output_dir, 'figure_3_4.png'), bbox_inches='tight')
+    plt.close()
 
     '''
         contract type proportions
@@ -210,6 +215,7 @@ def run(job_list, output_dir):
     ax.set_ylabel("Nombre d'offres")
     plt.title(u"Nombre de CDD et CDI en fonction du niveau de diplôme", y=1.08)
     plt.savefig(os.path.join(output_dir, 'figure_3_8.png'), bbox_inches='tight')
+    plt.close()
 
     '''
         education level proportions
@@ -236,6 +242,7 @@ def run(job_list, output_dir):
     ax.set_ylabel("Nombre d'offres")
     plt.title(u'Moyennes mensuelles 2013-2015', y=1.08)
     plt.savefig(os.path.join(output_dir, 'figure_3_9.png'), bbox_inches='tight')
+    plt.close()
 
     df11 = pd.DataFrame({'date': df.submission_date, 'type': df.contract_subtype})
     tmp = df11['type'].isin(['Post-doc / IR',u'CDD Ingénieur', 'CDD autre', 'ATER'])
@@ -250,6 +257,7 @@ def run(job_list, output_dir):
     ax.set_ylabel("Nombre d'offres")
     plt.title(u'Moyennes mensuelles 2013-2015 pour les CDD', y=1.08)
     plt.savefig(os.path.join(output_dir, 'figure_3_10.png'), bbox_inches='tight')
+    plt.close()
 
     df12 = pd.DataFrame({'date': df.submission_date, 'type': df.contract_subtype})
     tmp = df12['type'].isin(['CDI autre','IE', 'IR', 'PR', 'MdC', 'CR'])
@@ -265,3 +273,4 @@ def run(job_list, output_dir):
     ax.set_ylabel("Nombre d'offres")
     plt.title(u'Moyennes mensuelles 2013-2015 pour les CDI', y=1.08)
     plt.savefig(os.path.join(output_dir, 'figure_3_11.png'), bbox_inches='tight')
+    plt.close()

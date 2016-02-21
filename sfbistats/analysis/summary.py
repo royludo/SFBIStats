@@ -53,6 +53,7 @@ def run(job_list, output_dir):
     plt.axis('equal')
     plt.title('Types de poste', y=1.08)
     plt.savefig(os.path.join(output_dir,'figure_1_1.png'), bbox_inches='tight')
+    plt.close()
 
 
     # CDI subtypes ratios pie chart
@@ -65,6 +66,7 @@ def run(job_list, output_dir):
     plt.axis('equal')
     plt.title('Types de CDI', y=1.08)
     plt.savefig(os.path.join(output_dir,'figure_1_2.png'), bbox_inches='tight')
+    plt.close()
 
     # CDD subtypes ratios pie chart
     df_contract_subtype_CDD_count = pd.Series(df[df.contract_type == 'CDD'].contract_subtype).value_counts(sort=True)
@@ -76,6 +78,7 @@ def run(job_list, output_dir):
     plt.axis('equal')
     plt.title('Types de CDD', y=1.08)
     plt.savefig(os.path.join(output_dir,'figure_1_3.png'), bbox_inches='tight')
+    plt.close()
 
     # best cities
     df_city = pd.Series(df.city).value_counts()
@@ -94,6 +97,7 @@ def run(job_list, output_dir):
     plt.axis('equal')
     plt.title("Parts des villes ayant plus de 15 offres d'emploi", y=1.08)
     plt.savefig(os.path.join(output_dir,'figure_1_4.png'), bbox_inches='tight')
+    plt.close()
 
     # education level ratios pie chart
     df_study_level = pd.Series(df.contract_subtype).value_counts(sort=True)
@@ -110,3 +114,4 @@ def run(job_list, output_dir):
     plt.axis('equal')
     plt.title(u'Niveau de diplôme requis pour les CDD et CDI', y=1.08)
     plt.savefig(os.path.join(output_dir,'figure_1_5.png'), bbox_inches='tight')
+    plt.close()

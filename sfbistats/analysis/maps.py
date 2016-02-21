@@ -179,6 +179,7 @@ def run(job_list, output_dir):
             plt.text(x + location_dict[city]['count'] * 85, y + location_dict[city]['count'] * 85, city, va='bottom')
 
     plt.savefig(os.path.join(output_dir, 'figure_4_1.png'), bbox_inches='tight')
+    plt.close()
 
     ########################
     fig, ax, fr_map = init_france_map()
@@ -216,6 +217,7 @@ def run(job_list, output_dir):
             plt.text(x, y, city)
 
     plt.savefig(os.path.join(output_dir, 'figure_4_2.png'), bbox_inches='tight')
+    plt.close()
 
     ########################
     fig, ax, fr_map = init_france_map()
@@ -253,3 +255,4 @@ def run(job_list, output_dir):
             plt.text(x, y, city)
 
     plt.savefig(os.path.join(output_dir, 'figure_4_3.png'), bbox_inches='tight')
+    plt.close()
