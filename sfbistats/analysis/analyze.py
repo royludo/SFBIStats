@@ -45,7 +45,7 @@ def load_from_json(file):
         # use dict instead of directly object, better with pandas
         job = sfbi_job.JobOfferAnon.from_json(json.loads(l, object_hook=json_util.object_hook)).to_dict()
         job['city'] = sfbi_utils.sanitize_city_name(job['city'])
-        job['duration'] = sfbi_utils.sanitize_duration(str(job['duration']))
+        job['duration'] = sfbi_utils.sanitize_duration(job['duration'])
         job_list.append(job)
     return job_list
 
@@ -69,7 +69,7 @@ if __name__ == '__main__':
     job_list = load_from_json(input_file)
 
     # run the scripts
-    #summary.run(job_list, output_dir)
+    sfbi_summary.run(job_list, output_dir)
     #lexical_analysis.run(job_list, output_dir) # can't be run on JobOfferAnon
-    #time_series.run(job_list, output_dir)
+    sfbi_time_series.run(job_list, output_dir)
     sfbi_maps.run(job_list, output_dir)

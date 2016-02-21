@@ -60,10 +60,13 @@ if __name__ == '__main__':
         'ITEM_PIPELINES': {'__main__.MongoDBStorage': 1},
         # our specific settings
         'DB_NAME': db_name,
-        'COLLECTION_NAME': collection_name
+        'COLLECTION_NAME': collection_name,
+        # take 301 redirection in count
+        # doesn't seem to work, though :(
+        # 'DOWNLOADER_MIDDLEWARES': {'scrapy.downloadermiddlewares.redirect.RedirectMiddleware': 1}
     })
 
-    process.crawl(spider.JobSpider, start_urls=link_list[0:1])
+    process.crawl(spider.JobSpider, start_urls=link_list)
     process.start() # the script will block here until the crawling is finished
 
     #clear_db(mongo_client)

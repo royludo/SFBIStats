@@ -102,7 +102,7 @@ Some programming languages have been chosen to illustrate it.
 ### 4.1 Environment setup
 
 The following procedures assume you have the [conda environment manager](http://conda.pydata.org/docs/) installed.
-Else, here is the [miniconda download page](http://conda.pydata.org/miniconda.html).
+If you don't, here is the [miniconda download page](http://conda.pydata.org/miniconda.html).
 
 #### 4.1.1 The quick way
 

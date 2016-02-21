@@ -205,6 +205,10 @@ class JobOffer(object):
 class JobOfferAnon(object):
     """
     Same as JobOffer but less fields to make the data anonymous
+
+    from mongodb:
+    mongoexport --db sfbi_jobs --collection jobs --out jobs_anon.json
+    --fields submission_date,contract_type,city,title,limit_date,starting_date,contract_subtype,validity_date,duration
     """
     def __init__(self):
         self.title = ''
