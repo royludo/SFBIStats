@@ -3,11 +3,11 @@
 ## CONTENT
 
 1. PROJECT
-2. REQUIREMENTS
-4. USAGE
-5. DETAILS
-6. CHANGELOG
-7. ACKNOWLEDGEMENTS
+2. USAGE
+3. DETAILS
+4. CONTRIBUTE
+5. CHANGELOG
+6. ACKNOWLEDGEMENTS
 
 ## 1. PROJECT
 
@@ -21,12 +21,61 @@ offers and posts them on their [website](http://www.sfbi.fr/recherche_emplois) a
 You will find here information related to more than 1200 job offers that have been posted from april 2012 to this day.
 Please read the details section before using the charts.
 
+The data will be updated every month.
+
 ##### Remarks
 
 This project concerns data of french origin, and was essentially destined for the french bioinformatics community. 
 English has been used for the code, but the output charts are in french.
 
-## 5. DETAILS
+## 2. USAGE
+
+### 2.1 Setup the environment
+
+The following procedures assume you have the [conda environment manager](http://conda.pydata.org/docs/) installed.
+If you don't, here is the [miniconda download page](http://conda.pydata.org/miniconda.html).
+
+#### 2.1.1 The quick way
+
+Make use of the provided environment definition file `env.yml`:
+`conda env create -f env.yml`
+
+This will setup a complete environment called sfbistatsenv with all the requirements already installed.
+Go to 2.1.3
+
+#### 2.1.2 The less quick way
+
+Create the environment:
+`conda create -n sfbistatsenv python=2.7`
+
+Install the requirements:
+```bash
+conda install matplotlib
+conda install pandas
+conda install pymongo
+conda install PIL
+conda install basemap
+pip install geopy
+pip install wordcloud
+```
+
+Continue with 4.1.3
+
+#### 2.1.3 Get the code
+
+Create the project's directory (ex: SFBIStats) and clone the repository there.
+You should end up with something like sfbistatsenv/SFBIStats/sfbistats containing the actual code.
+
+#### 2.1.4 Make Python aware of your project
+
+Make the project's packages available to python:
+`export PYTHONPATH="$PYTHONPATH:/path/to/the/envs/sfbistatsenv/SFBIStats"`
+
+### 2.2 Run the script
+
+`python ./sfbistats/analyze/analysis.py --json ./resources/jobs_anon.json --output_dir ./output`
+
+## 3. DETAILS
 
 ### Job corpus
 
@@ -40,6 +89,21 @@ be put into perspective, as people were switching from the previous anarchic job
 
 Due to different technical issues (crazy encodings, dead links...), a small number of offers do not appear in the
 dataset. But as no real bias is introduced by these issues, this should be ok.
+
+### Dataset structure
+
+Each job entry contains the following fields:
+ - _id: unique mongodb ID
+ - title 
+ - submission_date
+ - contract_type: 'CDD', 'CDI', 'Stage', 'Thèse'
+ - contract_subtype: 'PR', 'MdC', 'CR', 'IR', 'IE', 'CDI autre', 'Post-doc / IR', u'CDD Ingénieur', 'ATER', 'CDD autre'
+ Stage and Thèse don't have any subtypes, so the field is empty ('')
+ - duration
+ - city
+ - starting_date
+ - limit_date
+ - validity_date
 
 ### Dataset usage
 
@@ -58,21 +122,6 @@ See the [json_util doc](http://api.mongodb.org/python/1.4/api/pymongo/json_util.
 
 The data have been scraped from web pages, and are delivered raw. Sanitization of the fields is left to users.
 
-### Dataset structure
-
-Each job entry contains the following fields:
- - _id: unique mongodb ID
- - title 
- - submission_date
- - contract_type: 'CDD', 'CDI', 'Stage', 'Thèse'
- - contract_subtype: 'PR', 'MdC', 'CR', 'IR', 'IE', 'CDI autre', 'Post-doc / IR', u'CDD Ingénieur', 'ATER', 'CDD autre'
- Stage and Thèse don't have any subtypes, so the field is empty ('')
- - duration
- - city
- - starting_date
- - limit_date
- - validity_date
- 
 ### Charts
 
 The charts are numbered according to the script that created it:
@@ -104,61 +153,19 @@ You will probably be interested by the content of the analysis package only. The
 the other python modules which produce the charts. 
 Beware that lexical_analysis.py can not be used with the provided data.
 
-## 4.USAGE
+## 4. CONTRIBUTE
 
-### 4.1 Setup the environment
+### Tutorial
 
-The following procedures assume you have the [conda environment manager](http://conda.pydata.org/docs/) installed.
-If you don't, here is the [miniconda download page](http://conda.pydata.org/miniconda.html).
-
-#### 4.1.1 The quick way
-
-Make use of the provided environment definition file `env.yml`:
-`conda env create -f env.yml`
-
-This will setup a complete environment called sfbistatsenv with all the requirements already installed.
-Go to 4.1.3
-
-#### 4.1.2 The less quick way
-
-Create the environment:
-`conda create -n sfbistatsenv python=2.7`
-
-Install the requirements:
-```bash
-conda install matplotlib
-conda install pandas
-conda install pymongo
-conda install PIL
-conda install basemap
-pip install geopy
-pip install wordcloud
-```
-
-Continue with 4.1.3
-
-#### 4.1.3 Get the code
-
-Create the project's directory (ex: SFBIStats) and clone the repository there.
-You should end up with something like sfbistatsenv/SFBIStats/sfbistats containing the actual code.
-
-#### 4.1.4 Make Python aware of your project
-
-Make the project's packages available to python:
-`export PYTHONPATH="$PYTHONPATH:/path/to/the/envs/sfbistatsenv/SFBIStats"`
-
-### 4.2 Run the script
-
-`python ./sfbistats/analyze/analysis.py --json ./resources/jobs_anon.json --output_dir ./output`
-
-## 5. Contribute
-
-## 6. TODO
+### TODO
 
  - finish the maps
  - more doc
+ - improve hbar charts
 
-## 7. ACKNOWLEDGEMENTS
+## 5. CHANGELOG
 
-I want to thank the bioinfo-fr community, who motivated me for this project, and Lins` in particular. He also had this idea.
+## 6. ACKNOWLEDGEMENTS
+
+Big thanks to the bioinfo-fr community, who lighted the sparkle of motivation for this project, and Lins` in particular.
 Credits for the original data go to the SFBI.
