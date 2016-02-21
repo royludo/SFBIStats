@@ -36,7 +36,10 @@ If you don't, here is the [miniconda download page](http://conda.pydata.org/mini
 
 Make use of the provided environment definition file `env.yml`
 
-`conda env create -f env.yml`
+```bash
+wget https://raw.githubusercontent.com/royludo/SFBIStats/master/env.yml
+conda env create -f env.yml
+```
 
 This will setup a complete environment called sfbistatsenv with all the requirements already installed.
 Don't forget `source activate sfbistatsenv`
@@ -65,8 +68,7 @@ Continue with 2.1.3
 
 #### 2.1.3 Get the code
 
-Create the project's directory (ex: SFBIStats) and clone the repository there.
-You should end up with something like sfbistatsenv/SFBIStats/sfbistats containing the actual code.
+Clone the repository directly in your environment. You should end up with something like `sfbistatsenv/SFBIStats/sfbistats` containing the actual code.
 
 #### 2.1.4 Make Python aware of your project
 
