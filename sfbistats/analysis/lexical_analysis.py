@@ -147,14 +147,14 @@ def build_freq_list(lex_dic, total):
     return freq_list
 
 
-def create_wordcloud(ordered_freq_list, output_dir):
+def create_wordcloud(ordered_freq_list, output):
     plt.figure(figsize=(10,8))
     wordcloud = WordCloud(width=1000, height=800, max_words=100, background_color='white',
                           relative_scaling=0.7, random_state=15, prefer_horizontal=0.5) .generate_from_frequencies(ordered_freq_list[0:100])
     wordcloud.recolor(random_state=42, color_func=my_color_func)
     plt.imshow(wordcloud)
     plt.axis("off")
-    plt.savefig(os.path.join(output_dir, 'figure_2_1.png'), bbox_inches='tight', facecolor='white')
+    plt.savefig(output, bbox_inches='tight', facecolor='white')
 
 
 def get_rank(word, ordered_freq_list):
@@ -219,12 +219,10 @@ def run(job_list, output_dir):
     total_words= get_total_words(lex_dic)
     ordered_freq_list = build_freq_list(lex_dic, total_words)
 
-    create_wordcloud(ordered_freq_list, output_dir)
+    create_wordcloud(ordered_freq_list, os.path.join(output_dir, 'figure_2_3.png'))
 
     print "TOTAL unique words: " + str(len(lex_dic))
     print "TOTAL words: " + str(total_words)
-    for i in range(0,100):
-        print str(i)+' '+str(ordered_freq_list[i])
     """
     print "bioinformatique " + str(get_rank('bioinformatique', ordered_freq_list))
     print "Perl " + str(get_rank('perl', ordered_freq_list))
