@@ -1,0 +1,227 @@
+City,Department,Region
+Paris,Paris,Île-de-France
+Villeurbanne,Rhône,Rhône-Alpes
+Evry,Essonne,Île-de-France
+Lille,Nord,Nord-Pas-de-Calais
+Bordeaux,Gironde,Aquitaine
+Saclay,Essonne,Île-de-France
+Chappes,Puy-de-Dôme,Auvergne
+Clermont Ferrand,Puy-de-Dôme,Auvergne
+Toulouse,Haute-Garonne,Midi-Pyrénées
+Bruxelles,Étranger,Étranger
+Brest,Finistère,Bretagne
+Goettingen,Étranger,Étranger
+Marcy L'Etoile,Rhône,Rhône-Alpes
+Lyon,Rhône,Rhône-Alpes
+Barcelone,Étranger,Étranger
+Gent,Étranger,Étranger
+Graz,Étranger,Étranger
+Angers,Maine-et-Loire,Pays de la Loire
+Grenoble,Isère,Rhône-Alpes
+Montpellier,Hérault,Languedoc-Roussillon
+Orléans,Loiret,Centre
+Limoges,Haute-Vienne,Limousin
+Ploufragan,Côtes-d'Armor,Bretagne
+Nantes,Loire-Atlantique,Pays de la Loire
+Oslo,Étranger,Étranger
+Londres,Étranger,Étranger
+Freiburg,Étranger,Étranger
+Neuilly Sur Seine,Hauts-de-Seine,Île-de-France
+Versailles,Yvelines,Île-de-France
+Marseille,Bouches-du-Rhône,Provence-Alpes-Côte d'Azur
+Mondonville,Haute-Garonne,Midi-Pyrénées
+Vitry Sur Seine,Val-de-Marne,Île-de-France
+Chilly Mazarin,Essonne,Île-de-France
+Glasgow,Étranger,Étranger
+Reims,Marne,Alsace-Champagne-Ardenne-Lorraine
+Rouen,Seine-Maritime,Haute-Normandie
+Leiden,Étranger,Étranger
+Uppsala,Étranger,Étranger
+Rennes,Ille-et-Vilaine,Bretagne
+Vélizy Villacoublay,Yvelines,Île-de-France
+Québec,Étranger,Étranger
+Bagnols Sur Cèze,Gard,Languedoc-Roussillon
+Orsay ,Essonne,Île-de-France
+Strasbourg,Bas-Rhin,Alsace-Champagne-Ardenne-Lorraine
+Issy Les Moulineaux,Hauts-de-Seine,Île-de-France
+Chicago,Étranger,Étranger
+Loos,Nord,Nord-Pas-de-Calais
+Biot,Alpes-Maritimes,Provence-Alpes-Côte d'Azur
+Maison Alfort,Loire-Atlantique,Pays de la Loire
+Sophia Antipolis,Alpes-Maritimes,Provence-Alpes-Côte d'Azur
+Pau,Pyrénées-Atlantiques,Aquitaine
+Athens,Étranger,Étranger
+Cologne,Étranger,Étranger
+Orsay,Essonne,Île-de-France
+Croissy Sur Seine,Yvelines,Île-de-France
+Cambridge,Étranger,Étranger
+Dijon,Côte-d'Or,Bourgogne
+Colmar,Haut-Rhin,Alsace-Champagne-Ardenne-Lorraine
+Gif Sur Yvette,Essonne,Île-de-France
+Ithaca,Étranger,Étranger
+Banyuls Sur Mer,Pyrénées-Orientales,Languedoc-Roussillon
+Rodez,Aveyron,Midi-Pyrénées
+Clermont Ferrant,Puy-de-Dôme,Auvergne
+Roscoff ,Finistère,Bretagne
+Berlin,Étranger,Étranger
+Bergen,Étranger,Étranger
+Münster Germany,Étranger,Étranger
+La Bohalle,Maine-et-Loire,Pays de la Loire
+Münster,Étranger,Étranger
+Fontenay Le Fleury,Yvelines,Île-de-France
+Jouy En Josas,Yvelines,Île-de-France
+Munich,Étranger,Étranger
+Villefranche Sur Mer,Alpes-Maritimes,Provence-Alpes-Côte d'Azur
+Leicester,Étranger,Étranger
+Thiverval Grignon,Yvelines,Île-de-France
+Castanet Tolosan,Haute-Garonne,Midi-Pyrénées
+Auzeville Tolosane,Haute-Garonne,Midi-Pyrénées
+Singapore,Étranger,Étranger
+Villejuif,Val-de-Marne,Île-de-France
+Nancy,Meurthe-et-Moselle,Alsace-Champagne-Ardenne-Lorraine
+Velizy Villacoublay,Yvelines,Île-de-France
+Basel,Étranger,Étranger
+Roscoff,Finistère,Bretagne
+Montréal,Étranger,Étranger
+Barcelona,Étranger,Étranger
+Nicosie,Étranger,Étranger
+Palaiseau,Essonne,Île-de-France
+Bad Nauheim,Étranger,Étranger
+Babraham,Étranger,Étranger
+Vancouver,Étranger,Étranger
+Vitry,Val-de-Marne,Île-de-France
+Reading,Étranger,Étranger
+Biot Sophia Antipolis,Alpes-Maritimes,Provence-Alpes-Côte d'Azur
+Antony,Hauts-de-Seine,Île-de-France
+Nice,Alpes-Maritimes,Provence-Alpes-Côte d'Azur
+Campinas,Étranger,Étranger
+Jena,Étranger,Étranger
+Clichy La Garenne,Hauts-de-Seine,Île-de-France
+Namur,Étranger,Étranger
+Plan Les Ouates,Étranger,Étranger
+Villeneuve D'Ascq,Nord,Nord-Pas-de-Calais
+Theix,Morbihan,Bretagne
+Heidelberg,Étranger,Étranger
+Clichy,Hauts-de-Seine,Île-de-France
+Dundee,Étranger,Étranger
+Caen,Calvados,Basse-Normandie
+Créteil,Val-de-Marne,Île-de-France
+Melbourne,Étranger,Étranger
+Labège,Haute-Garonne,Midi-Pyrénées
+Craponne,Rhône,Rhône-Alpes
+Münster   Germany,Étranger,Étranger
+Boulogne Billancourt,Hauts-de-Seine,Île-de-France
+Rennes ,Ille-et-Vilaine,Bretagne
+Copenhague,Étranger,Étranger
+Brisbane,Étranger,Étranger
+Aubière,Puy-de-Dôme,Auvergne
+Yvelines,Yvelines,Île-de-France
+Neuilly,Hauts-de-Seine,Île-de-France
+New York City,Étranger,Étranger
+Cachan,Val-de-Marne,Île-de-France
+Puteaux ,Hauts-de-Seine,Île-de-France
+Cayenne,Étranger,Étranger
+Poitiers,Vienne,Poitou-Charentes
+Los Alamos,Étranger,Étranger
+Aulnay Sous Bois,Seine-Saint-Denis,Île-de-France
+Santiago Du Chili,Étranger,Étranger
+Paris ,Paris,Île-de-France
+Geneva,Étranger,Étranger
+Champenoux,Meurthe-et-Moselle,Alsace-Champagne-Ardenne-Lorraine
+Saint Sauveur,Étranger,Étranger
+Zurich,Étranger,Étranger
+Aachen,Étranger,Étranger
+Nouzilly,Indre-et-Loire,Centre
+Oxford,Étranger,Étranger
+Gand,Étranger,Étranger
+Stockholm,Étranger,Étranger
+Palmerston North,Étranger,Étranger
+New York,Étranger,Étranger
+Sweden,Étranger,Étranger
+Liège,Étranger,Étranger
+Asnières Sur Seine,Hauts-de-Seine,Île-de-France
+Beirut,Étranger,Étranger
+Genève,Étranger,Étranger
+London,Étranger,Étranger
+Amsterdam,Étranger,Étranger
+Avignon,Vaucluse,Provence-Alpes-Côte d'Azur
+Milan,Étranger,Étranger
+Wageningen,Étranger,Étranger
+Grenoble ,Isère,Rhône-Alpes
+Maisons Alfort,Val-de-Marne,Île-de-France
+Kaiserslautern,Étranger,Étranger
+Karlsruhe,Étranger,Étranger
+Edinburgh,Étranger,Étranger
+Saint Pierre,Étranger,Étranger
+Milano,Étranger,Étranger
+Bruyères Le Chatel,Essonne,Île-de-France
+Petit Bourg,Étranger,Étranger
+Santiago,Étranger,Étranger
+Cali,Étranger,Étranger
+Boulogne,Pas-de-Calais,Nord-Pas-de-Calais
+Cappelle En Pévèle,Nord,Nord-Pas-de-Calais
+Beauvais,Oise,Picardie
+Leuven,Étranger,Étranger
+Marcy L'Étoile,Rhône,Rhône-Alpes
+Talence,Gironde,Aquitaine
+Lausanne,Étranger,Étranger
+Lyon ,Rhône,Rhône-Alpes
+Gosselies,Étranger,Étranger
+Saclay ,Essonne,Île-de-France
+Nîmes,Gard,Languedoc-Roussillon
+France,Gard,Languedoc-Roussillon
+75015,Gard,Île-de-France
+Rixensart,Étranger,Étranger
+Toulouse ,Haute-Garonne,Midi-Pyrénées
+Corvalis,Étranger,Étranger
+Copenhagen,Étranger,Étranger
+Quebec,Étranger,Étranger
+Saint Genès  Champanelle,Puy-de-Dôme,Auvergne
+Kaust,Étranger,Étranger
+Perth,Étranger,Étranger
+93,Seine-Saint-Denis,Île-de-France
+Tours,Indre-et-Loire,Centre
+Villenave D'Ornon,Gironde,Aquitaine
+92,Hauts-de-Seine,Île-de-France
+Atlanta,Étranger,Étranger
+Mont Saint Aignan,Seine-Maritime,Haute-Normandie
+91,Essonne,Île-de-France
+Hinxton   Cambridge   Uk,Étranger,Étranger
+Tokyo,Étranger,Étranger
+Louvain,Étranger,Étranger
+Gent   Belgium,Étranger,Étranger
+ParisParis,Paris,Île-de-France
+Chatenay Malabry,Hauts-de-Seine,Île-de-France
+Hinxton,Étranger,Étranger
+Brétigny Sur Orge,Essonne,Île-de-France
+Tassin La Demi Lune,Rhône,Rhône-Alpes
+Cestas,Gironde,Aquitaine
+Mayence,Étranger,Étranger
+Delft,Étranger,Étranger
+Vigo,Étranger,Étranger
+Plouzané,Finistère,Bretagne
+Compiègne,Oise,Picardie
+Rostock,Étranger,Étranger
+Dresden,Étranger,Étranger
+Les Aubrais,Loire-Atlantique,Pays de la Loire
+Göteborg,Étranger,Étranger
+Boulogne Billancourt ,Hauts-de-Seine,Île-de-France
+Labege,Haute-Garonne,Midi-Pyrénées
+Région Parisienne,Étranger,Étranger
+Bagnols Sur Ceze,Gard,Languedoc-Roussillon
+Jouy En Josas ,Yvelines,Île-de-France
+Leuven Belgium,Étranger,Étranger
+Marne La Vallée,Seine-et-Marne,Île-de-France
+Louvain La Neuve,Étranger,Étranger
+Bielefeld,Étranger,Étranger
+Cadarache,Gard,Languedoc-Roussillon
+Cork,Étranger,Étranger
+Paris France,Paris,Île-de-France
+Le Cap,Étranger,Étranger
+Montreal,Étranger,Étranger
+Stockholm ,Étranger,Étranger
+Fontenay Aux Roses,Hauts-de-Seine,Île-de-France
+Saint Beauzire,Puy-de-Dôme,Auvergne
+Hauts De Seine,Hauts-de-Seine,Île-de-France
+Evry ,Essonne,Île-de-France
+Alnarp,Étranger,Étranger
