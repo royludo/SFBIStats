@@ -75,7 +75,7 @@ def run(job_list, output_dir):
     # CDI subtypes ratios pie chart
     df_contract_subtype_CDI_count = pd.Series(df[df.contract_type == 'CDI'].contract_subtype).value_counts(sort=True)
     fig, ax = minimal_hbar(df_contract_subtype_CDI_count)
-    ax.set_title(u'Types de postes')
+    ax.set_title(u'Types de CDI')
     fig.savefig(os.path.join(output_dir, 'summary_7.svg'), bbox_inches='tight')
     plt.close(fig); del(fig)
 
@@ -91,7 +91,7 @@ def run(job_list, output_dir):
     # CDD subtypes ratios pie chart
     df_contract_subtype_CDD_count = pd.Series(df[df.contract_type == 'CDD'].contract_subtype).value_counts(sort=True)
     fig, ax = minimal_hbar(df_contract_subtype_CDD_count)
-    ax.set_title(u'Types de postes')
+    ax.set_title(u'Types de CDD')
     fig.savefig(os.path.join(output_dir, 'summary_8.svg'), bbox_inches='tight')
     plt.close(fig); del(fig)
 
@@ -141,6 +141,7 @@ def run(job_list, output_dir):
     plt.savefig(os.path.join(output_dir, 'summary_5.svg'), bbox_inches='tight')
     plt.close()
 
+    # per city distribution
     df_city2 = pd.Series(df.city).value_counts()
     citytype_dict = dict()
     citysubtype_dict = dict()
@@ -203,7 +204,7 @@ def run(job_list, output_dir):
     for total in df_study_level_city['Total']:
         ax.text(1.02, i-0.15, total)
         i += 1
-    plt.title('Types de poste', y=1.08)
+    plt.title(u"Proportion des niveaux de diplôme requis\ndans les 10 villes ayant le plus d'offres", y=1.08)
     plt.savefig(os.path.join(output_dir, 'summary_9.svg'), bbox_inches='tight')
 
     df_proportion_city = pd.DataFrame(proportion_dict).fillna(0).sort_values(by='Total')
@@ -213,7 +214,7 @@ def run(job_list, output_dir):
     for total in df_proportion_city['Total']:
         ax.text(1.02, i-0.15, total)
         i += 1
-    plt.title('Types de poste', y=1.08)
+    plt.title(u"Répartition des types d'offres\ndans les 10 villes ayant le plus d'offres", y=1.08)
     plt.savefig(os.path.join(output_dir, 'summary_10.svg'), bbox_inches='tight')
 
 
