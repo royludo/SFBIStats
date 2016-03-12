@@ -38,6 +38,7 @@ def run(job_list, output_dir):
     phd_level = ['Post-doc / IR', 'PR', 'MdC', 'CR', 'IR', 'ATER']
     master_level = [u'CDD Ingénieur', 'IE']
     colors = sfbi_utils.get_colors()
+    plt.rcParams.update(plt.rcParamsDefault)
 
     df = pd.DataFrame(job_list, columns=['_id', 'contract_type', 'contract_subtype',
                                          'city', 'department', 'region', 'submission_date'])
