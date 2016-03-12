@@ -53,38 +53,38 @@ def run(job_list, output_dir):
 
     # general types ratios pie chart
     df_contract_type_count = pd.Series(df.contract_type).value_counts(sort=True)
-    minimal_hbar(df_contract_type_count, os.path.join(output_dir, 'figure_1_6.svg'))
+    minimal_hbar(df_contract_type_count, os.path.join(output_dir, 'summary_6.svg'))
     plt.figure()
     ax = df_contract_type_count.plot(kind='pie', startangle=90, autopct='%1.1f%%', colors=colors)
     ax.set_xlabel('')
     ax.set_ylabel('')
     plt.axis('equal')
     plt.title('Types de poste', y=1.08)
-    plt.savefig(os.path.join(output_dir, 'figure_1_1.svg'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'summary_1.svg'), bbox_inches='tight')
     plt.close()
 
     # CDI subtypes ratios pie chart
     df_contract_subtype_CDI_count = pd.Series(df[df.contract_type == 'CDI'].contract_subtype).value_counts(sort=True)
-    minimal_hbar(df_contract_subtype_CDI_count, os.path.join(output_dir, 'figure_1_7.svg'))
+    minimal_hbar(df_contract_subtype_CDI_count, os.path.join(output_dir, 'summary_7.svg'))
     plt.figure()
     ax = df_contract_subtype_CDI_count.plot(kind='pie', startangle=90, autopct='%1.1f%%', colors=colors)
     ax.set_xlabel('')
     ax.set_ylabel('')
     plt.axis('equal')
     plt.title('Types de CDI', y=1.08)
-    plt.savefig(os.path.join(output_dir, 'figure_1_2.svg'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'summary_2.svg'), bbox_inches='tight')
     plt.close()
 
     # CDD subtypes ratios pie chart
     df_contract_subtype_CDD_count = pd.Series(df[df.contract_type == 'CDD'].contract_subtype).value_counts(sort=True)
-    minimal_hbar(df_contract_subtype_CDD_count, os.path.join(output_dir, 'figure_1_8.svg'))
+    minimal_hbar(df_contract_subtype_CDD_count, os.path.join(output_dir, 'summary_8.svg'))
     plt.figure()
     ax = df_contract_subtype_CDD_count.plot(kind='pie', startangle=90, autopct='%1.1f%%', colors=colors)
     ax.set_xlabel('')
     ax.set_ylabel('')
     plt.axis('equal')
     plt.title('Types de CDD', y=1.08)
-    plt.savefig(os.path.join(output_dir, 'figure_1_3.svg'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'summary_3.svg'), bbox_inches='tight')
     plt.close()
 
     # best cities
@@ -104,7 +104,7 @@ def run(job_list, output_dir):
         ax.set_ylabel('')
     plt.axis('equal')
     plt.title("Parts des villes ayant plus de 15 offres d'emploi", y=1.08)
-    plt.savefig(os.path.join(output_dir, 'figure_1_4.svg'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'summary_4.svg'), bbox_inches='tight')
     plt.close()
 
     # education level ratios pie chart
@@ -121,7 +121,7 @@ def run(job_list, output_dir):
     ax.set_ylabel('')
     plt.axis('equal')
     plt.title(u'Niveau de diplôme requis pour les CDD et CDI', y=1.08)
-    plt.savefig(os.path.join(output_dir, 'figure_1_5.svg'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'summary_5.svg'), bbox_inches='tight')
     plt.close()
 
     df_city2 = pd.Series(df.city).value_counts()
@@ -187,7 +187,7 @@ def run(job_list, output_dir):
         ax.text(1.02, i-0.15, total)
         i += 1
     plt.title('Types de poste', y=1.08)
-    plt.savefig(os.path.join(output_dir, 'figure_1_9.svg'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'summary_9.svg'), bbox_inches='tight')
 
     df_proportion_city = pd.DataFrame(proportion_dict).fillna(0).sort_values(by='Total')
     ax = df_proportion_city.loc[:, ['CDD', 'CDI', 'Stage', u'Thèse']].plot(kind='barh', stacked=True, color=colors)
@@ -197,6 +197,6 @@ def run(job_list, output_dir):
         ax.text(1.02, i-0.15, total)
         i += 1
     plt.title('Types de poste', y=1.08)
-    plt.savefig(os.path.join(output_dir, 'figure_1_10.svg'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'summary_10.svg'), bbox_inches='tight')
 
 

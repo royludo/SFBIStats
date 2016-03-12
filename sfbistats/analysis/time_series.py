@@ -106,7 +106,7 @@ def run(job_list, output_dir):
     plt.title(u'Évolution des types de poste', y=1.08)
     ax.set_xlabel('Date')
     ax.set_ylabel("Nombre d'offres")
-    plt.savefig(os.path.join(output_dir, 'figure_3_1.svg'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'time_series_1.svg'), bbox_inches='tight')
     plt.close()
 
     # just CDD
@@ -120,7 +120,7 @@ def run(job_list, output_dir):
     plt.title(u'Évolution des types de CDD', y=1.08)
     ax.set_xlabel('Date')
     ax.set_ylabel("Nombre d'offres")
-    plt.savefig(os.path.join(output_dir, 'figure_3_2.svg'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'time_series_2.svg'), bbox_inches='tight')
     plt.close()
 
     # just CDI
@@ -134,7 +134,7 @@ def run(job_list, output_dir):
     plt.title(u'Évolution des types de CDI', y=1.08)
     ax.set_xlabel('Date')
     ax.set_ylabel("Nombre d'offres")
-    plt.savefig(os.path.join(output_dir, 'figure_3_3.svg'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'time_series_3.svg'), bbox_inches='tight')
     plt.close()
 
     df4 = pd.DataFrame({'date': pd.to_datetime(df.submission_date)}).reset_index().groupby('date')['index'].count()
@@ -144,7 +144,7 @@ def run(job_list, output_dir):
     plt.title(u"Évolution du nombre total d'offre", y=1.08)
     ax.set_xlabel('Date')
     ax.set_ylabel("Nombre d'offres")
-    plt.savefig(os.path.join(output_dir, 'figure_3_4.svg'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'time_series_4.svg'), bbox_inches='tight')
     plt.close()
 
     '''
@@ -161,7 +161,7 @@ def run(job_list, output_dir):
     # replace all the values by ratios
     df5_t3 = pd.DataFrame(df5_t2).apply(lambda x: (x / x['total'] * 100), axis=1).fillna(0).drop('total', 1)
     df5_t3.columns.name = 'Type'
-    proportion_stackplot(df5_t3, output=os.path.join(output_dir, 'figure_3_5.svg'), xlabel='Date', ylabel='%des offres',
+    proportion_stackplot(df5_t3, output=os.path.join(output_dir, 'time_series_5.svg'), xlabel='Date', ylabel='%des offres',
                          title=u"Évolution de la proportion des types de poste")
 
     '''
@@ -180,7 +180,7 @@ def run(job_list, output_dir):
     # replace all the values by ratios
     df6_t3 = pd.DataFrame(df6_t2).apply(lambda x: (x / x['total'] * 100), axis=1).fillna(0).drop('total', 1)
     df6_t3.columns.name = 'Type'
-    proportion_stackplot(df6_t3, output=os.path.join(output_dir, 'figure_3_6.svg'), xlabel='Date', ylabel='%des offres',
+    proportion_stackplot(df6_t3, output=os.path.join(output_dir, 'time_series_6.svg'), xlabel='Date', ylabel='%des offres',
                          title=u"Évolution de la proportion des types de CDI")
 
     '''
@@ -199,7 +199,7 @@ def run(job_list, output_dir):
     # replace all the values by ratios
     df7_t3 = pd.DataFrame(df7_t2).apply(lambda x: (x / x['total'] * 100), axis=1).fillna(0).drop('total', 1)
     df7_t3.columns.name = 'Type'
-    proportion_stackplot(df7_t3, output=os.path.join(output_dir, 'figure_3_7.svg'), xlabel='Date', ylabel='%des offres',
+    proportion_stackplot(df7_t3, output=os.path.join(output_dir, 'time_series_7.svg'), xlabel='Date', ylabel='%des offres',
                          title=u'Évolution de la proportion des types de CDD')
 
     # education level quantity
@@ -218,7 +218,7 @@ def run(job_list, output_dir):
     ax.set_xlabel('Date')
     ax.set_ylabel("Nombre d'offres")
     plt.title(u"Nombre de CDD et CDI en fonction du niveau de diplôme", y=1.08)
-    plt.savefig(os.path.join(output_dir, 'figure_3_8.svg'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'time_series_8.svg'), bbox_inches='tight')
     plt.close()
 
     '''
@@ -229,7 +229,7 @@ def run(job_list, output_dir):
     df9['total'] = df9.Master + df9.PhD
     # replace all the values by ratios
     df9 = pd.DataFrame(df9).apply(lambda x: (x / x['total'] * 100), axis=1).fillna(0).drop('total', 1)
-    proportion_stackplot(df9, output=os.path.join(output_dir, 'figure_3_9.svg'), xlabel='Date', ylabel='%des offres',
+    proportion_stackplot(df9, output=os.path.join(output_dir, 'time_series_9.svg'), xlabel='Date', ylabel='%des offres',
                          title=u'Proportion des niveaux de diplôme requis pour les CDD et CDI')
 
     '''
@@ -245,7 +245,7 @@ def run(job_list, output_dir):
     ax.set_xlabel('Mois')
     ax.set_ylabel("Nombre d'offres")
     plt.title(u'Moyennes mensuelles 2013-2015', y=1.08)
-    plt.savefig(os.path.join(output_dir, 'figure_3_9.svg'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'time_series_10.svg'), bbox_inches='tight')
     plt.close()
 
     df11 = pd.DataFrame({'date': df.submission_date, 'type': df.contract_subtype})
@@ -260,7 +260,7 @@ def run(job_list, output_dir):
     ax.set_xlabel('Mois')
     ax.set_ylabel("Nombre d'offres")
     plt.title(u'Moyennes mensuelles 2013-2015 pour les CDD', y=1.08)
-    plt.savefig(os.path.join(output_dir, 'figure_3_10.svg'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'time_series_11.svg'), bbox_inches='tight')
     plt.close()
 
     df12 = pd.DataFrame({'date': df.submission_date, 'type': df.contract_subtype})
@@ -276,5 +276,5 @@ def run(job_list, output_dir):
     ax.set_xlabel('Mois')
     ax.set_ylabel("Nombre d'offres")
     plt.title(u'Moyennes mensuelles 2013-2015 pour les CDI', y=1.08)
-    plt.savefig(os.path.join(output_dir, 'figure_3_11.svg'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'time_series_12.svg'), bbox_inches='tight')
     plt.close()

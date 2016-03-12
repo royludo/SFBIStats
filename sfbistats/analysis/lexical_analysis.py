@@ -219,7 +219,7 @@ def run(job_list, output_dir):
     total_words= get_total_words(lex_dic)
     ordered_freq_list = build_freq_list(lex_dic, total_words)
 
-    create_wordcloud(ordered_freq_list, os.path.join(output_dir, 'figure_2_3.png'))
+    create_wordcloud(ordered_freq_list, os.path.join(output_dir, 'lexical_analysis_3.png'))
 
     print "TOTAL unique words: " + str(len(lex_dic))
     print "TOTAL words: " + str(total_words)
@@ -241,5 +241,5 @@ def run(job_list, output_dir):
     print "matlab  " + str(get_rank('matlab', ordered_freq_list))
     """
 
-    #plot_tendencies(['perl', 'java', 'python', 'c++'], pos_dic, 5, output_dir, 'figure_2_2.svg')
+    #plot_tendencies(['perl', 'java', 'python', 'c++'], pos_dic, 5, output_dir, 'lexical_analysis_2.svg')
 

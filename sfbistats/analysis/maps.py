@@ -176,7 +176,7 @@ def run(job_list, output_dir):
             map2.plot(x, y, marker='o', color='m', markersize=int(location_dict[city]['count'] / 2), alpha=0.5)
             plt.text(x + location_dict[city]['count'] * 85, y + location_dict[city]['count'] * 85, city, va='bottom')
 
-    plt.savefig(os.path.join(output_dir, 'figure_4_1.svg'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'maps_1.svg'), bbox_inches='tight')
     plt.close()
 
     ########################
@@ -214,7 +214,7 @@ def run(job_list, output_dir):
             # submapIDF_contract_type.plot(x, y, marker='o', color='m', markersize=int(location_dict[city]['count']/2), alpha=0.5)
             plt.text(x, y, city)
 
-    plt.savefig(os.path.join(output_dir, 'figure_4_2.svg'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'maps_2.svg'), bbox_inches='tight')
     plt.close()
 
     ########################
@@ -252,5 +252,5 @@ def run(job_list, output_dir):
             # submapIDF_contract_type.plot(x, y, marker='o', color='m', markersize=int(location_dict[city]['count']/2), alpha=0.5)
             plt.text(x, y, city.decode('utf8'))
 
-    plt.savefig(os.path.join(output_dir, 'figure_4_3.svg'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'maps_3.svg'), bbox_inches='tight')
     plt.close()
