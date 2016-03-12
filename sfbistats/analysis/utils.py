@@ -157,6 +157,26 @@ def city_to_dep_region(name, city_filename):
                 country = component['long_name']
         print ('Found:', ', '.join([dep, reg, country]))
 
+        # Conversion to new regions
+        newregions_dict = {'Haute-Normandie': 'Normandie',
+                           'Basse-Normandie': 'Normandie',
+                           'Champagne-Ardenne': 'Alsace-Champagne-Ardenne-Lorraine',
+                           'Alsace': 'Alsace-Champagne-Ardenne-Lorraine',
+                           'Lorraine': 'Alsace-Champagne-Ardenne-Lorraine',
+                           'Bourgogne': 'Bourgogne-Franche-Comté',
+                           'Franche-Comté': 'Bourgogne-Franche-Comté',
+                           'Auvergne': 'Auvergne-Rhône-Alpes',
+                           'Rhône-Alpes': 'Auvergne-Rhône-Alpes',
+                           'Aquitaine': 'Aquitaine-Limousin-Poitou-Charentes',
+                           'Limousin': 'Aquitaine-Limousin-Poitou-Charentes',
+                           'Poitou-Charentes': 'Aquitaine-Limousin-Poitou-Charentes',
+                           'Languedoc-Roussillon': 'Languedoc-Roussillon-Midi-Pyrénées',
+                           'Midi-Pyrénées': 'Languedoc-Roussillon-Midi-Pyrénées',
+                           'Nord-Pas-de-Calais': 'Nord-Pas-de-Calais-Picardie',
+                           'Picardie': 'Nord-Pas-de-Calais-Picardie'}
+        if reg in newregions_dict:
+            reg = newregions_dict[reg]
+
         if country != 'France':
             dep = u'Étranger'
             reg = u'Étranger'
