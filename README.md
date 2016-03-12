@@ -153,12 +153,16 @@ So beware that the information displayed in these charts may not be the most acc
 
 figure_2_1:
 
-Generated with the [word_cloud module](https://github.com/amueller/word_cloud).
+Generated with the [word_cloud module](https://github.com/amueller/word_cloud) using the content of the job offers.
 
 figure_2_2:
 
 This is just an example of what the lexical_analysis module can do.
 Some programming languages have been chosen to illustrate it.
+
+figure_2_3:
+
+See figure_2_1. Generated with the titles of the job offers.
 
 ### Code
 

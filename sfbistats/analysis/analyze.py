@@ -78,10 +78,10 @@ if __name__ == '__main__':
     job_list = load_from_json(input_file)
 
     # run the scripts
-    #sfbi_summary.run(job_list, output_dir)
+    sfbi_summary.run(job_list, output_dir)
     sfbi_summary_lins.run(job_list, output_dir)
-    #lexical_analysis.run(job_list, output_dir) # can't be run on JobOfferAnon
-    #sfbi_time_series.run(job_list, output_dir)
-    #sfbi_maps.run(job_list, output_dir)
+    lexical_analysis.run(job_list, output_dir) # can't be run on JobOfferAnon
+    sfbi_time_series.run(job_list, output_dir)
+    sfbi_maps.run(job_list, output_dir)
 
     print "Complete"
