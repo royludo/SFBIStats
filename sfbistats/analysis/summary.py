@@ -9,22 +9,27 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 import sfbistats.analysis.utils as sfbi_utils
+import numpy as num
 
 
-def minimal_hbar(series, output):
-    ss = series.sort_values()  # needed for barh
+def minimal_hbar(ss, figsize=(6,3)):
+    tot = ss.values.sum()
+    ss = ss.sort_values(ascending=True)
     labels = ss.index.get_values()
-    labelAsX = range(len(labels))
-    plt.figure(figsize=(10, 0.75 * len(labels)))
-    plt.barh(labelAsX, ss.values, align='center', color='cornflowerblue', height=0.8)
-    plt.yticks(labelAsX, labels)
-    plt.xticks([])
-    plt.grid(False)
+    labelAsX = num.arange(len(labels))+0.5
+    fig, ax  = plt.subplots(figsize=figsize)
+    ax.barh(labelAsX, ss.values, align='center', color='cornflowerblue', height=0.8)
+    ax.set_yticks(labelAsX)
+    ax.set_yticklabels(labels)
+    ax.set_xticks([])
+    ax.grid(False)
+    ax.set_ylim(0, labelAsX[-1]+1)
+    ax.set_xlim(0, max(ss.values*1.15))
     for pos, n in zip(labelAsX, ss.values):
-        plt.annotate(str(n), xy=(n + (max(ss.values * 0.01)), pos))
-    plt.title('Types de poste', y=1.08)
-    plt.savefig(output, bbox_inches='tight')
-    plt.close()
+        perc = 100*float(n)/tot
+        ax.annotate('{0:.1f}%'.format(perc), xy=(n + (max(ss.values) * 0.01), pos), va='center')
+        ax.annotate(str(n), xy=(n - (max(ss.values * 0.01)), pos), va='center', ha='right')
+    return fig, ax
 
 
 def run(job_list, output_dir):
@@ -53,7 +58,11 @@ def run(job_list, output_dir):
 
     # general types ratios pie chart
     df_contract_type_count = pd.Series(df.contract_type).value_counts(sort=True)
-    minimal_hbar(df_contract_type_count, os.path.join(output_dir, 'summary_6.svg'))
+    fig, ax = minimal_hbar(df_contract_type_count)
+    ax.set_title(u'Types de postes')
+    fig.savefig(os.path.join(output_dir, 'summary_6.svg'), bbox_inches='tight')
+    plt.close(fig); del(fig)
+
     plt.figure()
     ax = df_contract_type_count.plot(kind='pie', startangle=90, autopct='%1.1f%%', colors=colors)
     ax.set_xlabel('')
@@ -65,7 +74,11 @@ def run(job_list, output_dir):
 
     # CDI subtypes ratios pie chart
     df_contract_subtype_CDI_count = pd.Series(df[df.contract_type == 'CDI'].contract_subtype).value_counts(sort=True)
-    minimal_hbar(df_contract_subtype_CDI_count, os.path.join(output_dir, 'summary_7.svg'))
+    fig, ax = minimal_hbar(df_contract_subtype_CDI_count)
+    ax.set_title(u'Types de postes')
+    fig.savefig(os.path.join(output_dir, 'summary_7.svg'), bbox_inches='tight')
+    plt.close(fig); del(fig)
+
     plt.figure()
     ax = df_contract_subtype_CDI_count.plot(kind='pie', startangle=90, autopct='%1.1f%%', colors=colors)
     ax.set_xlabel('')
@@ -77,7 +90,11 @@ def run(job_list, output_dir):
 
     # CDD subtypes ratios pie chart
     df_contract_subtype_CDD_count = pd.Series(df[df.contract_type == 'CDD'].contract_subtype).value_counts(sort=True)
-    minimal_hbar(df_contract_subtype_CDD_count, os.path.join(output_dir, 'summary_8.svg'))
+    fig, ax = minimal_hbar(df_contract_subtype_CDD_count)
+    ax.set_title(u'Types de postes')
+    fig.savefig(os.path.join(output_dir, 'summary_8.svg'), bbox_inches='tight')
+    plt.close(fig); del(fig)
+
     plt.figure()
     ax = df_contract_subtype_CDD_count.plot(kind='pie', startangle=90, autopct='%1.1f%%', colors=colors)
     ax.set_xlabel('')
