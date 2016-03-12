@@ -36,6 +36,12 @@ def run(job_list, output_dir):
     master_level = [u'CDD Ingénieur', 'IE']
     colors = sfbi_utils.get_colors()
 
+    plt.style.use('fivethirtyeight')
+    plt.rcParams['axes.prop_cycle'] = plt.cycler('color', sfbi_utils.get_colors())
+    # for the pie charts
+    plt.rcParams['patch.linewidth'] = 1
+    plt.rcParams['patch.edgecolor'] = 'white'
+
     df = pd.DataFrame(job_list, columns=['_id', 'contract_type', 'contract_subtype', 'city', 'submission_date'])
 
     summary_file = open(os.path.join(output_dir, 'summary.txt'), 'w')
@@ -122,7 +128,7 @@ def run(job_list, output_dir):
     citytype_dict = dict()
     citysubtype_dict = dict()
     for i in range(0, len(df)):
-        city = df.city[i].encode('utf8')
+        city = df.city[i]
         type = df.contract_type[i].encode('utf8')
         subtype = df.contract_subtype[i].encode('utf8')
         if citytype_dict.has_key(city):

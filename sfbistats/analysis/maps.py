@@ -155,7 +155,7 @@ def run(job_list, output_dir):
             # print city+" "+str(location_dict[city]['count'])
             x, y = fr_map(location_dict[city]['longitude'], location_dict[city]['latitude'])
             fr_map.plot(x, y, marker='o', color='m', markersize=int(location_dict[city]['count'] / 2), alpha=0.5)
-            plt.text(x + location_dict[city]['count'] * 320, y + location_dict[city]['count'] * 320, city)
+            plt.text(x + location_dict[city]['count'] * 320, y + location_dict[city]['count'] * 320, city.decode('utf8'))
 
     axins = zoomed_inset_axes(ax, 3.5, loc=3)
     # NE 49.241299, 3.55852
@@ -189,7 +189,7 @@ def run(job_list, output_dir):
             ratio_list = get_contract_type_ratios(location_dict[city])
             draw_pie(ax, ratios=ratio_list, X=x, Y=y, size=600)
             # map_contract_type.plot(x, y, marker='o', color='m', markersize=int(location_dict[city]['count']/2), alpha=0.5)
-            plt.text(x, y, city)
+            plt.text(x, y, city.decode('utf8'))
 
     axins = zoomed_inset_axes(ax, 3.5, loc=3)
     # NE 49.241299, 3.55852
@@ -227,7 +227,7 @@ def run(job_list, output_dir):
             ratio_list = get_contract_subtype_ratios(location_dict[city])
             draw_pie(ax, ratios=ratio_list, X=x, Y=y, size=600)
             # map_contract_type.plot(x, y, marker='o', color='m', markersize=int(location_dict[city]['count']/2), alpha=0.5)
-            plt.text(x, y, city)
+            plt.text(x, y, city.decode('utf8'))
 
     axins = zoomed_inset_axes(ax, 3.5, loc=3)
     # NE 49.241299, 3.55852
@@ -250,7 +250,7 @@ def run(job_list, output_dir):
             ratio_list = get_contract_subtype_ratios(location_dict[city])
             draw_pie(axins, ratios=ratio_list, X=x, Y=y, size=600)
             # submapIDF_contract_type.plot(x, y, marker='o', color='m', markersize=int(location_dict[city]['count']/2), alpha=0.5)
-            plt.text(x, y, city)
+            plt.text(x, y, city.decode('utf8'))
 
     plt.savefig(os.path.join(output_dir, 'figure_4_3.png'), bbox_inches='tight')
     plt.close()

@@ -9,6 +9,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mDates
 import os
+import sfbistats.analysis.utils as sfbi_utils
 
 
 def proportion_stackplot(df, output=None, xlabel='', ylabel='', title=''):
@@ -88,8 +89,10 @@ def legend_displace_factor(column_names):
 def run(job_list, output_dir):
 
     print "Running time_series.py"
+    plt.style.use('fivethirtyeight')
     plt.rcParams['lines.linewidth'] = 0
     plt.rcParams['patch.linewidth'] = 0
+    plt.rcParams['axes.prop_cycle'] = plt.cycler('color', sfbi_utils.get_colors())
     # disable silly warning
     pd.options.mode.chained_assignment = None
 
