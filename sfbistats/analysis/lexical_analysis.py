@@ -241,5 +241,5 @@ def run(job_list, output_dir):
     print "matlab  " + str(get_rank('matlab', ordered_freq_list))
     """
 
-    #plot_tendencies(['perl', 'java', 'python', 'c++'], pos_dic, 5, output_dir, 'figure_2_2.png')
+    #plot_tendencies(['perl', 'java', 'python', 'c++'], pos_dic, 5, output_dir, 'figure_2_2.svg')
 
