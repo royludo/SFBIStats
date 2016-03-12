@@ -222,9 +222,10 @@ def run(job_list, output_dir):
 
     create_wordcloud(ordered_freq_list, os.path.join(output_dir, 'lexical_analysis_3.png'))
 
+    """
     print "TOTAL unique words: " + str(len(lex_dic))
     print "TOTAL words: " + str(total_words)
-    """
+
     print "bioinformatique " + str(get_rank('bioinformatique', ordered_freq_list))
     print "Perl " + str(get_rank('perl', ordered_freq_list))
     print "Java " + str(get_rank('java', ordered_freq_list))
