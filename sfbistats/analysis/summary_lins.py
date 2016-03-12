@@ -31,7 +31,7 @@ def minimal_hbar(ss, figsize=(6,3)):
 
 
 def run(job_list, output_dir):
-    print "Running summary.py"
+    print "Running summary_lins.py"
     contract_type_labels = ['Stage', u'Thèse', 'CDD', 'CDI']
     contract_subtype_labels = {'CDI': ['PR', 'MdC', 'CR', 'IR', 'IE', 'CDI autre'],
                                'CDD': ['Post-doc / IR', u'CDD Ingénieur', 'ATER', 'CDD autre']}

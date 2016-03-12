@@ -19,6 +19,7 @@ from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+import pkg_resources
 
 
 def get_stopwords():
@@ -31,11 +32,11 @@ def get_stopwords():
 
     """
     stopword_dict = dict()
-    f_en = open('stopwords_en.txt', 'r')
+    f_en = open(pkg_resources.resource_filename('sfbistats.analysis', 'stopwords_en.txt'), 'r')
     for line in f_en.readlines():
         stopword_dict[line.strip().lower()] = True
     f_en.close()
-    f_fr = open('stopwords_fr.txt', 'r')
+    f_fr = open(pkg_resources.resource_filename('sfbistats.analysis', 'stopwords_fr.txt'), 'r')
     for line in f_fr.readlines():
         a = line.strip().lower().decode('utf8')
         stopword_dict[a] = True
