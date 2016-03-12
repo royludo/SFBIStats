@@ -133,14 +133,10 @@ The data have been scraped from web pages, and are delivered raw. Sanitization o
 
 ### Charts
 
-You can see a sample of the output charts [here](https://www.dropbox.com/sh/b33edivf9tuljfw/AABiurGJNg0i0EdhxoEwouc0a). They are numbered according to the script that created it:
- - summary.py : 1
- - lexical_analysis.py : 2 (unusable with the provided data)
- - time_series.py : 3
- - maps.py : 4
-So figure_1_1 and figure_1_2 are the first two figures from summary.py, and so on...
+You can see a sample of the output charts [here](https://www.dropbox.com/sh/b33edivf9tuljfw/AABiurGJNg0i0EdhxoEwouc0a).
+They are named according to the script that created it.
 
-figure_1_5, 3_8 and 3_9:
+summary_5 and 9, time_series_8 and 9:
 
 The education level required for a job has been inferred only from job subtypes, and concerns only CDD and CDI.
 Stage and Thèse categories have been excluded.
@@ -151,24 +147,24 @@ The job was considered as requiring :
 The fuzzy subtypes 'CDD autre' and 'CDI autre' have been excluded.
 So beware that the information displayed in these charts may not be the most accurate there is. Use with caution.
 
-figure_2_1:
+lexical_analysis_1:
 
 Generated with the [word_cloud module](https://github.com/amueller/word_cloud) using the content of the job offers.
 
-figure_2_2:
+lexical_analysis_2:
 
 This is just an example of what the lexical_analysis module can do.
 Some programming languages have been chosen to illustrate it.
 
-figure_2_3:
+lexical_analysis_3:
 
-See figure_2_1. Generated with the titles of the job offers.
+See lexical_analysis_1. Generated only with the titles of the job offers.
 
 ### Code
 
 You will probably be interested by the content of the analysis package only. The main script is analyze.py. It calls
 the other python modules which produce the charts. 
-Beware that lexical_analysis.py can not be used with the provided data.
+Beware that some functions in lexical_analysis.py can not be used with the provided data.
 
 ## 4. CONTRIBUTE
 

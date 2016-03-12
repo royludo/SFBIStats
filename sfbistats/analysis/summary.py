@@ -172,7 +172,7 @@ def run(job_list, output_dir):
     for i in range(0,10):
         city = df_city2.index[i]
         total = df_city2[i]
-        print str(city)+' '+str(total)
+        #print str(city)+' '+str(total)
         #proportion_dict[city] = {'CDD': 0, 'CDI': 0, u'Thèse': 0, 'Stage': 0}
         for k,v in citytype_dict[city].iteritems():
             proportion_dict[k.decode('utf8')][city] = citytype_dict[city][k] / float(total)
