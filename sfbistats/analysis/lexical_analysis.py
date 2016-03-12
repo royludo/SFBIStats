@@ -19,6 +19,7 @@ from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+import pkg_resources
 
 
 def get_stopwords():
@@ -31,11 +32,11 @@ def get_stopwords():
 
     """
     stopword_dict = dict()
-    f_en = open('stopwords_en.txt', 'r')
+    f_en = open(pkg_resources.resource_filename('sfbistats.analysis', 'stopwords_en.txt'), 'r')
     for line in f_en.readlines():
         stopword_dict[line.strip().lower()] = True
     f_en.close()
-    f_fr = open('stopwords_fr.txt', 'r')
+    f_fr = open(pkg_resources.resource_filename('sfbistats.analysis', 'stopwords_fr.txt'), 'r')
     for line in f_fr.readlines():
         a = line.strip().lower().decode('utf8')
         stopword_dict[a] = True
@@ -66,12 +67,12 @@ def my_color_func(word=None, font_size=None, position=None, orientation=None, fo
     return "hsl(%d, 70%%, 40%%)" % random_state.randint(0, 255)
 
 
-def build_lex_dic(job_list, stopword_dict= {}, separator=u"[\s,.\(\)!?/:;\[\]\{\}\u2019']+"):
+def build_lex_dic(corpus, stopword_dict= {}, separator=u"[\s,.\(\)!?/:;\[\]\{\}\u2019']+"):
     """
 
     Parameters
     ----------
-    job_list
+    corpus
     stopword_dict
     separator
 
@@ -80,8 +81,7 @@ def build_lex_dic(job_list, stopword_dict= {}, separator=u"[\s,.\(\)!?/:;\[\]\{\
 
     """
     lex_dic = dict()
-    for job in job_list:
-        text = job['description']
+    for text in corpus:
         for tkn in re.split(separator, text):
             tkn = tkn.lower()
             # don't keep stopwords, and skip weird characters and whitespace
@@ -94,12 +94,12 @@ def build_lex_dic(job_list, stopword_dict= {}, separator=u"[\s,.\(\)!?/:;\[\]\{\
     return lex_dic
 
 
-def build_pos_dic(job_list, stopword_dict= {}, separator=u"[\s,.\(\)!?/:;\[\]\{\}\u2019']+"):#, bins=100):
+def build_pos_dic(corpus, stopword_dict= {}, separator=u"[\s,.\(\)!?/:;\[\]\{\}\u2019']+"):#, bins=100):
     """
 
     Parameters
     ----------
-    job_list
+    corpus
     stopword_dict
     separator
 
@@ -108,8 +108,7 @@ def build_pos_dic(job_list, stopword_dict= {}, separator=u"[\s,.\(\)!?/:;\[\]\{\
 
     """
     pos_dic = dict()
-    for job in job_list:
-        text = job['description']
+    for text in corpus:
         word_pos = 0
         text_pos_dic = dict()
         for tkn in re.split(separator, text):
@@ -149,14 +148,14 @@ def build_freq_list(lex_dic, total):
     return freq_list
 
 
-def create_wordcloud(ordered_freq_list, output_dir):
+def create_wordcloud(ordered_freq_list, output):
     plt.figure(figsize=(10,8))
     wordcloud = WordCloud(width=1000, height=800, max_words=100, background_color='white',
                           relative_scaling=0.7, random_state=15, prefer_horizontal=0.5) .generate_from_frequencies(ordered_freq_list[0:100])
     wordcloud.recolor(random_state=42, color_func=my_color_func)
     plt.imshow(wordcloud)
     plt.axis("off")
-    plt.savefig(os.path.join(output_dir, 'figure_2_1.png'), bbox_inches='tight', facecolor='white')
+    plt.savefig(output, bbox_inches='tight', facecolor='white')
 
 
 def get_rank(word, ordered_freq_list):
@@ -212,15 +211,21 @@ def run(job_list, output_dir):
     stopword_dict['http'] = True
     stopword_dict['al'] = True
 
-    lex_dic = build_lex_dic(job_list, stopword_dict=stopword_dict)
-    pos_dic = build_pos_dic(job_list, stopword_dict=stopword_dict)#, bins=100)
+    corpus = list()
+    for job in job_list:
+        corpus.append(job['title'])
+
+    lex_dic = build_lex_dic(corpus, stopword_dict=stopword_dict)
+    pos_dic = build_pos_dic(corpus, stopword_dict=stopword_dict)#, bins=100)
     total_words= get_total_words(lex_dic)
     ordered_freq_list = build_freq_list(lex_dic, total_words)
 
-    create_wordcloud(ordered_freq_list, output_dir)
+    create_wordcloud(ordered_freq_list, os.path.join(output_dir, 'lexical_analysis_3.png'))
 
+    """
     print "TOTAL unique words: " + str(len(lex_dic))
     print "TOTAL words: " + str(total_words)
+
     print "bioinformatique " + str(get_rank('bioinformatique', ordered_freq_list))
     print "Perl " + str(get_rank('perl', ordered_freq_list))
     print "Java " + str(get_rank('java', ordered_freq_list))
@@ -236,6 +241,7 @@ def run(job_list, output_dir):
     print "c# " + str(get_rank('c#', ordered_freq_list))
     print "c++ " + str(get_rank('c++', ordered_freq_list))
     print "matlab  " + str(get_rank('matlab', ordered_freq_list))
+    """
 
-    plot_tendencies(['perl', 'java', 'python', 'c++'], pos_dic, 5, output_dir, 'figure_2_2.png')
+    #plot_tendencies(['perl', 'java', 'python', 'c++'], pos_dic, 5, output_dir, 'lexical_analysis_2.svg')
 

@@ -10,10 +10,10 @@ from __future__ import unicode_literals
 
 import json
 import argparse
-import matplotlib.pyplot as plt
 from bson import json_util
 import os
 import sfbistats.analysis.utils as sfbi_utils
+import pkg_resources
 
 
 import sfbistats.job_offer as sfbi_job
@@ -22,13 +22,6 @@ import sfbistats.analysis.summary as sfbi_summary
 import sfbistats.analysis.summary_lins as sfbi_summary_lins
 import sfbistats.analysis.lexical_analysis as sfbi_lexical_analysis
 import sfbistats.analysis.maps as sfbi_maps
-
-#plt.style.use('fivethirtyeight')
-#plt.rcParams['axes.prop_cycle'] = plt.cycler('color', sfbi_utils.get_colors())
-# for the pie charts
-#plt.rcParams['patch.linewidth'] = 1
-#plt.rcParams['patch.edgecolor'] = 'white'
-
 
 
 def load_from_json(file):
@@ -50,7 +43,7 @@ def load_from_json(file):
         job = sfbi_job.JobOfferAnon.from_json(json.loads(l, object_hook=json_util.object_hook)).to_dict()
         job['city'] = sfbi_utils.sanitize_city_name(job['city'])
         job['city'] = sfbi_utils.sanitize_city_name_for_geoloc(job['city'])
-        city_file = './resources/city_locations.csv'
+        city_file = pkg_resources.resource_filename('sfbistats.analysis', 'city_locations.csv')
         dep, reg = sfbi_utils.city_to_dep_region(job['city'], city_file)
         job['department'] = dep
         job['region'] = reg
@@ -78,10 +71,10 @@ if __name__ == '__main__':
     job_list = load_from_json(input_file)
 
     # run the scripts
-    #sfbi_summary.run(job_list, output_dir)
+    sfbi_summary.run(job_list, output_dir)
     sfbi_summary_lins.run(job_list, output_dir)
-    #lexical_analysis.run(job_list, output_dir) # can't be run on JobOfferAnon
-    #sfbi_time_series.run(job_list, output_dir)
-    #sfbi_maps.run(job_list, output_dir)
+    sfbi_lexical_analysis.run(job_list, output_dir)
+    sfbi_time_series.run(job_list, output_dir)
+    sfbi_maps.run(job_list, output_dir)
 
     print "Complete"

@@ -10,8 +10,7 @@ import pandas as pd
 import os
 import sfbistats.analysis.utils as sfbi_utils
 import numpy as num
-import geopy
-import sys
+
 
 def minimal_hbar(ss, figsize=(6,3)):
     tot = ss.values.sum()
@@ -32,29 +31,23 @@ def minimal_hbar(ss, figsize=(6,3)):
 
 
 def run(job_list, output_dir):
-    print "Running summary.py"
+    print "Running summary_lins.py"
     contract_type_labels = ['Stage', u'Thèse', 'CDD', 'CDI']
     contract_subtype_labels = {'CDI': ['PR', 'MdC', 'CR', 'IR', 'IE', 'CDI autre'],
                                'CDD': ['Post-doc / IR', u'CDD Ingénieur', 'ATER', 'CDD autre']}
     phd_level = ['Post-doc / IR', 'PR', 'MdC', 'CR', 'IR', 'ATER']
     master_level = [u'CDD Ingénieur', 'IE']
     colors = sfbi_utils.get_colors()
+    plt.rcParams.update(plt.rcParamsDefault)
 
     df = pd.DataFrame(job_list, columns=['_id', 'contract_type', 'contract_subtype',
                                          'city', 'department', 'region', 'submission_date'])
-
-    summary_file = open(os.path.join(output_dir, 'summary.txt'), 'w')
-    submission_date_series = pd.Series(df.submission_date)
-    summary_file.write("From " + str(submission_date_series.min()) + " to " + str(submission_date_series.max()) + '\n')
-    summary_file.write("Total jobs: " + str(len(df.index)) + "\n")
-    summary_file.write(pd.Series(df.contract_type).value_counts().to_string(header=False).encode(
-        'utf8') + "\n")  # global contract type proportions
 
     # Contract type
     df_contract_type_count = pd.Series(df.contract_type).value_counts(sort=True, ascending=True)
     fig, ax = minimal_hbar(df_contract_type_count)
     ax.set_title(u'Répartition des types de contrats (2012-2016)')
-    fig.savefig(os.path.join(output_dir, 'contract_type.svg'),
+    fig.savefig(os.path.join(output_dir, 'summary_lins_1.svg'),
             bbox_inches='tight')
     plt.close(fig); del(fig)
 
@@ -62,7 +55,7 @@ def run(job_list, output_dir):
     df_contract_subtype_CDI_count = pd.Series(df[df.contract_type == 'CDI'].contract_subtype).value_counts(sort=True, ascending=True)
     fig, ax = minimal_hbar(df_contract_subtype_CDI_count)
     ax.set_title(u'Répartition des types de CDI (2012-2016)')
-    fig.savefig(os.path.join(output_dir, 'cdi_subtype.svg'),
+    fig.savefig(os.path.join(output_dir, 'summary_lins_2.svg'),
             bbox_inches='tight')
     plt.close(fig); del(fig)
 
@@ -70,7 +63,7 @@ def run(job_list, output_dir):
     df_contract_subtype_CDD_count = pd.Series(df[df.contract_type == 'CDD'].contract_subtype).value_counts(sort=True, ascending=True)
     fig, ax = minimal_hbar(df_contract_subtype_CDD_count)
     ax.set_title(u'Répartition des types de CDD (2012-2016)')
-    fig.savefig(os.path.join(output_dir, 'cdd_subtype.svg'),
+    fig.savefig(os.path.join(output_dir, 'summary_lins_3.svg'),
             bbox_inches='tight')
     plt.close(fig); del(fig)
 
@@ -78,7 +71,7 @@ def run(job_list, output_dir):
     df_region_count = pd.Series(df.region).value_counts(sort=True, ascending=True)
     fig, ax = minimal_hbar(df_region_count, figsize=(6,7))
     ax.set_title(u'Répartition des offres par régions (2012-2016)')
-    fig.savefig(os.path.join(output_dir, 'regions.svg'),
+    fig.savefig(os.path.join(output_dir, 'summary_lins_4.svg'),
             bbox_inches='tight')
     plt.close(fig); del(fig)
 
@@ -86,6 +79,6 @@ def run(job_list, output_dir):
     df_dept_count = pd.Series(df.department).value_counts(sort=True, ascending=True)
     fig, ax = minimal_hbar(df_dept_count, figsize=(6,10))
     ax.set_title(u'Répartition des offres par département (2012-2016)')
-    fig.savefig(os.path.join(output_dir, 'departements.svg'),
+    fig.savefig(os.path.join(output_dir, 'summary_lins_5.svg'),
             bbox_inches='tight')
     plt.close(fig); del(fig)

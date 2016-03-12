@@ -9,22 +9,27 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 import sfbistats.analysis.utils as sfbi_utils
+import numpy as num
 
 
-def minimal_hbar(series, output):
-    ss = series.sort_values()  # needed for barh
+def minimal_hbar(ss, figsize=(6,3)):
+    tot = ss.values.sum()
+    ss = ss.sort_values(ascending=True)
     labels = ss.index.get_values()
-    labelAsX = range(len(labels))
-    plt.figure(figsize=(10, 0.75 * len(labels)))
-    plt.barh(labelAsX, ss.values, align='center', color='cornflowerblue', height=0.8)
-    plt.yticks(labelAsX, labels)
-    plt.xticks([])
-    plt.grid(False)
+    labelAsX = num.arange(len(labels))+0.5
+    fig, ax  = plt.subplots(figsize=figsize)
+    ax.barh(labelAsX, ss.values, align='center', color='cornflowerblue', height=0.8)
+    ax.set_yticks(labelAsX)
+    ax.set_yticklabels(labels)
+    ax.set_xticks([])
+    ax.grid(False)
+    ax.set_ylim(0, labelAsX[-1]+1)
+    ax.set_xlim(0, max(ss.values*1.15))
     for pos, n in zip(labelAsX, ss.values):
-        plt.annotate(str(n), xy=(n + (max(ss.values * 0.01)), pos))
-    plt.title('Types de poste', y=1.08)
-    plt.savefig(output, bbox_inches='tight')
-    plt.close()
+        perc = 100*float(n)/tot
+        ax.annotate('{0:.1f}%'.format(perc), xy=(n + (max(ss.values) * 0.01), pos), va='center')
+        ax.annotate(str(n), xy=(n - (max(ss.values * 0.01)), pos), va='center', ha='right')
+    return fig, ax
 
 
 def run(job_list, output_dir):
@@ -35,6 +40,12 @@ def run(job_list, output_dir):
     phd_level = ['Post-doc / IR', 'PR', 'MdC', 'CR', 'IR', 'ATER']
     master_level = [u'CDD Ingénieur', 'IE']
     colors = sfbi_utils.get_colors()
+
+    plt.style.use('fivethirtyeight')
+    plt.rcParams['axes.prop_cycle'] = plt.cycler('color', sfbi_utils.get_colors())
+    # for the pie charts
+    plt.rcParams['patch.linewidth'] = 1
+    plt.rcParams['patch.edgecolor'] = 'white'
 
     df = pd.DataFrame(job_list, columns=['_id', 'contract_type', 'contract_subtype', 'city', 'submission_date'])
 
@@ -47,45 +58,57 @@ def run(job_list, output_dir):
 
     # general types ratios pie chart
     df_contract_type_count = pd.Series(df.contract_type).value_counts(sort=True)
-    minimal_hbar(df_contract_type_count, os.path.join(output_dir, 'figure_1_6.png'))
+    fig, ax = minimal_hbar(df_contract_type_count)
+    ax.set_title(u'Types de postes')
+    fig.savefig(os.path.join(output_dir, 'summary_6.svg'), bbox_inches='tight')
+    plt.close(fig); del(fig)
+
     plt.figure()
     ax = df_contract_type_count.plot(kind='pie', startangle=90, autopct='%1.1f%%', colors=colors)
     ax.set_xlabel('')
     ax.set_ylabel('')
     plt.axis('equal')
     plt.title('Types de poste', y=1.08)
-    plt.savefig(os.path.join(output_dir, 'figure_1_1.png'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'summary_1.svg'), bbox_inches='tight')
     plt.close()
 
     # CDI subtypes ratios pie chart
     df_contract_subtype_CDI_count = pd.Series(df[df.contract_type == 'CDI'].contract_subtype).value_counts(sort=True)
-    minimal_hbar(df_contract_subtype_CDI_count, os.path.join(output_dir, 'figure_1_7.png'))
+    fig, ax = minimal_hbar(df_contract_subtype_CDI_count)
+    ax.set_title(u'Types de CDI')
+    fig.savefig(os.path.join(output_dir, 'summary_7.svg'), bbox_inches='tight')
+    plt.close(fig); del(fig)
+
     plt.figure()
     ax = df_contract_subtype_CDI_count.plot(kind='pie', startangle=90, autopct='%1.1f%%', colors=colors)
     ax.set_xlabel('')
     ax.set_ylabel('')
     plt.axis('equal')
     plt.title('Types de CDI', y=1.08)
-    plt.savefig(os.path.join(output_dir, 'figure_1_2.png'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'summary_2.svg'), bbox_inches='tight')
     plt.close()
 
     # CDD subtypes ratios pie chart
     df_contract_subtype_CDD_count = pd.Series(df[df.contract_type == 'CDD'].contract_subtype).value_counts(sort=True)
-    minimal_hbar(df_contract_subtype_CDD_count, os.path.join(output_dir, 'figure_1_8.png'))
+    fig, ax = minimal_hbar(df_contract_subtype_CDD_count)
+    ax.set_title(u'Types de CDD')
+    fig.savefig(os.path.join(output_dir, 'summary_8.svg'), bbox_inches='tight')
+    plt.close(fig); del(fig)
+
     plt.figure()
     ax = df_contract_subtype_CDD_count.plot(kind='pie', startangle=90, autopct='%1.1f%%', colors=colors)
     ax.set_xlabel('')
     ax.set_ylabel('')
     plt.axis('equal')
     plt.title('Types de CDD', y=1.08)
-    plt.savefig(os.path.join(output_dir, 'figure_1_3.png'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'summary_3.svg'), bbox_inches='tight')
     plt.close()
 
     # best cities
     df_city = pd.Series(df.city).value_counts()
     # df_city = df_city[df_city >= 10]
-    sum_small_cities = df_city[df_city < 15].sum()
-    df_city = df_city[df_city >= 15]
+    sum_small_cities = df_city.iloc[16:].sum()
+    df_city = df_city.iloc[:15]
     df_city['Autres'] = sum_small_cities
     # plt.figure()
     city_names = df_city.index
@@ -97,8 +120,8 @@ def run(job_list, output_dir):
         ax.set_xlabel('')
         ax.set_ylabel('')
     plt.axis('equal')
-    plt.title("Parts des villes ayant plus de 15 offres d'emploi", y=1.08)
-    plt.savefig(os.path.join(output_dir, 'figure_1_4.png'), bbox_inches='tight')
+    plt.title("Parts des 15 villes ayant le plus d'offres d'emploi", y=1.08)
+    plt.savefig(os.path.join(output_dir, 'summary_4.svg'), bbox_inches='tight')
     plt.close()
 
     # education level ratios pie chart
@@ -115,5 +138,83 @@ def run(job_list, output_dir):
     ax.set_ylabel('')
     plt.axis('equal')
     plt.title(u'Niveau de diplôme requis pour les CDD et CDI', y=1.08)
-    plt.savefig(os.path.join(output_dir, 'figure_1_5.png'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'summary_5.svg'), bbox_inches='tight')
     plt.close()
+
+    # per city distribution
+    df_city2 = pd.Series(df.city).value_counts()
+    citytype_dict = dict()
+    citysubtype_dict = dict()
+    for i in range(0, len(df)):
+        city = df.city[i]
+        type = df.contract_type[i].encode('utf8')
+        subtype = df.contract_subtype[i].encode('utf8')
+        if citytype_dict.has_key(city):
+            if citytype_dict[city].has_key(type):
+                citytype_dict[city][type] += 1
+            else:
+                citytype_dict[city][type] = 1
+
+            if citysubtype_dict[city].has_key(subtype):
+                citysubtype_dict[city][subtype] += 1
+            else:
+                citysubtype_dict[city][subtype] = 1
+        else:
+            citytype_dict[city] = dict()
+            citytype_dict[city][type] = 1
+            citysubtype_dict[city] = dict()
+            citysubtype_dict[city][subtype] = 1
+    proportion_dict = {'CDD': {}, 'CDI': {}, u'Thèse': {}, 'Stage': {}, 'Total': {}}
+    count_dict = {'CDD': {}, 'CDI': {}, u'Thèse': {}, 'Stage': {}}
+    subtype_count_dict = {'PR': {}, 'MdC': {}, 'CR': {}, 'IR': {}, 'IE': {}, 'CDI autre': {},
+                          'Post-doc / IR': {}, u'CDD Ingénieur': {}, 'ATER': {}, 'CDD autre': {} }
+    study_level_dict = {'Master': {}, 'PhD': {}, 'Total': {}}
+    for i in range(0,10):
+        city = df_city2.index[i]
+        total = df_city2[i]
+        #print str(city)+' '+str(total)
+        #proportion_dict[city] = {'CDD': 0, 'CDI': 0, u'Thèse': 0, 'Stage': 0}
+        for k,v in citytype_dict[city].iteritems():
+            proportion_dict[k.decode('utf8')][city] = citytype_dict[city][k] / float(total)
+            count_dict[k.decode('utf8')][city] = citytype_dict[city][k]
+        proportion_dict['Total'][city] = total
+        for k,v in citysubtype_dict[city].iteritems():
+            if k:
+                subtype_count_dict[k.decode('utf8')][city] = citysubtype_dict[city][k]
+
+        study_level_dict['PhD'][city] = 0
+        study_level_dict['Master'][city] = 0
+        subtotal = 0
+        for k in phd_level:
+            if citysubtype_dict[city].has_key(k.encode('utf8')):
+                study_level_dict['PhD'][city] += citysubtype_dict[city][k.encode('utf8')]
+                subtotal += citysubtype_dict[city][k.encode('utf8')]
+        for k in master_level:
+            if citysubtype_dict[city].has_key(k.encode('utf8')):
+                study_level_dict['Master'][city] += citysubtype_dict[city][k.encode('utf8')]
+                subtotal += citysubtype_dict[city][k.encode('utf8')]
+        study_level_dict['Master'][city] /= float(subtotal)
+        study_level_dict['PhD'][city] /= float(subtotal)
+        study_level_dict['Total'][city] = subtotal
+
+    df_study_level_city = pd.DataFrame(study_level_dict).fillna(0).sort_values(by='Total')
+    ax = df_study_level_city.loc[:, ['Master', 'PhD']].plot(kind='barh', stacked=True, color=colors)
+    ax.set_xlim([0,1])
+    i = 0
+    for total in df_study_level_city['Total']:
+        ax.text(1.02, i-0.15, total)
+        i += 1
+    plt.title(u"Proportion des niveaux de diplôme requis\ndans les 10 villes ayant le plus d'offres", y=1.08)
+    plt.savefig(os.path.join(output_dir, 'summary_9.svg'), bbox_inches='tight')
+
+    df_proportion_city = pd.DataFrame(proportion_dict).fillna(0).sort_values(by='Total')
+    ax = df_proportion_city.loc[:, ['CDD', 'CDI', 'Stage', u'Thèse']].plot(kind='barh', stacked=True, color=colors)
+    ax.set_xlim([0,1])
+    i = 0
+    for total in df_proportion_city['Total']:
+        ax.text(1.02, i-0.15, total)
+        i += 1
+    plt.title(u"Répartition des types d'offres\ndans les 10 villes ayant le plus d'offres", y=1.08)
+    plt.savefig(os.path.join(output_dir, 'summary_10.svg'), bbox_inches='tight')
+
+
