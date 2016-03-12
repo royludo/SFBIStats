@@ -107,8 +107,8 @@ def run(job_list, output_dir):
     # best cities
     df_city = pd.Series(df.city).value_counts()
     # df_city = df_city[df_city >= 10]
-    sum_small_cities = df_city[df_city < 15].sum()
-    df_city = df_city[df_city >= 15]
+    sum_small_cities = df_city.iloc[16:].sum()
+    df_city = df_city.iloc[:15]
     df_city['Autres'] = sum_small_cities
     # plt.figure()
     city_names = df_city.index
@@ -120,7 +120,7 @@ def run(job_list, output_dir):
         ax.set_xlabel('')
         ax.set_ylabel('')
     plt.axis('equal')
-    plt.title("Parts des villes ayant plus de 15 offres d'emploi", y=1.08)
+    plt.title("Parts des 15 villes ayant le plus d'offres d'emploi", y=1.08)
     plt.savefig(os.path.join(output_dir, 'summary_4.svg'), bbox_inches='tight')
     plt.close()
 
