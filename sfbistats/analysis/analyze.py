@@ -70,7 +70,7 @@ if __name__ == '__main__':
 
     # run the scripts
     sfbi_summary.run(job_list, output_dir)
-    #lexical_analysis.run(job_list, output_dir) # can't be run on JobOfferAnon
+    sfbi_lexical_analysis.run(job_list, output_dir)
     sfbi_time_series.run(job_list, output_dir)
     sfbi_maps.run(job_list, output_dir)
 
