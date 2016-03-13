@@ -39,6 +39,14 @@ def run(job_list, output_dir):
                                'CDD': ['Post-doc / IR', u'CDD Ingénieur', 'ATER', 'CDD autre']}
     phd_level = ['Post-doc / IR', 'PR', 'MdC', 'CR', 'IR', 'ATER']
     master_level = [u'CDD Ingénieur', 'IE']
+    contract_subtype_level = {'Post-doc / IR': 'PhD',
+                              'PR': 'PhD',
+                              'MdC': 'PhD',
+                              'CR': 'PhD',
+                              'IR': 'PhD',
+                              'ATER': 'PhD',
+                              u'CDD Ingénieur': 'Master',
+                              'IE': 'Master'}
     colors = sfbi_utils.get_colors()
 
     plt.style.use('fivethirtyeight')
@@ -141,80 +149,55 @@ def run(job_list, output_dir):
     plt.savefig(os.path.join(output_dir, 'summary_5.svg'), bbox_inches='tight')
     plt.close()
 
-    # per city distribution
-    df_city2 = pd.Series(df.city).value_counts()
-    citytype_dict = dict()
-    citysubtype_dict = dict()
-    for i in range(0, len(df)):
-        city = df.city[i]
-        type = df.contract_type[i].encode('utf8')
-        subtype = df.contract_subtype[i].encode('utf8')
-        if citytype_dict.has_key(city):
-            if citytype_dict[city].has_key(type):
-                citytype_dict[city][type] += 1
-            else:
-                citytype_dict[city][type] = 1
-
-            if citysubtype_dict[city].has_key(subtype):
-                citysubtype_dict[city][subtype] += 1
-            else:
-                citysubtype_dict[city][subtype] = 1
-        else:
-            citytype_dict[city] = dict()
-            citytype_dict[city][type] = 1
-            citysubtype_dict[city] = dict()
-            citysubtype_dict[city][subtype] = 1
-    proportion_dict = {'CDD': {}, 'CDI': {}, u'Thèse': {}, 'Stage': {}, 'Total': {}}
-    count_dict = {'CDD': {}, 'CDI': {}, u'Thèse': {}, 'Stage': {}}
-    subtype_count_dict = {'PR': {}, 'MdC': {}, 'CR': {}, 'IR': {}, 'IE': {}, 'CDI autre': {},
-                          'Post-doc / IR': {}, u'CDD Ingénieur': {}, 'ATER': {}, 'CDD autre': {} }
-    study_level_dict = {'Master': {}, 'PhD': {}, 'Total': {}}
-    for i in range(0,10):
-        city = df_city2.index[i]
-        total = df_city2[i]
-        #print str(city)+' '+str(total)
-        #proportion_dict[city] = {'CDD': 0, 'CDI': 0, u'Thèse': 0, 'Stage': 0}
-        for k,v in citytype_dict[city].iteritems():
-            proportion_dict[k.decode('utf8')][city] = citytype_dict[city][k] / float(total)
-            count_dict[k.decode('utf8')][city] = citytype_dict[city][k]
-        proportion_dict['Total'][city] = total
-        for k,v in citysubtype_dict[city].iteritems():
-            if k:
-                subtype_count_dict[k.decode('utf8')][city] = citysubtype_dict[city][k]
-
-        study_level_dict['PhD'][city] = 0
-        study_level_dict['Master'][city] = 0
-        subtotal = 0
-        for k in phd_level:
-            if citysubtype_dict[city].has_key(k.encode('utf8')):
-                study_level_dict['PhD'][city] += citysubtype_dict[city][k.encode('utf8')]
-                subtotal += citysubtype_dict[city][k.encode('utf8')]
-        for k in master_level:
-            if citysubtype_dict[city].has_key(k.encode('utf8')):
-                study_level_dict['Master'][city] += citysubtype_dict[city][k.encode('utf8')]
-                subtotal += citysubtype_dict[city][k.encode('utf8')]
-        study_level_dict['Master'][city] /= float(subtotal)
-        study_level_dict['PhD'][city] /= float(subtotal)
-        study_level_dict['Total'][city] = subtotal
-
-    df_study_level_city = pd.DataFrame(study_level_dict).fillna(0).sort_values(by='Total')
-    ax = df_study_level_city.loc[:, ['Master', 'PhD']].plot(kind='barh', stacked=True, color=colors)
-    ax.set_xlim([0,1])
+    # per city contract types
+    city_gb = df.groupby('city')
+    df_type_city = city_gb.contract_type.value_counts(sort=True, ascending=True).unstack(level=-1).fillna(0)
+    df_type_city['Total'] = df_type_city.sum(axis='columns')
+    df_perc_city = df_type_city.div(df_type_city['Total'], axis='index')
+    df_perc_city['Total'] = df_type_city['Total']
+    df_perc_city = df_perc_city.sort_values(by='Total')
+    fig, ax = plt.subplots()
+    ax = df_perc_city.loc[:, ['CDD', 'CDI', 'Stage', u'Thèse']].iloc[-10:].plot(ax=ax, kind='barh', stacked=True, color=colors)
+    ax.set_xlim([0, 1])
+    ax.set_ylabel('')
     i = 0
-    for total in df_study_level_city['Total']:
-        ax.text(1.02, i-0.15, total)
-        i += 1
-    plt.title(u"Proportion des niveaux de diplôme requis\ndans les 10 villes ayant le plus d'offres", y=1.08)
-    plt.savefig(os.path.join(output_dir, 'summary_9.svg'), bbox_inches='tight')
-
-    df_proportion_city = pd.DataFrame(proportion_dict).fillna(0).sort_values(by='Total')
-    ax = df_proportion_city.loc[:, ['CDD', 'CDI', 'Stage', u'Thèse']].plot(kind='barh', stacked=True, color=colors)
-    ax.set_xlim([0,1])
-    i = 0
-    for total in df_proportion_city['Total']:
-        ax.text(1.02, i-0.15, total)
+    for total in df_perc_city['Total'].iloc[-10:]:
+        ax.text(1.02, i, int(total), va='center')
         i += 1
     plt.title(u"Répartition des types d'offres\ndans les 10 villes ayant le plus d'offres", y=1.08)
-    plt.savefig(os.path.join(output_dir, 'summary_10.svg'), bbox_inches='tight')
+    ax.legend(loc='lower center', bbox_to_anchor=(0.5, -0.2), ncol=4)
+    fig.savefig(os.path.join(output_dir, 'summary_9.svg'), bbox_inches='tight')
+    plt.close(fig); del(fig)
 
+    #per city education level
+    def get_jobs_educ_level(series):
+        level_dict = {'PhD': 0, 'Master': 0}
+        for e in series.index:
+            if e in contract_subtype_level:
+                level_dict[contract_subtype_level[e]] += series[e]
+        return pd.Series(level_dict)
 
+    def count_master(series):
+        return get_jobs_educ_level(series.value_counts())['Master']
+
+    def count_phd(series):
+        return get_jobs_educ_level(series.value_counts())['PhD']
+
+    df_level_city = city_gb.contract_subtype.aggregate({'Master': count_master, 'PhD': count_phd})
+    df_level_city['Total'] = df_level_city['Master'] + df_level_city['PhD']
+    df_level_city['Master'] = df_level_city['Master']/df_level_city['Total']
+    df_level_city['PhD'] = df_level_city['PhD']/df_level_city['Total']
+    df_level_city = df_level_city.sort_values(by='Total')
+    print df_level_city
+    fig, ax = plt.subplots()
+    ax = df_level_city.loc[:, ['Master', 'PhD']].iloc[-10:].plot(ax=ax, kind='barh', stacked=True, color=colors)
+    ax.set_xlim([0, 1])
+    ax.set_ylabel('')
+    i = 0
+    for total in df_level_city['Total'].iloc[-10:]:
+        ax.text(1.02, i, int(total), va='center')
+        i += 1
+    plt.title(u"Proportion des niveaux de diplôme requis\ndans les 10 villes ayant le plus d'offres", y=1.08)
+    ax.legend(loc='lower center', bbox_to_anchor=(0.5, -0.2), ncol=4)
+    fig.savefig(os.path.join(output_dir, 'summary_10.svg'), bbox_inches='tight')
+    plt.close(fig); del(fig)
