@@ -79,6 +79,7 @@ def sanitize_city_name_for_geoloc(orig_name):
     name = name.replace(u'   Paris   Région Parisienne', 'Paris')
     # When several cities, just keep the first one
     name = name.replace('/', '|').split('|')[0]
+    name = name.strip()
 
     return name.encode('utf-8') # don't forget to encode the output
 
