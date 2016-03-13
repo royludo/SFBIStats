@@ -38,6 +38,7 @@ def load_from_json(file):
 
     """
     job_list = list()
+    city_dict = dict()
     for l in file.readlines():
         # use dict instead of directly object, better with pandas
         job = sfbi_job.JobOfferAnon.from_json(json.loads(l, object_hook=json_util.object_hook)).to_dict()
@@ -48,7 +49,13 @@ def load_from_json(file):
         job['department'] = dep
         job['region'] = reg
         job['duration'] = sfbi_utils.sanitize_duration(job['duration'])
+        city = job['city']
+        if city in city_dict:
+            city_dict[city] += 1
+        else:
+            city_dict[city] = 1
         job_list.append(job)
+    job_list = sfbi_utils.spell_correct(job_list, city_dict)
     return job_list
 
 if __name__ == '__main__':

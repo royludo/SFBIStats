@@ -7,6 +7,7 @@ Miscellaneous stuff.
 from __future__ import print_function, unicode_literals
 import re
 import geopy
+import numpy as np
 
 def sanitize_city_name(orig_name):
     """
@@ -186,3 +187,85 @@ def city_to_dep_region(name, city_filename):
         with open(city_filename, 'a') as city_file:
             print (new_line.encode('utf-8'), file=city_file)
         return dep, reg
+
+
+def levenshtein(source, target):
+    """
+    see https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#Python
+    5th example
+
+    Parameters
+    ----------
+    source
+    target
+
+    Returns
+    -------
+
+    """
+    if len(source) < len(target):
+        return levenshtein(target, source)
+
+    # So now we have len(source) >= len(target).
+    if len(target) == 0:
+        return len(source)
+
+    # We call tuple() to force strings to be used as sequences
+    # ('c', 'a', 't', 's') - numpy uses them as values by default.
+    source = np.array(tuple(source))
+    target = np.array(tuple(target))
+
+    # We use a dynamic programming algorithm, but with the
+    # added optimization that we only need the last two rows
+    # of the matrix.
+    previous_row = np.arange(target.size + 1)
+    for s in source:
+        # Insertion (target grows longer than source):
+        current_row = previous_row + 1
+
+        # Substitution or matching:
+        # Target and source items are aligned, and either
+        # are different (cost of 1), or are the same (cost of 0).
+        current_row[1:] = np.minimum(
+                current_row[1:],
+                np.add(previous_row[:-1], target != s))
+
+        # Deletion (target grows shorter than source):
+        current_row[1:] = np.minimum(
+                current_row[1:],
+                current_row[0:-1] + 1)
+
+        previous_row = current_row
+
+    return previous_row[-1]
+
+
+def get_close_spelling(city, city_dict):
+    leven_list = list()
+    for city_check in city_dict.iterkeys():
+        dl = levenshtein(city.decode('utf8'), city_check.decode('utf8'))
+        if (dl == 1 and len(city) < 10) or (len(city) > 10 and dl < 4 and dl != 0):
+            leven_list.append(city_check)
+    #if len(leven_list) != 0:
+    #    print(city.decode('utf8')+' '+str(leven_list))
+    return leven_list
+
+
+def spell_correct(job_list, city_dict):
+    replace_dict = dict()
+    for city in city_dict.iterkeys():
+        closests = get_close_spelling(city, city_dict)
+        if len(closests) == 1:
+            alt = closests[0]
+            if alt in replace_dict.values():
+                continue
+            #print(alt.decode('utf8')+' '+str(city_dict[alt])+' '+city.decode('utf8')+' '+str(city_dict[city]))
+            if city_dict[alt] > city_dict[city]:
+                replace_dict[city] = alt
+            else:
+                replace_dict[alt] = city
+    #print(replace_dict)
+    for job in job_list:
+        if job['city'] in replace_dict:
+            job['city'] = replace_dict[job['city']]
+    return job_list
