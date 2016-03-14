@@ -97,19 +97,21 @@ def sanitize_duration(job_duration_string):
     m3 = re.search('(\d+).*(semaine|semaines|week|weeks).*', job_duration_string)
     m4 = re.search('(\d+)', job_duration_string.lower())
 
-    m5 = re.search('(indéterminé|indeterminé|indetermine|CDI)', job_duration_string.lower())
+    m5 = re.search('(indéterminé|indeterminé|indetermine|cdi|inderterminé|full time)', job_duration_string.lower())
 
     if m1:
-        return int(m1.group(1))
-    if m2:
-        return int(m2.group(1)) * 12
-    if m3:
-        return int(m3.group(1)) / 4
-    if m4:
-        return int(m4.group(1))
-    if m5:
-        return ''
-    return '-1'
+        dur = int(m1.group(1))
+    elif m2:
+        dur = int(m2.group(1)) * 12
+    elif m3:
+        dur = int(m3.group(1)) / 4
+    elif m4:
+        dur = int(m4.group(1))
+    elif m5:
+        dur = ''
+    else:
+        dur = -1
+    return dur
 
 
 def get_colors():
@@ -158,22 +160,16 @@ def city_to_dep_region(name, city_filename):
         print ('Found:', ', '.join([dep, reg, country]))
 
         # Conversion to new regions
-        newregions_dict = {'Haute-Normandie': 'Normandie',
-                           'Basse-Normandie': 'Normandie',
-                           'Champagne-Ardenne': 'Alsace-Champagne-Ardenne-Lorraine',
-                           'Alsace': 'Alsace-Champagne-Ardenne-Lorraine',
-                           'Lorraine': 'Alsace-Champagne-Ardenne-Lorraine',
-                           'Bourgogne': 'Bourgogne-Franche-Comté',
-                           'Franche-Comté': 'Bourgogne-Franche-Comté',
-                           'Auvergne': 'Auvergne-Rhône-Alpes',
-                           'Rhône-Alpes': 'Auvergne-Rhône-Alpes',
-                           'Aquitaine': 'Aquitaine-Limousin-Poitou-Charentes',
-                           'Limousin': 'Aquitaine-Limousin-Poitou-Charentes',
-                           'Poitou-Charentes': 'Aquitaine-Limousin-Poitou-Charentes',
-                           'Languedoc-Roussillon': 'Languedoc-Roussillon-Midi-Pyrénées',
-                           'Midi-Pyrénées': 'Languedoc-Roussillon-Midi-Pyrénées',
-                           'Nord-Pas-de-Calais': 'Nord-Pas-de-Calais-Picardie',
-                           'Picardie': 'Nord-Pas-de-Calais-Picardie'}
+        conv_table = [(('Haute-Normandie','Basse-Normandie'), 'Normandie'),
+                      (('Champagne-Ardenne','Alsace','Lorraine'), 'Alsace-Champagne-Ardenne-Lorraine'),
+                      (('Bourgogne',u'Franche-Comté'),u'Bourgogne-Franche-Comté'),
+                      (('Auvergne',u'Rhône-Alpes'),u'Auvergne-Rhône-Alpes'),
+                      (('Aquitaine','Limousin','Poitou-Charentes'),'Aquitaine-Limousin-Poitou-Charentes'),
+                      (('Languedoc-Roussillon',u'Midi-Pyrénées'),u'Languedoc-Roussillon-Midi-Pyrénées'),
+                      (('Nord-Pas-de-Calais','Picardie'),'Nord-Pas-de-Calais-Picardie')]
+        newregions_dict = {}
+        for keylist in conv_table:
+            newregions_dict.update(dict.fromkeys(keylist[0], keylist[1]))
         if reg in newregions_dict:
             reg = newregions_dict[reg]
 

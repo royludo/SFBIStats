@@ -41,14 +41,17 @@ def run(job_list, output_dir):
                                'CDD': ['Post-doc / IR',
                                        u'CDD Ingénieur', 'ATER',
                                        'CDD autre']}
-    contract_subtype_level = {'Post-doc / IR': 'PhD',
-                              'PR': 'PhD',
-                              'MdC': 'PhD',
-                              'CR': 'PhD',
-                              'IR': 'PhD',
-                              'ATER': 'PhD',
-                              u'CDD Ingénieur': 'Master',
-                              'IE': 'Master'}
+    # Dictionnary to convert subtype to level
+    contract_subtype_level = dict.fromkeys(['Post-doc / IR',
+                                            'PR',
+                                            'MdC',
+                                            'CR',
+                                            'IR',
+                                            'ATER'], 'PhD')
+    contract_subtype_level.update(dict.fromkeys([u'CDD Ingénieur', 'IE'], 'Master'))
+
+
+
     colors = plt.get_cmap('Greens')(num.linspace(0.1,0.9,4))
     colors = map(lambda rgb:
             '#%02x%02x%02x' % (rgb[0]*255,rgb[1]*255,rgb[2]*255),
