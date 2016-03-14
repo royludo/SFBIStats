@@ -32,6 +32,29 @@ def minimal_hbar(ss, figsize=(6,3)):
                     color='k', fontsize=8, va='center')
     return fig, ax
 
+def minimal_violinplot(df, figsize=(6,3)):
+    cat = df.columns
+    labels = cat.get_values()
+    labelAsX = num.arange(len(labels))+1
+    data = [list(df[x].dropna()) for x in labels]
+    fig, ax = plt.subplots(figsize=figsize)
+    violin_parts = ax.violinplot(data,
+            vert=False,
+            positions=labelAsX,
+            showextrema=False,
+            showmedians=True)
+    for pc in violin_parts['bodies']:
+            pc.set_facecolor('gray')
+            pc.set_edgecolor('black')
+    ax.set_yticks(labelAsX)
+    ax.set_yticklabels(labels)
+    ax.grid(axis='y')
+    for pos, n in zip(labelAsX, data):
+        tot = len(n)
+        ax.annotate(tot,
+                xy=(0.9*df.max().max(), pos+0.1),
+                color='k', fontsize=12, va='center', ha='center')
+    return fig, ax
 
 def run(job_list, output_dir):
     print ("Running global_lins.py...")
@@ -63,6 +86,7 @@ def run(job_list, output_dir):
                                          'city',
                                          'department',
                                          'region',
+                                         'duration',
                                          'submission_date'])
 
     # Contract type
@@ -155,7 +179,7 @@ def run(job_list, output_dir):
     for total in df_level_region['Total']:
         ax.text(1.02, i-0.15, total)
         i += 1
-    ax.set_title(u"Proportion des diplômes requis par régions")
+    ax.set_title(u"Proportion des diplômes requis par régions (2012-2016)")
     lines, labels = ax.get_legend_handles_labels()
     ax.legend(lines, labels, bbox_to_anchor=(0.75, -0.05), ncol=2)
     fig.savefig(os.path.join(output_dir, 'summary_lins_7.svg'),
@@ -185,9 +209,67 @@ def run(job_list, output_dir):
     for total in df_perc_region['Total']:
         ax.text(1.02, i-0.15, total)
         i += 1
-    ax.set_title(u"Proportion des postes par régions")
+    ax.set_title(u"Proportion des postes par régions (2012-2016)")
     lines, labels = ax.get_legend_handles_labels()
     ax.legend(lines, labels, bbox_to_anchor=(0.98, -0.05), ncol=4)
     fig.savefig(os.path.join(output_dir, 'summary_lins_8.svg'),
+        bbox_inches='tight')
+    plt.close(fig); del(fig)
+
+    # Duration of CDD
+    dict_categories = {u'≤ 6 mois': lambda x: 0<x<=6,
+                       u'6 < x ≤ 12 mois': lambda x: 6<x<=12,
+                       u'12 < x ≤ 18 mois': lambda x: 12<x<=18,
+                       u'18 < x ≤ 24 mois': lambda x: 18<x<=24,
+                       u'24 < x ≤ 30 mois': lambda x: 24<x<=30,
+                       u'30 < x ≤ 36 mois': lambda x: 30<x<=36,
+                       u'> 36 mois': lambda x: x>36}
+    list_categories = [u'≤ 6 mois',
+                       u'6 < x ≤ 12 mois',
+                       u'12 < x ≤ 18 mois',
+                       u'18 < x ≤ 24 mois',
+                       u'24 < x ≤ 30 mois',
+                       u'30 < x ≤ 36 mois',
+                       u'> 36 mois']
+    def get_category(months):
+        for key, func in dict_categories.items():
+            if func(months): return key
+
+    is_CDD = df.contract_type == 'CDD'
+    is_sanitized = (0 < df.duration) & (df.duration < 100)
+    df_duration = df[is_CDD & is_sanitized][['contract_subtype','duration', 'region']]
+    df_duration['category'] = df_duration.loc[:,'duration'].apply(get_category)
+
+    ## Global duration of CDD
+    df_categories = df_duration.category.value_counts().reindex(list_categories)
+    fig, ax = minimal_hbar(df_categories)
+    ax.set_title(u'Répartition des durées de CDD (2012-2016)')
+    fig.savefig(os.path.join(output_dir, 'summary_lins_9.svg'),
+            bbox_inches='tight')
+    plt.close(fig); del(fig)
+
+    ## Duration of CDD per contract subtype
+    df_duration_by_contract = df_duration.pivot(columns='contract_subtype').duration
+    fig, ax = minimal_violinplot(df_duration_by_contract, figsize=(8,6))
+
+    ax.set_title(u'Répartition des durées de CDD par type de contrat (2012-2016)')
+    ax.set_xlabel(u'Durée (mois)')
+    xticks = range(0,66,6)
+    ax.set_xticks(xticks)
+    ax.set_xticklabels([str(x) for x in xticks])
+    fig.savefig(os.path.join(output_dir, 'summary_lins_10.svg'),
+        bbox_inches='tight')
+    plt.close(fig); del(fig)
+
+    ## Duration of CDD per region
+    df_duration_by_region = df_duration.pivot(columns='region').duration
+    fig, ax = minimal_violinplot(df_duration_by_region, figsize=(8,8))
+
+    ax.set_title(u'Répartition des durées de CDD par région (2012-2016)')
+    ax.set_xlabel(u'Durée (mois)')
+    xticks = range(0,66,6)
+    ax.set_xticks(xticks)
+    ax.set_xticklabels([str(x) for x in xticks])
+    fig.savefig(os.path.join(output_dir, 'summary_lins_11.svg'),
         bbox_inches='tight')
     plt.close(fig); del(fig)
