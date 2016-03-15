@@ -12,21 +12,21 @@ import sfbistats.analysis.utils as sfbi_utils
 import numpy as num
 
 
-def minimal_hbar(ss, figsize=(6,3)):
+def minimal_hbar(ss, figsize=(6, 3)):
     tot = ss.values.sum()
     ss = ss.sort_values(ascending=True)
     labels = ss.index.get_values()
-    labelAsX = num.arange(len(labels))+0.5
-    fig, ax  = plt.subplots(figsize=figsize)
+    labelAsX = num.arange(len(labels)) + 0.5
+    fig, ax = plt.subplots(figsize=figsize)
     ax.barh(labelAsX, ss.values, align='center', color='cornflowerblue', height=0.8)
     ax.set_yticks(labelAsX)
     ax.set_yticklabels(labels)
     ax.set_xticks([])
     ax.grid(False)
-    ax.set_ylim(0, labelAsX[-1]+1)
-    ax.set_xlim(0, max(ss.values*1.15))
+    ax.set_ylim(0, labelAsX[-1] + 1)
+    ax.set_xlim(0, max(ss.values * 1.15))
     for pos, n in zip(labelAsX, ss.values):
-        perc = 100*float(n)/tot
+        perc = 100 * float(n) / tot
         ax.annotate('{0:.1f}%'.format(perc), xy=(n + (max(ss.values) * 0.01), pos), va='center')
         ax.annotate(str(n), xy=(n - (max(ss.values * 0.01)), pos), va='center', ha='right')
     return fig, ax
@@ -34,9 +34,6 @@ def minimal_hbar(ss, figsize=(6,3)):
 
 def run(job_list, output_dir):
     print "Running summary.py"
-    contract_type_labels = ['CDI', 'CDD', 'Stage', u'Thèse']
-    contract_subtype_labels = {'CDI': ['PR', 'MdC', 'CR', 'IR', 'IE', 'CDI autre'],
-                               'CDD': ['Post-doc / IR', u'CDD Ingénieur', 'ATER', 'CDD autre']}
     contract_subtype_level = {'Post-doc / IR': 'PhD',
                               'PR': 'PhD',
                               'MdC': 'PhD',
@@ -59,15 +56,14 @@ def run(job_list, output_dir):
     submission_date_series = pd.Series(df.submission_date)
     summary_file.write("From " + str(submission_date_series.min()) + " to " + str(submission_date_series.max()) + '\n')
     summary_file.write("Total jobs: " + str(len(df.index)) + "\n")
-    summary_file.write(pd.Series(df.contract_type).value_counts().to_string(header=False).encode(
-        'utf8') + "\n")  # global contract type proportions
+    summary_file.write(pd.Series(df.contract_type).value_counts().to_string(header=False).encode('utf8') + "\n")
 
     # general types ratios pie chart
     df_contract_type_count = pd.Series(df.contract_type).value_counts(sort=True)
     fig, ax = minimal_hbar(df_contract_type_count)
     ax.set_title(u'Types de postes')
     fig.savefig(os.path.join(output_dir, 'summary_6.svg'), bbox_inches='tight')
-    plt.close(fig); del(fig)
+    plt.close(fig)
 
     plt.figure()
     ax = df_contract_type_count.plot(kind='pie', startangle=90, autopct='%1.1f%%', colors=colors)
@@ -83,7 +79,7 @@ def run(job_list, output_dir):
     fig, ax = minimal_hbar(df_contract_subtype_CDI_count)
     ax.set_title(u'Types de CDI')
     fig.savefig(os.path.join(output_dir, 'summary_7.svg'), bbox_inches='tight')
-    plt.close(fig); del(fig)
+    plt.close(fig)
 
     plt.figure()
     ax = df_contract_subtype_CDI_count.plot(kind='pie', startangle=90, autopct='%1.1f%%', colors=colors)
@@ -99,7 +95,7 @@ def run(job_list, output_dir):
     fig, ax = minimal_hbar(df_contract_subtype_CDD_count)
     ax.set_title(u'Types de CDD')
     fig.savefig(os.path.join(output_dir, 'summary_8.svg'), bbox_inches='tight')
-    plt.close(fig); del(fig)
+    plt.close(fig)
 
     plt.figure()
     ax = df_contract_subtype_CDD_count.plot(kind='pie', startangle=90, autopct='%1.1f%%', colors=colors)
@@ -120,7 +116,8 @@ def run(job_list, output_dir):
     city_names = df_city.index
     labels = ['{0} - {1:1.2f} %'.format(i, j) for i, j in zip(city_names, 100. * df_city / df_city.sum())]
     # [' '] * len(labels) -> empty labels for each pie, to avoid matplotlib warning
-    axes = pd.DataFrame(df_city).plot(kind='pie', startangle=90, labels=[' '] * len(labels), colors=colors, subplots=True)
+    axes = pd.DataFrame(df_city).plot(kind='pie', startangle=90, labels=[' '] * len(labels), colors=colors,
+                                      subplots=True)
     for ax in axes:
         ax.legend(labels, loc=1, bbox_to_anchor=(1.5, 1.1))
         ax.set_xlabel('')
@@ -154,7 +151,8 @@ def run(job_list, output_dir):
     df_perc_city['Total'] = df_type_city['Total']
     df_perc_city = df_perc_city.sort_values(by='Total')
     fig, ax = plt.subplots()
-    ax = df_perc_city.loc[:, ['CDD', 'CDI', 'Stage', u'Thèse']].iloc[-10:].plot(ax=ax, kind='barh', stacked=True, color=colors)
+    ax = df_perc_city.loc[:, ['CDD', 'CDI', 'Stage', u'Thèse']].iloc[-10:].plot(ax=ax, kind='barh', stacked=True,
+                                                                                color=colors)
     ax.set_xlim([0, 1])
     ax.set_ylabel('')
     i = 0
@@ -164,9 +162,9 @@ def run(job_list, output_dir):
     plt.title(u"Répartition des types d'offres\ndans les 10 villes ayant le plus d'offres", y=1.08)
     ax.legend(loc='lower center', bbox_to_anchor=(0.5, -0.2), ncol=4)
     fig.savefig(os.path.join(output_dir, 'summary_9.svg'), bbox_inches='tight')
-    plt.close(fig); del(fig)
+    plt.close(fig)
 
-    #per city education level
+    # per city education level
     def get_jobs_educ_level(series):
         level_dict = {'PhD': 0, 'Master': 0}
         for e in series.index:
@@ -196,4 +194,4 @@ def run(job_list, output_dir):
     plt.title(u"Proportion des niveaux de diplôme requis\ndans les 10 villes ayant le plus d'offres", y=1.08)
     ax.legend(loc='lower center', bbox_to_anchor=(0.5, -0.2), ncol=4)
     fig.savefig(os.path.join(output_dir, 'summary_10.svg'), bbox_inches='tight')
-    plt.close(fig); del(fig)
+    plt.close(fig)
