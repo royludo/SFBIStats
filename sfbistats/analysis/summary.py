@@ -37,8 +37,6 @@ def run(job_list, output_dir):
     contract_type_labels = ['CDI', 'CDD', 'Stage', u'Thèse']
     contract_subtype_labels = {'CDI': ['PR', 'MdC', 'CR', 'IR', 'IE', 'CDI autre'],
                                'CDD': ['Post-doc / IR', u'CDD Ingénieur', 'ATER', 'CDD autre']}
-    phd_level = ['Post-doc / IR', 'PR', 'MdC', 'CR', 'IR', 'ATER']
-    master_level = [u'CDD Ingénieur', 'IE']
     contract_subtype_level = {'Post-doc / IR': 'PhD',
                               'PR': 'PhD',
                               'MdC': 'PhD',
@@ -135,11 +133,10 @@ def run(job_list, output_dir):
     # education level ratios pie chart
     df_study_level = pd.Series(df.contract_subtype).value_counts(sort=True)
     level_dict = {'PhD': 0, 'Master': 0}
-    for e in df_study_level.index:
-        if e in phd_level:
-            level_dict['PhD'] += df_study_level[e]
-        elif e in master_level:
-            level_dict['Master'] += df_study_level[e]
+    for subtype in df_study_level.index:
+        if subtype in contract_subtype_level:
+            level = contract_subtype_level[subtype]
+            level_dict[level] += df_study_level[subtype]
     plt.figure()
     ax = pd.Series(level_dict).plot(kind='pie', startangle=90, autopct='%1.1f%%', colors=colors)
     ax.set_xlabel('')
@@ -185,15 +182,15 @@ def run(job_list, output_dir):
 
     df_level_city = city_gb.contract_subtype.aggregate({'Master': count_master, 'PhD': count_phd})
     df_level_city['Total'] = df_level_city['Master'] + df_level_city['PhD']
-    df_level_city['Master'] = df_level_city['Master']/df_level_city['Total']
-    df_level_city['PhD'] = df_level_city['PhD']/df_level_city['Total']
-    df_level_city = df_level_city.sort_values(by='Total')
+    df_level_perc = df_level_city.div(df_level_city['Total'], axis='index')
+    df_level_perc['Total'] = df_level_city['Total']
+    df_level_perc = df_level_perc.sort_values(by='Total')
     fig, ax = plt.subplots()
-    ax = df_level_city.loc[:, ['Master', 'PhD']].iloc[-10:].plot(ax=ax, kind='barh', stacked=True, color=colors)
+    ax = df_level_perc.loc[:, ['Master', 'PhD']].iloc[-10:].plot(ax=ax, kind='barh', stacked=True, color=colors)
     ax.set_xlim([0, 1])
     ax.set_ylabel('')
     i = 0
-    for total in df_level_city['Total'].iloc[-10:]:
+    for total in df_level_perc['Total'].iloc[-10:]:
         ax.text(1.02, i, int(total), va='center')
         i += 1
     plt.title(u"Proportion des niveaux de diplôme requis\ndans les 10 villes ayant le plus d'offres", y=1.08)
