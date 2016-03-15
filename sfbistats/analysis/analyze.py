@@ -19,7 +19,7 @@ import pkg_resources
 import sfbistats.job_offer as sfbi_job
 import sfbistats.analysis.time_series as sfbi_time_series
 import sfbistats.analysis.summary as sfbi_summary
-import sfbistats.analysis.summary_lins as sfbi_summary_lins
+import sfbistats.analysis.global_lins as sfbi_global_lins
 import sfbistats.analysis.lexical_analysis as sfbi_lexical_analysis
 import sfbistats.analysis.maps as sfbi_maps
 
@@ -78,10 +78,10 @@ if __name__ == '__main__':
     job_list = load_from_json(input_file)
 
     # run the scripts
-    sfbi_summary.run(job_list, output_dir)
-    sfbi_summary_lins.run(job_list, output_dir)
-    sfbi_lexical_analysis.run(job_list, output_dir)
-    sfbi_time_series.run(job_list, output_dir)
-    sfbi_maps.run(job_list, output_dir)
+    #sfbi_summary.run(job_list, output_dir)
+    sfbi_global_lins.run(job_list, output_dir)
+    #sfbi_lexical_analysis.run(job_list, output_dir)
+    #sfbi_time_series.run(job_list, output_dir)
+    #sfbi_maps.run(job_list, output_dir)
 
-    print "Complete"
+    print ("Complete")
