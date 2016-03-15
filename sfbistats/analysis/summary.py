@@ -188,7 +188,6 @@ def run(job_list, output_dir):
     df_level_city['Master'] = df_level_city['Master']/df_level_city['Total']
     df_level_city['PhD'] = df_level_city['PhD']/df_level_city['Total']
     df_level_city = df_level_city.sort_values(by='Total')
-    print df_level_city
     fig, ax = plt.subplots()
     ax = df_level_city.loc[:, ['Master', 'PhD']].iloc[-10:].plot(ax=ax, kind='barh', stacked=True, color=colors)
     ax.set_xlim([0, 1])

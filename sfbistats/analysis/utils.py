@@ -82,6 +82,10 @@ def sanitize_city_name_for_geoloc(orig_name):
     name = name.replace('/', '|').split('|')[0]
     name = name.strip()
 
+    # Problem!! ParisParis
+    #if orig_name == 'Ile De France   Paris   Région Parisienne':
+    #    print(name)
+
     return name.encode('utf-8') # don't forget to encode the output
 
 
@@ -240,10 +244,8 @@ def get_close_spelling(city, city_dict):
     leven_list = list()
     for city_check in city_dict.iterkeys():
         dl = levenshtein(city.decode('utf8'), city_check.decode('utf8'))
-        if (dl == 1 and len(city) < 10) or (len(city) > 10 and dl < 4 and dl != 0):
+        if (len(city) < 10 and dl == 1) or (len(city) > 10 and dl < 4 and dl != 0):
             leven_list.append(city_check)
-    #if len(leven_list) != 0:
-    #    print(city.decode('utf8')+' '+str(leven_list))
     return leven_list
 
 
