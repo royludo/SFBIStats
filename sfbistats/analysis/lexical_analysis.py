@@ -148,7 +148,11 @@ def build_freq_list(lex_dic, total):
     return freq_list
 
 
-def create_wordcloud(ordered_freq_list, output):
+def create_wordcloud(corpus, output, stopword_dict):
+    lex_dic = build_lex_dic(corpus, stopword_dict=stopword_dict)
+    total_words = get_total_words(lex_dic)
+    ordered_freq_list = build_freq_list(lex_dic, total_words)
+
     plt.figure(figsize=(10,8))
     wordcloud = WordCloud(width=1000, height=800, max_words=100, background_color='white',
                           relative_scaling=0.7, random_state=15, prefer_horizontal=0.5) .generate_from_frequencies(ordered_freq_list[0:100])
@@ -211,16 +215,56 @@ def run(job_list, output_dir):
     stopword_dict['http'] = True
     stopword_dict['al'] = True
 
+    # 'Post-doc / IR', u'CDD Ingénieur', 'ATER', 'CDD autre']
+    #'PR', 'MdC', 'CR', 'IR', 'IE', 'CDI autre'
     corpus = list()
+    corpus_stage = list()
+    corpus_these = list()
+    corpus_CDD = list()
+    corpus_CDI = list()
+    corpus_CDDpostdoc = list()
+    corpus_CDDing = list()
+    corpus_CDDautre = list()
+    corpus_CDIIE = list()
+    corpus_CDIautre = list()
+    corpus_CDIIR = list()
+
     for job in job_list:
         corpus.append(job['title'])
+        if job['contract_type'] == 'CDD':
+            corpus_CDD.append(job['title'])
+        elif job['contract_type'] == 'CDI':
+            corpus_CDI.append(job['title'])
+        elif job['contract_type'] == 'Stage':
+            corpus_stage.append(job['title'])
+        elif job['contract_type'] == u'Thèse':
+            corpus_these.append(job['title'])
 
-    lex_dic = build_lex_dic(corpus, stopword_dict=stopword_dict)
-    pos_dic = build_pos_dic(corpus, stopword_dict=stopword_dict)#, bins=100)
-    total_words= get_total_words(lex_dic)
-    ordered_freq_list = build_freq_list(lex_dic, total_words)
+        if job['contract_subtype'] == 'Post-doc / IR':
+            corpus_CDDpostdoc.append(job['title'])
+        elif job['contract_subtype'] == u'CDD Ingénieur':
+            corpus_CDDing.append(job['title'])
+        elif job['contract_subtype'] == 'CDD autre':
+            corpus_CDDautre.append(job['title'])
+        elif job['contract_subtype'] == 'IR':
+            corpus_CDIIR.append(job['title'])
+        elif job['contract_subtype'] == 'IE':
+            corpus_CDIIE.append(job['title'])
+        elif job['contract_subtype'] == 'CDI autre':
+            corpus_CDIautre.append(job['title'])
 
-    create_wordcloud(ordered_freq_list, os.path.join(output_dir, 'lexical_analysis_3.png'))
+    create_wordcloud(corpus, os.path.join(output_dir, 'lexical_analysis_3_general.png'), stopword_dict)
+    create_wordcloud(corpus_CDD, os.path.join(output_dir, 'lexical_analysis_4_CDD.png'), stopword_dict)
+    create_wordcloud(corpus_CDI, os.path.join(output_dir, 'lexical_analysis_5_CDI.png'), stopword_dict)
+    create_wordcloud(corpus_stage, os.path.join(output_dir, 'lexical_analysis_6_Stage.png'), stopword_dict)
+    create_wordcloud(corpus_these, os.path.join(output_dir, 'lexical_analysis_7_PhD.png'), stopword_dict)
+
+    create_wordcloud(corpus_CDDpostdoc, os.path.join(output_dir, 'lexical_analysis_8_CDDpostdoc.png'), stopword_dict)
+    create_wordcloud(corpus_CDDing, os.path.join(output_dir, 'lexical_analysis_9_CDDing.png'), stopword_dict)
+    create_wordcloud(corpus_CDDautre, os.path.join(output_dir, 'lexical_analysis_10_CDDautre.png'), stopword_dict)
+    create_wordcloud(corpus_CDIIR, os.path.join(output_dir, 'lexical_analysis_11_CDIIR.png'), stopword_dict)
+    create_wordcloud(corpus_CDIIE, os.path.join(output_dir, 'lexical_analysis_12_CDIIE.png'), stopword_dict)
+    create_wordcloud(corpus_CDIautre, os.path.join(output_dir, 'lexical_analysis_13_CDIautre.png'), stopword_dict)
 
     """
     print "TOTAL unique words: " + str(len(lex_dic))
