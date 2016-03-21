@@ -74,11 +74,13 @@ def run(job_list, output_dir):
     contract_subtype_level.update(dict.fromkeys([u'CDD Ingénieur', 'IE'], 'Master'))
 
 
-
-    colors = plt.get_cmap('Greens')(num.linspace(0.1,0.9,4))
-    colors = map(lambda rgb:
-            '#%02x%02x%02x' % (rgb[0]*255,rgb[1]*255,rgb[2]*255),
-                               tuple(colors[:,0:-1]))
+    # Define colors using a color map
+    #colors = plt.get_cmap('nipy_spectral')(num.linspace(0,0.8,4))
+    #colors = map(lambda rgb:
+    #        '#%02x%02x%02x' % (rgb[0]*255,rgb[1]*255,rgb[2]*255),
+    #                           tuple(colors[:,0:-1]))
+    # Define colors using bioinfo-fr color palette
+    colors = ['#6f3883', '#87ad3e', '#fce33e', '#4066c7', '#cc3428']
     plt.rcParams.update(plt.rcParamsDefault)
 
     df = pd.DataFrame(job_list, columns=['contract_type',
