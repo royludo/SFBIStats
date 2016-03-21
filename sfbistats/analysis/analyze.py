@@ -50,8 +50,7 @@ def load_from_json(file):
         job['department'] = dep
         job['region'] = reg
         job['duration'] = sfbi_utils.sanitize_duration(job['duration'])
-        city = job['city']
-        city_dict[city] += 1
+        city_dict[job['city']] += 1
         job_list.append(job)
     job_list = sfbi_utils.spell_correct(job_list, city_dict)
     return job_list
