@@ -253,18 +253,18 @@ def run(job_list, output_dir):
         elif job['contract_subtype'] == 'CDI autre':
             corpus_CDIautre.append(job['title'])
 
-    create_wordcloud(corpus, os.path.join(output_dir, 'lexical_analysis_3_general.png'), stopword_dict)
-    create_wordcloud(corpus_CDD, os.path.join(output_dir, 'lexical_analysis_4_CDD.png'), stopword_dict)
-    create_wordcloud(corpus_CDI, os.path.join(output_dir, 'lexical_analysis_5_CDI.png'), stopword_dict)
-    create_wordcloud(corpus_stage, os.path.join(output_dir, 'lexical_analysis_6_Stage.png'), stopword_dict)
-    create_wordcloud(corpus_these, os.path.join(output_dir, 'lexical_analysis_7_PhD.png'), stopword_dict)
+    create_wordcloud(corpus, os.path.join(output_dir, 'lexical_analysis_1_general.png'), stopword_dict)
+    create_wordcloud(corpus_CDD, os.path.join(output_dir, 'lexical_analysis_2_CDD.png'), stopword_dict)
+    create_wordcloud(corpus_CDI, os.path.join(output_dir, 'lexical_analysis_3_CDI.png'), stopword_dict)
+    create_wordcloud(corpus_stage, os.path.join(output_dir, 'lexical_analysis_4_Stage.png'), stopword_dict)
+    create_wordcloud(corpus_these, os.path.join(output_dir, 'lexical_analysis_5_PhD.png'), stopword_dict)
 
-    create_wordcloud(corpus_CDDpostdoc, os.path.join(output_dir, 'lexical_analysis_8_CDDpostdoc.png'), stopword_dict)
-    create_wordcloud(corpus_CDDing, os.path.join(output_dir, 'lexical_analysis_9_CDDing.png'), stopword_dict)
-    create_wordcloud(corpus_CDDautre, os.path.join(output_dir, 'lexical_analysis_10_CDDautre.png'), stopword_dict)
-    create_wordcloud(corpus_CDIIR, os.path.join(output_dir, 'lexical_analysis_11_CDIIR.png'), stopword_dict)
-    create_wordcloud(corpus_CDIIE, os.path.join(output_dir, 'lexical_analysis_12_CDIIE.png'), stopword_dict)
-    create_wordcloud(corpus_CDIautre, os.path.join(output_dir, 'lexical_analysis_13_CDIautre.png'), stopword_dict)
+    create_wordcloud(corpus_CDDpostdoc, os.path.join(output_dir, 'lexical_analysis_6_CDDpostdoc.png'), stopword_dict)
+    create_wordcloud(corpus_CDDing, os.path.join(output_dir, 'lexical_analysis_7_CDDing.png'), stopword_dict)
+    create_wordcloud(corpus_CDDautre, os.path.join(output_dir, 'lexical_analysis_8_CDDautre.png'), stopword_dict)
+    create_wordcloud(corpus_CDIIR, os.path.join(output_dir, 'lexical_analysis_9_CDIIR.png'), stopword_dict)
+    create_wordcloud(corpus_CDIIE, os.path.join(output_dir, 'lexical_analysis_10_CDIIE.png'), stopword_dict)
+    create_wordcloud(corpus_CDIautre, os.path.join(output_dir, 'lexical_analysis_11_CDIautre.png'), stopword_dict)
 
     """
     print "TOTAL unique words: " + str(len(lex_dic))

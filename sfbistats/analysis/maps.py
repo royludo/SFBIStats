@@ -77,7 +77,7 @@ def run(job_list, output_dir):
         and displayed as zoomed region
     '''
     print " Getting geolocation of cities from Nominatim web service"
-    df_city = pd.DataFrame(pd.Series(df.city).value_counts().head(30))
+    df_city = pd.DataFrame(pd.Series(df.city).value_counts().head(20))
     location_dict = dict()
     IDF_total_count = 0
     for city, s in df_city.iterrows():

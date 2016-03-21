@@ -136,7 +136,7 @@ The data have been scraped from web pages, and are delivered raw. Sanitization o
 You can see a sample of the output charts [here](https://www.dropbox.com/sh/b33edivf9tuljfw/AABiurGJNg0i0EdhxoEwouc0a).
 They are named according to the script that created it.
 
-summary_5 and 9, time_series_8 and 9:
+summary_5 and 10, time_series_8 and 9, summary_lins_6 and 7:
 
 The education level required for a job has been inferred only from job subtypes, and concerns only CDD and CDI.
 Stage and Thèse categories have been excluded.
@@ -147,18 +147,10 @@ The job was considered as requiring :
 The fuzzy subtypes 'CDD autre' and 'CDI autre' have been excluded.
 So beware that the information displayed in these charts may not be the most accurate there is. Use with caution.
 
-lexical_analysis_1:
+lexical_analysis 1-11:
 
-Generated with the [word_cloud module](https://github.com/amueller/word_cloud) using the content of the job offers.
-
-lexical_analysis_2:
-
-This is just an example of what the lexical_analysis module can do.
-Some programming languages have been chosen to illustrate it.
-
-lexical_analysis_3:
-
-See lexical_analysis_1. Generated only with the titles of the job offers.
+Generated with the [word_cloud module](https://github.com/amueller/word_cloud) using the titles of the job offers.
+Types and subtypes of contracts are specified in each image title. 
 
 ### Code
 
@@ -192,7 +184,6 @@ Next time you run analyze.py, you will see your own charts added to the others.
 
  - finish the maps
  - more doc
- - improve hbar charts
  - logging
 
 ## 5. CHANGELOG
