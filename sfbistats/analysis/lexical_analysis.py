@@ -149,13 +149,17 @@ def build_freq_list(lex_dic, total):
 
 
 def create_wordcloud(ordered_freq_list, output):
-    plt.figure(figsize=(10,8))
+    fig = plt.figure(figsize=(10,8), frameon=False)
+    ax = plt.Axes(fig, [0., 0., 1., 1.])
+    ax.set_axis_off()
+    fig.add_axes(ax)
+
     wordcloud = WordCloud(width=1000, height=800, max_words=100, background_color='white',
                           relative_scaling=0.7, random_state=15, prefer_horizontal=0.5) .generate_from_frequencies(ordered_freq_list[0:100])
     wordcloud.recolor(random_state=42, color_func=my_color_func)
-    plt.imshow(wordcloud)
-    plt.axis("off")
-    plt.savefig(output, bbox_inches='tight', facecolor='white')
+
+    ax.imshow(wordcloud)
+    fig.savefig(output, facecolor='white')
 
 
 def get_rank(word, ordered_freq_list):
@@ -201,7 +205,6 @@ def plot_tendencies(word_list, pos_dic, bin_size, output_dir, file_name):
     plt.savefig(os.path.join(output_dir, file_name), bbox_inches='tight')
 
 def run(job_list, output_dir):
-
     stopword_dict = get_stopwords()
     # add some stuff that isn't in the stopwords lists
     stopword_dict['-'] = True
