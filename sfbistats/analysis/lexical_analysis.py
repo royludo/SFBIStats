@@ -67,7 +67,7 @@ def my_color_func(word=None, font_size=None, position=None, orientation=None, fo
     return "hsl(%d, 70%%, 40%%)" % random_state.randint(0, 255)
 
 
-def build_lex_dic(corpus, stopword_dict= {}, separator=u"[\s,.\(\)!?/:;\[\]\{\}\u2019']+"):
+def build_lex_dic(corpus, stopword_dict={}, separator=u"[\s,.\(\)!?/:;\[\]\{\}\u2019']+"):
     """
 
     Parameters
@@ -94,7 +94,7 @@ def build_lex_dic(corpus, stopword_dict= {}, separator=u"[\s,.\(\)!?/:;\[\]\{\}\
     return lex_dic
 
 
-def build_pos_dic(corpus, stopword_dict= {}, separator=u"[\s,.\(\)!?/:;\[\]\{\}\u2019']+"):#, bins=100):
+def build_pos_dic(corpus, stopword_dict={}, separator=u"[\s,.\(\)!?/:;\[\]\{\}\u2019']+"):  # , bins=100):
     """
 
     Parameters
@@ -123,12 +123,12 @@ def build_pos_dic(corpus, stopword_dict= {}, separator=u"[\s,.\(\)!?/:;\[\]\{\}\
             word_pos += 1
         # convert word positions in percentage of the text
         text_length = word_pos
-        #print "text length: "+str(text_length)
-        #pprint(text_pos_dic)
+        # print "text length: "+str(text_length)
+        # pprint(text_pos_dic)
         for tkn, pos_list in text_pos_dic.iteritems():
             for e in pos_list:
                 if tkn in pos_dic:
-                    pos_dic[tkn].append(np.floor(float(e) / text_length * 100) )
+                    pos_dic[tkn].append(np.floor(float(e) / text_length * 100))
                 else:
                     pos_dic[tkn] = [np.floor(float(e) / text_length * 100)]
     return pos_dic
@@ -144,18 +144,22 @@ def get_total_words(lex_dic):
 def build_freq_list(lex_dic, total):
     freq_list = list()
     for e in sorted(lex_dic, key=lex_dic.get, reverse=True):
-       freq_list.append([e, float(lex_dic[e]) / total])
+        freq_list.append([e, float(lex_dic[e]) / total])
     return freq_list
 
 
-def create_wordcloud(ordered_freq_list, output):
-    fig = plt.figure(figsize=(10,8), frameon=False)
+def create_wordcloud(corpus, output, stopword_dict):
+    lex_dic = build_lex_dic(corpus, stopword_dict=stopword_dict)
+    total_words = get_total_words(lex_dic)
+    ordered_freq_list = build_freq_list(lex_dic, total_words)
+
+    fig = plt.figure(figsize=(10, 8), frameon=False)
     ax = plt.Axes(fig, [0., 0., 1., 1.])
     ax.set_axis_off()
     fig.add_axes(ax)
-
     wordcloud = WordCloud(width=1000, height=800, max_words=100, background_color='white',
-                          relative_scaling=0.7, random_state=15, prefer_horizontal=0.5) .generate_from_frequencies(ordered_freq_list[0:100])
+                          relative_scaling=0.7, random_state=15, prefer_horizontal=0.5).generate_from_frequencies(
+        ordered_freq_list[0:100])
     wordcloud.recolor(random_state=42, color_func=my_color_func)
 
     ax.imshow(wordcloud)
@@ -168,18 +172,18 @@ def get_rank(word, ordered_freq_list):
         if pair[0] == word:
             return rank
         rank += 1
-    raise Exception("Word "+word+" not found")
+    raise Exception("Word " + word + " not found")
 
 
 def plot_tendency(word, pos_dic, bin_size, output_dir, file_name):
     plt.figure()
-    if not word in pos_dic:
-        raise Exception('Word '+word+' notfound')
+    if word not in pos_dic:
+        raise Exception('Word ' + word + ' notfound')
 
-    df = pd.DataFrame(pos_dic[word], columns=['pos'])#.groupby(['pos'])['pos'].count()
-    df['bins'] = pd.cut(df['pos'], bins=range(0,100+bin_size,bin_size), labels=range(0,100,bin_size))
+    df = pd.DataFrame(pos_dic[word], columns=['pos'])  # .groupby(['pos'])['pos'].count()
+    df['bins'] = pd.cut(df['pos'], bins=range(0, 100 + bin_size, bin_size), labels=range(0, 100, bin_size))
     df = df.groupby(['bins'])['bins'].count()
-    ax = df.plot(title="Position du mot '"+word+"' dans les descriptions des offres")
+    ax = df.plot(title="Position du mot '" + word + "' dans les descriptions des offres")
     ax.set_xlabel("Position (en % de la longueur de la description)")
     ax.set_ylabel("Nombre d'occurrences")
     plt.savefig(os.path.join(output_dir, file_name), bbox_inches='tight')
@@ -189,10 +193,10 @@ def plot_tendencies(word_list, pos_dic, bin_size, output_dir, file_name):
     plt.figure()
     dataframe_list = list()
     for word in word_list:
-        if not word in pos_dic:
-            raise Exception('Word '+word+' not found')
+        if word not in pos_dic:
+            raise Exception('Word ' + word + ' not found')
         df = pd.DataFrame(pos_dic[word], columns=['pos'])
-        df['bins'] = pd.cut(df['pos'], bins=range(0,100+bin_size,bin_size), labels=range(0,100,bin_size))
+        df['bins'] = pd.cut(df['pos'], bins=range(0, 100 + bin_size, bin_size), labels=range(0, 100, bin_size))
         df = df.groupby(['bins'])['bins'].count()
         dataframe_list.append(df)
 
@@ -204,6 +208,7 @@ def plot_tendencies(word_list, pos_dic, bin_size, output_dir, file_name):
     plt.title('Position des mots dans les descriptions des offres', y=1.08)
     plt.savefig(os.path.join(output_dir, file_name), bbox_inches='tight')
 
+
 def run(job_list, output_dir):
     stopword_dict = get_stopwords()
     # add some stuff that isn't in the stopwords lists
@@ -214,16 +219,56 @@ def run(job_list, output_dir):
     stopword_dict['http'] = True
     stopword_dict['al'] = True
 
+    # 'Post-doc / IR', u'CDD Ingénieur', 'ATER', 'CDD autre']
+    # 'PR', 'MdC', 'CR', 'IR', 'IE', 'CDI autre'
     corpus = list()
+    corpus_stage = list()
+    corpus_these = list()
+    corpus_CDD = list()
+    corpus_CDI = list()
+    corpus_CDDpostdoc = list()
+    corpus_CDDing = list()
+    corpus_CDDautre = list()
+    corpus_CDIIE = list()
+    corpus_CDIautre = list()
+    corpus_CDIIR = list()
+
     for job in job_list:
         corpus.append(job['title'])
+        if job['contract_type'] == 'CDD':
+            corpus_CDD.append(job['title'])
+        elif job['contract_type'] == 'CDI':
+            corpus_CDI.append(job['title'])
+        elif job['contract_type'] == 'Stage':
+            corpus_stage.append(job['title'])
+        elif job['contract_type'] == u'Thèse':
+            corpus_these.append(job['title'])
 
-    lex_dic = build_lex_dic(corpus, stopword_dict=stopword_dict)
-    pos_dic = build_pos_dic(corpus, stopword_dict=stopword_dict)#, bins=100)
-    total_words= get_total_words(lex_dic)
-    ordered_freq_list = build_freq_list(lex_dic, total_words)
+        if job['contract_subtype'] == 'Post-doc / IR':
+            corpus_CDDpostdoc.append(job['title'])
+        elif job['contract_subtype'] == u'CDD Ingénieur':
+            corpus_CDDing.append(job['title'])
+        elif job['contract_subtype'] == 'CDD autre':
+            corpus_CDDautre.append(job['title'])
+        elif job['contract_subtype'] == 'IR':
+            corpus_CDIIR.append(job['title'])
+        elif job['contract_subtype'] == 'IE':
+            corpus_CDIIE.append(job['title'])
+        elif job['contract_subtype'] == 'CDI autre':
+            corpus_CDIautre.append(job['title'])
 
-    create_wordcloud(ordered_freq_list, os.path.join(output_dir, 'lexical_analysis_3.png'))
+    create_wordcloud(corpus, os.path.join(output_dir, 'lexical_analysis_1_general.png'), stopword_dict)
+    create_wordcloud(corpus_CDD, os.path.join(output_dir, 'lexical_analysis_2_CDD.png'), stopword_dict)
+    create_wordcloud(corpus_CDI, os.path.join(output_dir, 'lexical_analysis_3_CDI.png'), stopword_dict)
+    create_wordcloud(corpus_stage, os.path.join(output_dir, 'lexical_analysis_4_Stage.png'), stopword_dict)
+    create_wordcloud(corpus_these, os.path.join(output_dir, 'lexical_analysis_5_PhD.png'), stopword_dict)
+
+    create_wordcloud(corpus_CDDpostdoc, os.path.join(output_dir, 'lexical_analysis_6_CDDpostdoc.png'), stopword_dict)
+    create_wordcloud(corpus_CDDing, os.path.join(output_dir, 'lexical_analysis_7_CDDing.png'), stopword_dict)
+    create_wordcloud(corpus_CDDautre, os.path.join(output_dir, 'lexical_analysis_8_CDDautre.png'), stopword_dict)
+    create_wordcloud(corpus_CDIIR, os.path.join(output_dir, 'lexical_analysis_9_CDIIR.png'), stopword_dict)
+    create_wordcloud(corpus_CDIIE, os.path.join(output_dir, 'lexical_analysis_10_CDIIE.png'), stopword_dict)
+    create_wordcloud(corpus_CDIautre, os.path.join(output_dir, 'lexical_analysis_11_CDIautre.png'), stopword_dict)
 
     """
     print "TOTAL unique words: " + str(len(lex_dic))
@@ -246,5 +291,4 @@ def run(job_list, output_dir):
     print "matlab  " + str(get_rank('matlab', ordered_freq_list))
     """
 
-    #plot_tendencies(['perl', 'java', 'python', 'c++'], pos_dic, 5, output_dir, 'lexical_analysis_2.svg')
-
+    # plot_tendencies(['perl', 'java', 'python', 'c++'], pos_dic, 5, output_dir, 'lexical_analysis_2.svg')

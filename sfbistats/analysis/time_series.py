@@ -48,7 +48,7 @@ def proportion_stackplot(df, output=None, xlabel='', ylabel='', title=''):
     for poly in polys:
         legends.append(plt.Rectangle((0, 0), 1, 1, facecolor=poly.get_facecolor()[0]))
     # don't try to understand the legend displacement thing here. Believe me. Don't.
-    plt.figlegend(legends, column_names, loc=7, bbox_to_anchor=(1.2+legend_displace_factor(column_names), 0.5))
+    plt.figlegend(legends, column_names, loc=7, bbox_to_anchor=(1.2 + legend_displace_factor(column_names), 0.5))
     plt.title(title, y=1.08)
     date_fmt_year = mDates.DateFormatter('%b\n%Y')
     date_fmt_month = mDates.DateFormatter('%b')
@@ -58,6 +58,7 @@ def proportion_stackplot(df, output=None, xlabel='', ylabel='', title=''):
     ax.xaxis.set_minor_formatter(date_fmt_month)
     plt.savefig(output, bbox_inches='tight')
     plt.close()
+
 
 def legend_displace_factor(column_names):
     """
@@ -86,8 +87,8 @@ def legend_displace_factor(column_names):
         max_length = 0
     return max_length * 0.015
 
-def run(job_list, output_dir):
 
+def run(job_list, output_dir):
     print "Running time_series.py"
     plt.style.use('fivethirtyeight')
     plt.rcParams['lines.linewidth'] = 0
@@ -96,9 +97,10 @@ def run(job_list, output_dir):
     # disable silly warning
     pd.options.mode.chained_assignment = None
 
-    df = pd.DataFrame(job_list, columns=['_id','city', 'user', 'submission_date', 'contract_type', 'contract_subtype'])
+    df = pd.DataFrame(job_list, columns=['_id', 'city', 'user', 'submission_date', 'contract_type', 'contract_subtype'])
 
-    df2 = pd.DataFrame({'date': df.submission_date, 'type': df.contract_type}).reset_index().groupby(['type','date'])['index'].count().reset_index(name='count')
+    df2 = pd.DataFrame({'date': df.submission_date, 'type': df.contract_type}).reset_index().groupby(['type', 'date'])[
+        'index'].count().reset_index(name='count')
     df2_t = df2.pivot(index='date', columns='type', values='count')
     df2_t2 = df2_t.resample('1M', how='sum')
     df2_t2.columns.name = 'Type'
@@ -110,8 +112,10 @@ def run(job_list, output_dir):
     plt.close()
 
     # just CDD
-    df3 = pd.DataFrame({'date': df.submission_date, 'type': df.contract_subtype}).reset_index().groupby(['type','date'])['index'].count().reset_index(name='count')
-    tmp = df3['type'].isin(['Post-doc / IR',u'CDD Ingénieur', 'CDD autre', 'ATER'])
+    df3 = \
+    pd.DataFrame({'date': df.submission_date, 'type': df.contract_subtype}).reset_index().groupby(['type', 'date'])[
+        'index'].count().reset_index(name='count')
+    tmp = df3['type'].isin(['Post-doc / IR', u'CDD Ingénieur', 'CDD autre', 'ATER'])
     df3 = df3[tmp]
     df3_t = df3.pivot(index='date', columns='type', values='count')
     df3_t2 = df3_t.resample('1M', how='sum')
@@ -124,8 +128,10 @@ def run(job_list, output_dir):
     plt.close()
 
     # just CDI
-    df3 = pd.DataFrame({'date': df.submission_date, 'type': df.contract_subtype}).reset_index().groupby(['type','date'])['index'].count().reset_index(name='count')
-    tmp = df3['type'].isin(['CDI autre','IE', 'IR', 'PR', 'MdC', 'CR'])
+    df3 = \
+    pd.DataFrame({'date': df.submission_date, 'type': df.contract_subtype}).reset_index().groupby(['type', 'date'])[
+        'index'].count().reset_index(name='count')
+    tmp = df3['type'].isin(['CDI autre', 'IE', 'IR', 'PR', 'MdC', 'CR'])
     df3 = df3[tmp]
     df3_t = df3.pivot(index='date', columns='type', values='count')
     df3_t2 = df3_t.resample('1M', how='sum')
@@ -151,26 +157,29 @@ def run(job_list, output_dir):
         contract type proportions
     '''
     # get the interesting fields and count the type for each date
-    df5= pd.DataFrame({'date': df.submission_date, 'type': df.contract_type}).reset_index().groupby(['date','type'])['index'].count().reset_index(name='count')
+    df5 = pd.DataFrame({'date': df.submission_date, 'type': df.contract_type}).reset_index().groupby(['date', 'type'])[
+        'index'].count().reset_index(name='count')
     # have all the types as column and each date as one line
     df5_t = df5.pivot(index='date', columns='type', values='count')
     # make it per month
     df5_t2 = df5_t.resample('1M', how='sum').fillna(0)
     # add a total column to compute ratio
-    df5_t2['total'] = df5_t2.CDD + df5_t2.CDI + df5_t2.Stage+ df5_t2[u'Thèse']
+    df5_t2['total'] = df5_t2.CDD + df5_t2.CDI + df5_t2.Stage + df5_t2[u'Thèse']
     # replace all the values by ratios
     df5_t3 = pd.DataFrame(df5_t2).apply(lambda x: (x / x['total'] * 100), axis=1).fillna(0).drop('total', 1)
     df5_t3.columns.name = 'Type'
-    proportion_stackplot(df5_t3, output=os.path.join(output_dir, 'time_series_5.svg'), xlabel='Date', ylabel='%des offres',
+    proportion_stackplot(df5_t3, output=os.path.join(output_dir, 'time_series_5.svg'), xlabel='Date',
+                         ylabel='%des offres',
                          title=u"Évolution de la proportion des types de poste")
 
     '''
         contract subtype proportions for CDI
     '''
     # get the interesting fields only for CDI
-    df6 = pd.DataFrame({'date': df.submission_date, 'subtype': df.contract_subtype})[df['contract_type'] == 'CDI'].reset_index()
+    df6 = pd.DataFrame({'date': df.submission_date, 'subtype': df.contract_subtype})[
+        df['contract_type'] == 'CDI'].reset_index()
     # count subtype for each date
-    df6 = df6.groupby(['date','subtype'])['index'].count().reset_index(name='count')
+    df6 = df6.groupby(['date', 'subtype'])['index'].count().reset_index(name='count')
     # have all the types as column and each date as one line
     df6_t = df6.pivot(index='date', columns='subtype', values='count')
     # make it per month
@@ -180,16 +189,18 @@ def run(job_list, output_dir):
     # replace all the values by ratios
     df6_t3 = pd.DataFrame(df6_t2).apply(lambda x: (x / x['total'] * 100), axis=1).fillna(0).drop('total', 1)
     df6_t3.columns.name = 'Type'
-    proportion_stackplot(df6_t3, output=os.path.join(output_dir, 'time_series_6.svg'), xlabel='Date', ylabel='%des offres',
+    proportion_stackplot(df6_t3, output=os.path.join(output_dir, 'time_series_6.svg'), xlabel='Date',
+                         ylabel='%des offres',
                          title=u"Évolution de la proportion des types de CDI")
 
     '''
         contract subtype proportions for CDD
     '''
     # get the interesting fields only for CDD
-    df7 = pd.DataFrame({ '_id': df._id, 'date': df.submission_date, 'subtype': df.contract_subtype})[df['contract_type'] == 'CDD'].reset_index()
+    df7 = pd.DataFrame({'_id': df._id, 'date': df.submission_date, 'subtype': df.contract_subtype})[
+        df['contract_type'] == 'CDD'].reset_index()
     # count subtype for each date
-    df7 = df7.groupby(['date','subtype'])['index'].count().reset_index(name='count')
+    df7 = df7.groupby(['date', 'subtype'])['index'].count().reset_index(name='count')
     # have all the types as column and each date as one line
     df7_t = df7.pivot(index='date', columns='subtype', values='count')
     # make it per month
@@ -199,18 +210,19 @@ def run(job_list, output_dir):
     # replace all the values by ratios
     df7_t3 = pd.DataFrame(df7_t2).apply(lambda x: (x / x['total'] * 100), axis=1).fillna(0).drop('total', 1)
     df7_t3.columns.name = 'Type'
-    proportion_stackplot(df7_t3, output=os.path.join(output_dir, 'time_series_7.svg'), xlabel='Date', ylabel='%des offres',
+    proportion_stackplot(df7_t3, output=os.path.join(output_dir, 'time_series_7.svg'), xlabel='Date',
+                         ylabel='%des offres',
                          title=u'Évolution de la proportion des types de CDD')
 
     # education level quantity
     df8 = pd.DataFrame({'date': df.submission_date, 'type': df.contract_subtype}).reset_index()
-    df_bool_master = df8['type'].isin([u'CDD Ingénieur', 'IE' ])
+    df_bool_master = df8['type'].isin([u'CDD Ingénieur', 'IE'])
     df_bool_phd = df8['type'].isin(['Post-doc / IR', 'PR', 'MdC', 'CR', 'IR', 'ATER'])
     df_master = df8[df_bool_master]
     df_master['type'] = 'Master'
     df_phd = df8[df_bool_phd]
     df_phd['type'] = 'PhD'
-    df8 = pd.concat([df_phd, df_master]).groupby(['type','date'])['index'].count().reset_index(name='count')
+    df8 = pd.concat([df_phd, df_master]).groupby(['type', 'date'])['index'].count().reset_index(name='count')
     df8_t = df8.pivot(index='date', columns='type', values='count')
     df8_t2 = df8_t.resample('1M', how='sum').fillna(0)
     df8_t2.columns.name = 'Niveau'
@@ -235,40 +247,45 @@ def run(job_list, output_dir):
     '''
        average year series
     '''
-    df10 = pd.DataFrame({'date': df.submission_date, 'type': df.contract_type})#.reset_index().groupby(['date'])['index'].count().reset_index(name='count')
+    df10 = pd.DataFrame({'date': df.submission_date,
+                         'type': df.contract_type})  # .reset_index().groupby(['date'])['index'].count().reset_index(name='count')
     df10 = df10.set_index(pd.DatetimeIndex(df10['date']))
     df10['month'] = df10.index.month
-    df10 = (df10['2013':'2015'].groupby(['month', 'type'])['month'].count()/3).reset_index(name='count')
+    df10 = (df10['2013':'2015'].groupby(['month', 'type'])['month'].count() / 3).reset_index(name='count')
     df10_t = df10.pivot(index='month', columns='type', values='count').fillna(0)
     df10_t.columns.name = 'Type'
     ax = df10_t.plot(linewidth=4)
     ax.set_xlabel('Mois')
     ax.set_ylabel("Nombre d'offres")
     plt.title(u'Moyennes mensuelles 2013-2015', y=1.08)
+    ax.legend(loc='center right', bbox_to_anchor=(1.25, 0.5))
     plt.savefig(os.path.join(output_dir, 'time_series_10.svg'), bbox_inches='tight')
     plt.close()
 
+    CDD_subtypes = ['Post-doc / IR', u'CDD Ingénieur', 'CDD autre', 'ATER']
     df11 = pd.DataFrame({'date': df.submission_date, 'type': df.contract_subtype})
-    tmp = df11['type'].isin(['Post-doc / IR',u'CDD Ingénieur', 'CDD autre', 'ATER'])
+    tmp = df11['type'].isin(CDD_subtypes)
     df11 = df11[tmp]
     df11 = df11.set_index(pd.DatetimeIndex(df11['date']))
     df11['month'] = df11.index.month
-    df11 = (df11['2013':'2015'].groupby(['month', 'type'])['month'].count()/3).reset_index(name='count')
+    df11 = (df11['2013':'2015'].groupby(['month', 'type'])['month'].count() / 3).reset_index(name='count')
     df11_t = df11.pivot(index='month', columns='type', values='count').fillna(0)
     df11_t.columns.name = 'Type'
     ax = df11_t.plot(linewidth=4)
     ax.set_xlabel('Mois')
     ax.set_ylabel("Nombre d'offres")
     plt.title(u'Moyennes mensuelles 2013-2015 pour les CDD', y=1.08)
+    ax.legend(loc='center right', bbox_to_anchor=(1.4, 0.5))
     plt.savefig(os.path.join(output_dir, 'time_series_11.svg'), bbox_inches='tight')
     plt.close()
 
+    CDI_subtypes = ['CDI autre', 'IE', 'IR', 'PR', 'MdC', 'CR']
     df12 = pd.DataFrame({'date': df.submission_date, 'type': df.contract_subtype})
-    tmp = df12['type'].isin(['CDI autre','IE', 'IR', 'PR', 'MdC', 'CR'])
+    tmp = df12['type'].isin(CDI_subtypes)
     df12 = df12[tmp]
     df12 = df12.set_index(pd.DatetimeIndex(df12['date']))
     df12['month'] = df12.index.month
-    df12 = (df12['2013':'2015'].groupby(['month', 'type'])['month'].count()/3).reset_index(name='count')
+    df12 = (df12['2013':'2015'].groupby(['month', 'type'])['month'].count() / 3).reset_index(name='count')
     df12_t = df12.pivot(index='month', columns='type', values='count').fillna(0)
     df12_t.columns.name = 'Type'
     ax = df12_t.plot(linewidth=4)
@@ -276,5 +293,6 @@ def run(job_list, output_dir):
     ax.set_xlabel('Mois')
     ax.set_ylabel("Nombre d'offres")
     plt.title(u'Moyennes mensuelles 2013-2015 pour les CDI', y=1.08)
+    ax.legend(loc='center right', bbox_to_anchor=(1.3, 0.5))
     plt.savefig(os.path.join(output_dir, 'time_series_12.svg'), bbox_inches='tight')
     plt.close()
