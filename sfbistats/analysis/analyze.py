@@ -59,7 +59,6 @@ def load_from_json(file):
     return job_list
 
 if __name__ == '__main__':
-
     # parse and check arguments
     argparser = argparse.ArgumentParser()
     argparser.add_argument('--json', required=True, type=file)
