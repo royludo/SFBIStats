@@ -32,11 +32,10 @@ def minimal_hbar(ss, figsize=(6,3)):
                     color='k', fontsize=8, va='center')
     return fig, ax
 
-def minimal_violinplot(df, figsize=(6,3)):
-    cat = df.columns
-    labels = cat.get_values()
+def minimal_violinplot(ss, figsize=(6,3)):
+    labels = ss.index.get_values()
+    data = [ss[x] for x in labels]
     labelAsX = num.arange(len(labels))+1
-    data = [list(df[x].dropna()) for x in labels]
     fig, ax = plt.subplots(figsize=figsize)
     violin_parts = ax.violinplot(data,
             vert=False,
@@ -49,10 +48,11 @@ def minimal_violinplot(df, figsize=(6,3)):
     ax.set_yticks(labelAsX)
     ax.set_yticklabels(labels)
     ax.grid(axis='y')
+    maxvalue = max(max(x) for x in data)
     for pos, n in zip(labelAsX, data):
         tot = len(n)
         ax.annotate(tot,
-                xy=(0.9*df.max().max(), pos+0.1),
+                xy=(0.9*maxvalue, pos+0.1),
                 color='k', fontsize=12, va='center', ha='center')
     return fig, ax
 
@@ -251,7 +251,11 @@ def run(job_list, output_dir):
     plt.close(fig); del(fig)
 
     ## Duration of CDD per contract subtype
-    df_duration_by_contract = df_duration.pivot(columns='contract_subtype').duration
+    gb_duration_by_contract = df_duration.groupby('contract_subtype')['duration']
+    df_duration_by_contract = gb_duration_by_contract.\
+            apply(lambda x: x.tolist()).to_frame()
+    df_duration_by_contract['Total'] = df_duration_by_contract['duration'].str.len()
+    df_duration_by_contract = df_duration_by_contract.sort_values(by='Total').duration
     fig, ax = minimal_violinplot(df_duration_by_contract, figsize=(8,6))
 
     ax.set_title(u'Répartition des durées de CDD par type de contrat (2012-2016)')
@@ -264,7 +268,11 @@ def run(job_list, output_dir):
     plt.close(fig); del(fig)
 
     ## Duration of CDD per region
-    df_duration_by_region = df_duration.pivot(columns='region').duration
+    gb_duration_by_region = df_duration.groupby('region')['duration']
+    df_duration_by_region = gb_duration_by_region.\
+            apply(lambda x: x.tolist()).to_frame()
+    df_duration_by_region['Total'] = df_duration_by_region['duration'].str.len()
+    df_duration_by_region = df_duration_by_region.sort_values(by='Total').duration
     fig, ax = minimal_violinplot(df_duration_by_region, figsize=(8,8))
 
     ax.set_title(u'Répartition des durées de CDD par région (2012-2016)')
