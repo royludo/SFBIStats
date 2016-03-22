@@ -124,7 +124,7 @@ def run(job_list, output_dir):
     df_region_count = df.region.\
             value_counts(sort=True, ascending=True)
     fig, ax = minimal_hbar(df_region_count, figsize=(6,7))
-    ax.set_title(u'Répartition des offres par régions (2012-2016)')
+    ax.set_title(u'Répartition des offres par région (2012-2016)')
     fig.savefig(os.path.join(output_dir, 'summary_lins_4.svg'),
             bbox_inches='tight')
     plt.close(fig); del(fig)
@@ -149,7 +149,7 @@ def run(job_list, output_dir):
             value_counts(sort=True)
     level_series = get_jobs_educ_level(df_study_level)
     fig, ax = minimal_hbar(level_series)
-    ax.set_title(u'Diplome minimal requis (2012-2016)')
+    ax.set_title(u'Diplôme minimal requis (2012-2016)')
     fig.savefig(os.path.join(output_dir, 'summary_lins_6.svg'),
             bbox_inches='tight')
     plt.close(fig); del(fig)
@@ -181,7 +181,7 @@ def run(job_list, output_dir):
     for total in df_level_region['Total']:
         ax.text(1.02, i-0.15, total)
         i += 1
-    ax.set_title(u"Proportion des diplômes requis par régions (2012-2016)")
+    ax.set_title(u"Proportion des diplômes requis par région (2012-2016)")
     lines, labels = ax.get_legend_handles_labels()
     ax.legend(lines, labels, bbox_to_anchor=(0.75, -0.05), ncol=2)
     fig.savefig(os.path.join(output_dir, 'summary_lins_7.svg'),
@@ -211,7 +211,7 @@ def run(job_list, output_dir):
     for total in df_perc_region['Total']:
         ax.text(1.02, i-0.15, total)
         i += 1
-    ax.set_title(u"Proportion des postes par régions (2012-2016)")
+    ax.set_title(u"Proportion des postes par région (2012-2016)")
     lines, labels = ax.get_legend_handles_labels()
     ax.legend(lines, labels, bbox_to_anchor=(0.98, -0.05), ncol=4)
     fig.savefig(os.path.join(output_dir, 'summary_lins_8.svg'),
