@@ -101,7 +101,6 @@ dataset. But as no real bias is introduced by these issues, this should be ok.
 ### Dataset structure
 
 Each job entry contains the following fields:
- - _id: unique mongodb ID
  - title 
  - submission_date
  - contract_type: 'CDD', 'CDI', 'Stage', 'Thèse'
@@ -187,6 +186,9 @@ Next time you run analyze.py, you will see your own charts added to the others.
  - logging
 
 ## 5. CHANGELOG
+
+    20/05/2016
+     - _id field in jobs_anon.json removed
 
 ## 6. ACKNOWLEDGEMENTS
 
