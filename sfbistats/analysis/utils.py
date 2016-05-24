@@ -8,6 +8,7 @@ from __future__ import print_function, unicode_literals
 import re
 import geopy
 import numpy as np
+import csv
 
 def sanitize_city_name(orig_name):
     """
@@ -78,6 +79,7 @@ def sanitize_city_name_for_geoloc(orig_name):
     name = name.replace(u"Génopôle D'Evry", 'Evry')
     name = name.replace(u'Île De', 'Paris')
     name = name.replace(u'   Paris   Région Parisienne', 'Paris')
+    name = name.replace(u'Région Parisienne', 'Paris')
     # When several cities, just keep the first one
     name = name.replace('/', '|').split('|')[0]
     name = name.strip()
@@ -136,6 +138,35 @@ def get_colors():
     return ['orange', 'burlywood', 'brown', 'cornflowerblue', 'crimson', 'darkolivegreen', 'silver', 'darkslategray',
           'plum', 'peru', 'saddlebrown', 'mediumorchid', 'goldenrod', 'darksage', 'coral', 'lightseagreen']
 
+
+def query_GoogleV3(name):
+    print('Querying for location:', name)
+    service = geopy.GoogleV3(domain='maps.google.fr', timeout=5)
+    loc = service.geocode(name, exactly_one=True)
+    address_dict = loc.raw['address_components']
+    print(address_dict)
+    d = dict()
+    d['admin_lvl1'] = ''
+    d['admin_lvl2'] = ''
+    d['locality'] = ''
+    d['colloquial'] = ''
+    d['country'] = ''
+    # first pass
+    for component in address_dict:
+        print(component['long_name'], ' ## ', component['types'])
+        if u'administrative_area_level_2' in component['types']:
+            d['admin_lvl2'] = component['long_name']
+        elif u'colloquial_area' in component['types']:  # sometimes contains region name instead of lvl1
+            d['colloquial'] = component['long_name']
+        elif u'administrative_area_level_1' in component['types']:
+            d['admin_lvl1'] = component['long_name']
+        elif u'country' in component['types']:
+            d['country'] = component['long_name']
+        elif u'locality' in component['types']:
+            d['locality'] = component['long_name']
+    return d
+
+
 def city_to_dep_region(name, city_filename):
     """ Returns the department and region from the city name, if located in France.
     Otherwise, returns 'Étranger'. """
@@ -143,26 +174,47 @@ def city_to_dep_region(name, city_filename):
     name = name.decode('utf-8')
     city_dict = {}
     with open(city_filename, 'r') as city_file:
-        city_file.readline()
-        for l in city_file:
-            l = l.decode('utf-8')
-            city, dep, reg = l.strip().split(',')
+        for l in csv.reader(city_file):
+            #l = l.decode('utf-8')
+            l = map(lambda x: x.decode('utf8'), l)
+            city, dep, reg = l
             city_dict[city] = (dep, reg)
 
     if name in city_dict:
         return city_dict[name]
     else:
         print ('Unknown city:', name)
-        service = geopy.GoogleV3(domain='maps.google.fr', timeout=5)
-        loc = service.geocode(name, exactly_one=True)
-        address_dict = loc.raw['address_components']
-        for component in address_dict:
-            if component['types'][0] == u'administrative_area_level_2':
-                dep = component['long_name']
-            elif component['types'][0] == u'administrative_area_level_1':
-                reg = component['long_name']
-            elif component['types'][0] == u'country':
-                country = component['long_name']
+        loc_dic = query_GoogleV3(name)
+
+        # check if everything is alright
+        if not loc_dic['country'] or loc_dic['country'] != 'France':
+            country = u'Étranger'
+        else:
+            country = loc_dic['country']
+            if loc_dic['admin_lvl1']:
+                reg = loc_dic['admin_lvl1']
+            else:
+                if loc_dic['colloquial']:
+                    reg = loc_dic['colloquial']
+                else:  # Cadarache case, search again
+                    loc_dic2 = query_GoogleV3(loc_dic['locality'])
+                    if loc_dic2['admin_lvl1']:
+                        reg = loc_dic2['admin_lvl1']
+                    else:
+                        if loc_dic2['colloquial']:
+                            reg = loc_dic2['colloquial']
+                        else:
+                            raise NameError(name, 'Could not find region')
+            if loc_dic['admin_lvl2']:
+                dep = loc_dic['admin_lvl2']
+            else: # search again
+                loc_dic2 = query_GoogleV3(loc_dic['locality'])
+                if loc_dic2['admin_lvl2']:
+                    reg = loc_dic2['admin_lvl2']
+                else:
+                    raise NameError(name, 'Could not find region')
+
+
         print ('Found:', ', '.join([dep, reg, country]))
 
         # Conversion to new regions
@@ -172,7 +224,8 @@ def city_to_dep_region(name, city_filename):
                       (('Auvergne',u'Rhône-Alpes'),u'Auvergne-Rhône-Alpes'),
                       (('Aquitaine','Limousin','Poitou-Charentes'),'Aquitaine-Limousin-Poitou-Charentes'),
                       (('Languedoc-Roussillon',u'Midi-Pyrénées'),u'Languedoc-Roussillon-Midi-Pyrénées'),
-                      (('Nord-Pas-de-Calais','Picardie'),'Nord-Pas-de-Calais-Picardie')]
+                      (('Nord-Pas-de-Calais','Picardie'),'Nord-Pas-de-Calais-Picardie'),
+                      (['Nord-Pas-de-Calais Picardie'],'Nord-Pas-de-Calais-Picardie')]
         newregions_dict = {}
         for keylist in conv_table:
             newregions_dict.update(dict.fromkeys(keylist[0], keylist[1]))

@@ -108,9 +108,9 @@ class JobOffer(object):
         else:
             job.lab = ''
 
-        contact_name_string = job.seek_info('Nom du contact', job_string_list, 1)
+        contact_name_string = job.seek_info('Nom et prénom du contact', job_string_list, 1)
         if not contact_name_string:
-            raise Exception('Now du contact field not found!')
+            raise Exception('Nom du contact field not found!')
         job.contact_name = contact_name_string.title()
 
         limit_date_string = job.seek_info('Date limite de candidature', job_string_list, 1)
