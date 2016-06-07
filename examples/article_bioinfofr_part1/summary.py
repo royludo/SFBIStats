@@ -8,7 +8,7 @@ Provide some basic, global stats.
 import matplotlib.pyplot as plt
 import pandas as pd
 import os
-import sfbistats.analysis.utils as sfbi_utils
+from sfbistats import utils as sfbi_utils
 import numpy as num
 
 
