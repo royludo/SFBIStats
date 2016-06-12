@@ -40,5 +40,7 @@ if __name__ == '__main__':
     job_list = utils.load_from_json(input_file)
 
     # run the scripts
-    global_lins.run(job_list, output_dir)
+    summary.run(job_list, output_dir)
+    lexical_analysis.run(job_list, output_dir)
+    maps.run(job_list, output_dir)
     print ("Complete")
