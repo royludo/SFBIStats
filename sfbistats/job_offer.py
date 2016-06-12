@@ -264,3 +264,4 @@ class JobOfferAnon(object):
                 "limit_date": self.limit_date,
                 "validity_date": self.validity_date,
                 }
+

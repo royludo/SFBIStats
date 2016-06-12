@@ -9,7 +9,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mDates
 import os
-import sfbistats.analysis.utils as sfbi_utils
+from sfbistats import utils as sfbi_utils
 
 
 def proportion_stackplot(df, output=None, xlabel='', ylabel='', title=''):
