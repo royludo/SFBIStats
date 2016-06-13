@@ -13,7 +13,7 @@ import geopy
 import re
 from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
 import math
-import sfbistats.analysis.utils as sfbi_utils
+from sfbistats import utils as sfbi_utils
 import os
 
 

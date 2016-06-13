@@ -8,7 +8,7 @@ Provide some basic, global stats.
 import matplotlib.pyplot as plt
 import pandas as pd
 import os
-import sfbistats.analysis.utils as sfbi_utils
+from sfbistats import utils as sfbi_utils
 import numpy as num
 
 
@@ -32,11 +32,10 @@ def minimal_hbar(ss, figsize=(6,3)):
                     color='k', fontsize=8, va='center')
     return fig, ax
 
-def minimal_violinplot(df, figsize=(6,3)):
-    cat = df.columns
-    labels = cat.get_values()
+def minimal_violinplot(ss, figsize=(6,3)):
+    labels = ss.index.get_values()
+    data = [ss[x] for x in labels]
     labelAsX = num.arange(len(labels))+1
-    data = [list(df[x].dropna()) for x in labels]
     fig, ax = plt.subplots(figsize=figsize)
     violin_parts = ax.violinplot(data,
             vert=False,
@@ -49,10 +48,11 @@ def minimal_violinplot(df, figsize=(6,3)):
     ax.set_yticks(labelAsX)
     ax.set_yticklabels(labels)
     ax.grid(axis='y')
+    maxvalue = max(max(x) for x in data)
     for pos, n in zip(labelAsX, data):
         tot = len(n)
         ax.annotate(tot,
-                xy=(0.9*df.max().max(), pos+0.1),
+                xy=(0.9*maxvalue, pos+0.1),
                 color='k', fontsize=12, va='center', ha='center')
     return fig, ax
 
@@ -74,11 +74,13 @@ def run(job_list, output_dir):
     contract_subtype_level.update(dict.fromkeys([u'CDD Ingénieur', 'IE'], 'Master'))
 
 
-
-    colors = plt.get_cmap('Greens')(num.linspace(0.1,0.9,4))
-    colors = map(lambda rgb:
-            '#%02x%02x%02x' % (rgb[0]*255,rgb[1]*255,rgb[2]*255),
-                               tuple(colors[:,0:-1]))
+    # Define colors using a color map
+    #colors = plt.get_cmap('nipy_spectral')(num.linspace(0,0.8,4))
+    #colors = map(lambda rgb:
+    #        '#%02x%02x%02x' % (rgb[0]*255,rgb[1]*255,rgb[2]*255),
+    #                           tuple(colors[:,0:-1]))
+    # Define colors using bioinfo-fr color palette
+    colors = ['#6f3883', '#87ad3e', '#fce33e', '#4066c7', '#cc3428']
     plt.rcParams.update(plt.rcParamsDefault)
 
     df = pd.DataFrame(job_list, columns=['contract_type',
@@ -122,7 +124,7 @@ def run(job_list, output_dir):
     df_region_count = df.region.\
             value_counts(sort=True, ascending=True)
     fig, ax = minimal_hbar(df_region_count, figsize=(6,7))
-    ax.set_title(u'Répartition des offres par régions (2012-2016)')
+    ax.set_title(u'Répartition des offres par région (2012-2016)')
     fig.savefig(os.path.join(output_dir, 'summary_lins_4.svg'),
             bbox_inches='tight')
     plt.close(fig); del(fig)
@@ -147,7 +149,7 @@ def run(job_list, output_dir):
             value_counts(sort=True)
     level_series = get_jobs_educ_level(df_study_level)
     fig, ax = minimal_hbar(level_series)
-    ax.set_title(u'Diplome minimal requis (2012-2016)')
+    ax.set_title(u'Diplôme minimal requis (2012-2016)')
     fig.savefig(os.path.join(output_dir, 'summary_lins_6.svg'),
             bbox_inches='tight')
     plt.close(fig); del(fig)
@@ -179,7 +181,7 @@ def run(job_list, output_dir):
     for total in df_level_region['Total']:
         ax.text(1.02, i-0.15, total)
         i += 1
-    ax.set_title(u"Proportion des diplômes requis par régions (2012-2016)")
+    ax.set_title(u"Proportion des diplômes requis par région (2012-2016)")
     lines, labels = ax.get_legend_handles_labels()
     ax.legend(lines, labels, bbox_to_anchor=(0.75, -0.05), ncol=2)
     fig.savefig(os.path.join(output_dir, 'summary_lins_7.svg'),
@@ -209,7 +211,7 @@ def run(job_list, output_dir):
     for total in df_perc_region['Total']:
         ax.text(1.02, i-0.15, total)
         i += 1
-    ax.set_title(u"Proportion des postes par régions (2012-2016)")
+    ax.set_title(u"Proportion des postes par région (2012-2016)")
     lines, labels = ax.get_legend_handles_labels()
     ax.legend(lines, labels, bbox_to_anchor=(0.98, -0.05), ncol=4)
     fig.savefig(os.path.join(output_dir, 'summary_lins_8.svg'),
@@ -249,7 +251,11 @@ def run(job_list, output_dir):
     plt.close(fig); del(fig)
 
     ## Duration of CDD per contract subtype
-    df_duration_by_contract = df_duration.pivot(columns='contract_subtype').duration
+    gb_duration_by_contract = df_duration.groupby('contract_subtype')['duration']
+    df_duration_by_contract = gb_duration_by_contract.\
+            apply(lambda x: x.tolist()).to_frame()
+    df_duration_by_contract['Total'] = df_duration_by_contract['duration'].str.len()
+    df_duration_by_contract = df_duration_by_contract.sort_values(by='Total').duration
     fig, ax = minimal_violinplot(df_duration_by_contract, figsize=(8,6))
 
     ax.set_title(u'Répartition des durées de CDD par type de contrat (2012-2016)')
@@ -262,7 +268,11 @@ def run(job_list, output_dir):
     plt.close(fig); del(fig)
 
     ## Duration of CDD per region
-    df_duration_by_region = df_duration.pivot(columns='region').duration
+    gb_duration_by_region = df_duration.groupby('region')['duration']
+    df_duration_by_region = gb_duration_by_region.\
+            apply(lambda x: x.tolist()).to_frame()
+    df_duration_by_region['Total'] = df_duration_by_region['duration'].str.len()
+    df_duration_by_region = df_duration_by_region.sort_values(by='Total').duration
     fig, ax = minimal_violinplot(df_duration_by_region, figsize=(8,8))
 
     ax.set_title(u'Répartition des durées de CDD par région (2012-2016)')

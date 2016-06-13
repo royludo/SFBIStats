@@ -27,12 +27,20 @@ Please read the details section before using the charts.
 
 ## 2. USAGE
 
-### 2.1 Setup the environment
+### 2.1 Clone the repository
+
+```bash
+git clone https://github.com/royludo/SFBIStats
+```
+
+This will create a SFBIStats directory containing the module.
+
+### 2.2 Setup the environment
 
 The following procedures assume you have the [conda environment manager](http://conda.pydata.org/docs/) installed.
 If you don't, here is the [miniconda download page](http://conda.pydata.org/miniconda.html).
 
-#### 2.1.1 The quick way
+#### 2.2.1 The quick way
 
 Make use of the provided environment definition file `env.yml`
 
@@ -44,9 +52,9 @@ conda env create -f env.yml
 This will setup a complete environment called sfbistatsenv with all the requirements already installed.
 Don't forget `source activate sfbistatsenv`
 
-Then go to 2.1.3
+Then go to 2.2.3
 
-#### 2.1.2 The less quick way
+#### 2.2.2 The less quick way
 
 Create the environment:
 
@@ -66,21 +74,21 @@ pip install wordcloud
 
 Continue with 2.1.3
 
-#### 2.1.3 Get the code
+#### 2.2.3 Install the sfbistats package
 
-Clone the repository directly in your environment. You should end up with something like `sfbistatsenv/SFBIStats/sfbistats` containing the actual code.
+Make sure you activated the virtualenv, then go into the SFBIStats/ directory and install the package using:
 
-#### 2.1.4 Make Python aware of your project
+```bash
+python setup.py install
+```
 
-Make the project's packages available to python:
+For a local installation, use the keyword develop instead of install.
 
-`export PYTHONPATH="$PYTHONPATH:/path/to/the/envs/sfbistatsenv/SFBIStats"`
-
-### 2.2 Run the script
+### 2.3 Run the example
 
 ```bash
 mkdir output
-python ./sfbistats/analysis/analyze.py --json ./resources/jobs_anon.json --output_dir ./output
+python ./examples/article_bioinfofr_part1/analyze.py --json ./resources/jobs_anon.json --output_dir ./output
 ```
 
 ## 3. DETAILS
