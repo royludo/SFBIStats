@@ -1,4 +1,5 @@
 # coding=utf-8
+from __future__ import division, print_function, unicode_literals
 
 import pymongo
 from scrapy.crawler import CrawlerProcess
@@ -33,9 +34,9 @@ class MongoDBStorage(object):
     clean mongodb stuff
 '''
 def clear_db(client):
-    print "Start cleaning DB"
+    print ("Start cleaning DB")
     client.drop_database(db_name)
-    print "DB " + db_name + " now clean"
+    print ("DB " + db_name + " now clean")
 
 if __name__ == '__main__':
 
@@ -49,7 +50,7 @@ if __name__ == '__main__':
     collection_name = 'jobs'
     configure_logging({'LOG_FILE': 'loader.log'})
 
-    print "Parsing mails..."
+    print ("Parsing mails...")
     parser = EmlParser(eml_dir)
     link_list = parser.get_link_list()
 

@@ -1,9 +1,0 @@
-setup.py
-sfbistats/__init__.py
-sfbistats/job_offer.py
-sfbistats/utils.py
-sfbistats.egg-info/PKG-INFO
-sfbistats.egg-info/SOURCES.txt
-sfbistats.egg-info/dependency_links.txt
-sfbistats.egg-info/not-zip-safe
-sfbistats.egg-info/top_level.txt

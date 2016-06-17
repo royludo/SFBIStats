@@ -1,4 +1,5 @@
 # coding=utf-8
+from __future__ import division, print_function
 import re
 import datetime
 
@@ -49,7 +50,7 @@ class JobOffer(object):
         :param document:
         :return:
         """
-        print document
+        print (document)
 
     @staticmethod
     def from_job_string_list(job_string_list, http_link):

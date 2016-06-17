@@ -1,3 +1,4 @@
+from __future__ import unicode_literals, division, print_function
 import re
 from HTMLParser import HTMLParser
 
@@ -12,7 +13,7 @@ class JobSpider(scrapy.Spider):
 
     def __init__(self, start_urls=None):
         super(JobSpider, self).__init__()
-        #print "start_urls "+str(start_urls)
+        #print ("start_urls "+str(start_urls))
         self.start_urls = start_urls
 
 
@@ -27,7 +28,7 @@ class JobSpider(scrapy.Spider):
         for line in response.body.decode(response.encoding).splitlines():
             line = line.strip()
             if line: # get rid of empty lines
-                #print line,
+                #print (line)
                 if re.search('\<h1 class\=\"title\"\>',line):
                     flag = 1
                 if re.search('<div class=\"region region-sidebar-first column sidebar\">',line):

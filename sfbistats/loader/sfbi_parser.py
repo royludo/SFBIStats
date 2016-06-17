@@ -1,4 +1,5 @@
 # coding=utf-8
+from __future__ import division, print_function, unicode_literals
 
 import os
 import email
@@ -38,7 +39,7 @@ class EmlParser(object):
             try:
                 f = open(os.path.join(mail_directory, filename), 'r')
             except:
-                print "Could not open "+filename+" in " + mail_directory
+                print ("Could not open "+filename+" in " + mail_directory)
                 continue
 
             msg = email.message_from_file(f)
@@ -93,7 +94,7 @@ class EmlParser(object):
         #first determine if mail is recent and formatted, or ancient and anarchic
         flags = dict.fromkeys(["f1", "f2", "f3", "f4", "f5", "f6"], 0)
         for line in text.splitlines(True):
-            #print ">"+line
+            #print (">"+line)
             if re.match('^Type de poste : ', line):
                 flags["f1"] = 1
             if re.match('^Intitulé du poste : ', line):

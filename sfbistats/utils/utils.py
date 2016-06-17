@@ -4,7 +4,7 @@
 Miscellaneous stuff.
 
 """
-from __future__ import print_function, unicode_literals
+from __future__ import print_function, unicode_literals, division
 import re
 import geopy
 import numpy as np
@@ -111,8 +111,6 @@ def sanitize_duration(job_duration_string):
     m3 = re.search('(\d+).*(semaine|semaines|week|weeks).*', job_duration_string)
     m4 = re.search('(\d+)', job_duration_string.lower())
 
-    m5 = re.search('(indéterminé|indeterminé|indetermine|cdi|inderterminé|full time)', job_duration_string.lower())
-
     if m1:
         dur = int(m1.group(1))
     elif m2:
@@ -121,8 +119,6 @@ def sanitize_duration(job_duration_string):
         dur = int(m3.group(1)) / 4
     elif m4:
         dur = int(m4.group(1))
-    elif m5:
-        dur = ''
     else:
         dur = -1
     return dur
@@ -181,8 +177,6 @@ def city_to_dep_region(name, city_filename):
     city_dict = {}
     with open(city_filename, 'r') as city_file:
         for l in csv.reader(city_file):
-            #l = l.decode('utf-8')
-            l = map(lambda x: x.decode('utf8'), l)
             city, dep, reg = l
             city_dict[city] = (dep, reg)
 
@@ -301,7 +295,7 @@ def levenshtein(source, target):
 
 def get_close_spelling(city, city_dict):
     leven_list = list()
-    for city_check in city_dict.iterkeys():
+    for city_check in city_dict.keys():
         dl = levenshtein(city.decode('utf8'), city_check.decode('utf8'))
         if (len(city) < 10 and dl == 1) or (len(city) > 10 and dl < 4 and dl != 0):
             leven_list.append(city_check)
@@ -310,7 +304,7 @@ def get_close_spelling(city, city_dict):
 
 def spell_correct(job_list, city_dict):
     replace_dict = dict()
-    for city in city_dict.iterkeys():
+    for city in city_dict.keys():
         closests = get_close_spelling(city, city_dict)
         if len(closests) == 1:
             alt = closests[0]
