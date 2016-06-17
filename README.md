@@ -17,25 +17,33 @@ This project aims to:
 
 The data come from the [Société Française de Bioinformatique (SFBI)](http://www.sfbi.fr/), an association who, among other things, gathers job
 offers and posts them on their [website](http://www.sfbi.fr/recherche_emplois) and mail list.
-You will find here information related to more than 1200 job offers that have been posted from april 2012 onward.
-The data will be updated every month.
+You will find here information related to more than 1400 job offers that have been posted from april 2012 onward.
+The data are regularly updated.
 
 This project concerns data of french origin, and was essentially destined for the french bioinformatics community. 
-English has been used for the code, but the output charts are in french.
+English has been used for the code, but the examples are in French.
 
 Please read the details section before using the charts.
 
 ## 2. USAGE
 
-### 2.1 Clone the repository
+### 2.1 Clone the repository and install the package
 
+SFBIStats has been tested for python >= 2.7 and >= 3.4.1.
 ```bash
 git clone https://github.com/royludo/SFBIStats
+cd ./SFBIStats
+sudo python setup.py install
 ```
+This will download the package and install it in /usr/lib, with
+the required dependencies (numpy, pymongo and geopy).
+For a local installation, use the keyword develop instead of install.
 
-This will create a SFBIStats directory containing the module.
+You can also use a virtual environment.
+In that case, you should activate the environment before running the setup.py script.
+See below for a way to set up a miniconda environment.
 
-### 2.2 Setup the environment
+### 2.2 OPTIONAL - Setting up a miniconda environment
 
 The following procedures assume you have the [conda environment manager](http://conda.pydata.org/docs/) installed.
 If you don't, here is the [miniconda download page](http://conda.pydata.org/miniconda.html).
@@ -50,9 +58,8 @@ conda env create -f env.yml
 ```
 
 This will setup a complete environment called sfbistatsenv with all the requirements already installed.
-Don't forget `source activate sfbistatsenv`
-
-Then go to 2.2.3
+Don't forget `source activate sfbistatsenv`.
+Then go back to 2.1.
 
 #### 2.2.2 The less quick way
 
@@ -63,33 +70,44 @@ Create the environment:
 Install the requirements:
 
 ```bash
+conda install pymongo
+pip install geopy
+```
+Then go back to 2.1.
+
+### 2.3 Run the examples
+
+The examples directory contains scripts that generate the figures presented on [bioinfo-fr](http://bioinfo-fr.net).
+This requires two additional packages:
+```bash
+(sudo) pip install matplotlib
+(sudo) pip install pandas
+```
+or 
+```bash
 conda install matplotlib
 conda install pandas
-conda install pymongo
-conda install PIL
-conda install basemap
-pip install geopy
-pip install wordcloud
 ```
 
-Continue with 2.1.3
-
-#### 2.2.3 Install the sfbistats package
-
-Make sure you activated the virtualenv, then go into the SFBIStats/ directory and install the package using:
-
-```bash
-python setup.py install
-```
-
-For a local installation, use the keyword develop instead of install.
-
-### 2.3 Run the example
-
+Once their are installed, you can generate the figures from the first article via:
 ```bash
 mkdir output
 python ./examples/article_bioinfofr_part1/analyze.py --json ./resources/jobs_anon.json --output_dir ./output
 ```
+
+The second example use jupyter notebook, which can be installed with the command:
+```bash
+(sudo) pip install jupyter
+```
+
+Then, just run the notebook:
+```bash
+cd ./examples/article_bioinfofr_part2/
+jupyter notebook
+```
+
+The misc directory contains several other (unpublished) figures that requires some extra packages, among which
+PIL, basemap and wordcloud.
 
 ## 3. DETAILS
 
@@ -171,34 +189,7 @@ If you want to transform the charts with your own awesome style, if you have a b
 data), or if you feel like some different kinds of charts could be useful, then don't hesitate! Fork, code, and tell us
 about it. We will happily accept any kind of contribution to this project!
 
-### Example: creating other charts
-
-Feel like the horizontal bar chart could be better if it was... vertical? No problem.
-Create your own python module (let's say, myscript.py) and put your code inside a function that looks like
-
-`def run(job_list, output_dir):`
-
-Now you have a list of jobs and a place to output your nice new charts!
-Process the data the way you want and save your work in output_dir.
-When you're done, open analyze.py, import your script and add
-
-`myscript.run(job_list, output_dir)`
-
-to the end of the code.
-Next time you run analyze.py, you will see your own charts added to the others.
-
-### TODO
-
- - finish the maps
- - more doc
- - logging
-
-## 5. CHANGELOG
-
-    20/05/2016
-     - _id field in jobs_anon.json removed
-
-## 6. ACKNOWLEDGEMENTS
+## 5. ACKNOWLEDGEMENTS
 
 Big thanks to the [bioinfo-fr](http://bioinfo-fr.net/) community, who lighted the sparkle of motivation for this project, and Lins` in particular.
 Credits for the original data go to the [SFBI](http://www.sfbi.fr/).
