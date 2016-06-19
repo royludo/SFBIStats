@@ -17,38 +17,24 @@ This project aims to:
 
 The data come from the [Société Française de Bioinformatique (SFBI)](http://www.sfbi.fr/), an association who, among other things, gathers job
 offers and posts them on their [website](http://www.sfbi.fr/recherche_emplois) and mail list.
-You will find here information related to more than 1400 job offers that have been posted from april 2012 onward.
-The data are regularly updated.
+You will find here information related to more than 1200 job offers that have been posted from april 2012 onward.
+The data will be updated every month.
 
 This project concerns data of french origin, and was essentially destined for the french bioinformatics community. 
-English has been used for the code, but the examples are in French.
+English has been used for the code, but the output charts are in french.
 
 Please read the details section before using the charts.
 
 ## 2. USAGE
 
-### 2.1 Clone the repository and install the package
+We highly recommend to use the [conda environment manager](http://conda.pydata.org/docs/) to install and use this project.
 
-SFBIStats has been tested for python >= 2.7 and >= 3.4.1.
-```bash
-git clone https://github.com/royludo/SFBIStats
-cd ./SFBIStats
-sudo python setup.py install
-```
-This will download the package and install it in /usr/lib, with
-the required dependencies (numpy, pymongo and geopy).
-For a local installation, use the keyword develop instead of install.
+### 2.1 Setup
 
-You can also use a virtual environment.
-In that case, you should activate the environment before running the setup.py script.
-See below for a way to set up a miniconda environment.
-
-### 2.2 OPTIONAL - Setting up a miniconda environment
-
-The following procedures assume you have the [conda environment manager](http://conda.pydata.org/docs/) installed.
+The following procedures assume you have already installed conda.
 If you don't, here is the [miniconda download page](http://conda.pydata.org/miniconda.html).
 
-#### 2.2.1 The quick way
+#### 2.1.1 Create the virtual environment
 
 Make use of the provided environment definition file `env.yml`
 
@@ -57,57 +43,25 @@ wget https://raw.githubusercontent.com/royludo/SFBIStats/master/env.yml
 conda env create -f env.yml
 ```
 
-This will setup a complete environment called sfbistatsenv with all the requirements already installed.
-Don't forget `source activate sfbistatsenv`.
-Then go back to 2.1.
+This will setup a complete environment called sfbistatsenv with the core package requirements already installed.
+Don't forget `source activate sfbistatsenv`
 
-#### 2.2.2 The less quick way
+#### 2.1.2 Get the code
 
-Create the environment:
+Clone the repository directly in your environment. You will end up with a folder `sfbistatsenv/SFBIStats` containing 
+all the project.
 
-`conda create -n sfbistatsenv python=2.7`
+#### 2.1.4 Install the package
 
-Install the requirements:
+Go in the project's directory.
+`python setup.py install`
 
-```bash
-conda install pymongo
-pip install geopy
-```
-Then go back to 2.1.
+### 2.2 Run the examples
 
-### 2.3 Run the examples
-
-The examples directory contains scripts that generate the figures presented on [bioinfo-fr](http://bioinfo-fr.net).
-This requires two additional packages:
-```bash
-(sudo) pip install matplotlib
-(sudo) pip install pandas
-```
-or 
-```bash
-conda install matplotlib
-conda install pandas
-```
-
-Once their are installed, you can generate the figures from the first article via:
-```bash
-mkdir output
-python ./examples/article_bioinfofr_part1/analyze.py --json ./resources/jobs_anon.json --output_dir ./output
-```
-
-The second example use jupyter notebook, which can be installed with the command:
-```bash
-(sudo) pip install jupyter
-```
-
-Then, just run the notebook:
-```bash
-cd ./examples/article_bioinfofr_part2/
-jupyter notebook
-```
-
-The misc directory contains several other (unpublished) figures that requires some extra packages, among which
-PIL, basemap and wordcloud.
+You probably want to use the data and create some charts. The examples folders contains scripts that make use of the 
+SFBI jobs data to produce charts as seen [here](http://bioinfo-fr.net/etat-de-lemploi-bioinformatique-en-france-analyse-des-offres-de-la-sfbi) or [here](https://www.dropbox.com/sh/b33edivf9tuljfw/AABiurGJNg0i0EdhxoEwouc0a).
+Each folder is different, and has its own dependencies. Please refer to the README provided in each folder for instructions
+on how to install and run each example.
 
 ## 3. DETAILS
 
@@ -177,12 +131,6 @@ lexical_analysis 1-11:
 Generated with the [word_cloud module](https://github.com/amueller/word_cloud) using the titles of the job offers.
 Types and subtypes of contracts are specified in each image title. 
 
-### Code
-
-You will probably be interested by the content of the analysis package only. The main script is analyze.py. It calls
-the other python modules which produce the charts. 
-Beware that some functions in lexical_analysis.py can not be used with the provided data.
-
 ## 4. CONTRIBUTE
 
 If you want to transform the charts with your own awesome style, if you have a better way to get the data (or more 
@@ -191,5 +139,6 @@ about it. We will happily accept any kind of contribution to this project!
 
 ## 5. ACKNOWLEDGEMENTS
 
-Big thanks to the [bioinfo-fr](http://bioinfo-fr.net/) community, who lighted the sparkle of motivation for this project, and Lins` in particular.
+Big thanks to the [bioinfo-fr](http://bioinfo-fr.net/) community, who lighted the sparkle of motivation for this
+project, and Lins` in particular.
 Credits for the original data go to the [SFBI](http://www.sfbi.fr/).
