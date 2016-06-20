@@ -4,7 +4,7 @@ from HTMLParser import HTMLParser
 
 import scrapy
 
-import job_offer
+from ..job_offer import JobOffer
 
 
 class JobSpider(scrapy.Spider):
@@ -44,7 +44,7 @@ class JobSpider(scrapy.Spider):
             e = e.strip()
             if e:
                 final_list.append(e)
-        return job_offer.JobOffer.from_job_string_list(final_list, response.url).to_dict()
+        return JobOffer.from_job_string_list(final_list, response.url).to_dict()
 
 
 class HTMLStripper(HTMLParser):
