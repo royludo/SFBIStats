@@ -1,207 +1,214 @@
-City,Department,Region
-Villeurbanne,Rhône,Auvergne-Rhône-Alpes
+Villeurbanne,Rhône,Auvergne Rhône-Alpes
 Evry,Essonne,Île-de-France
+Paris,Paris,Île-de-France
 Lille,Nord,Nord-Pas-de-Calais-Picardie
-Bordeaux,Gironde,Aquitaine-Limousin-Poitou-Charentes
+Bordeaux,Gironde,Aquitaine Limousin Poitou-Charentes
 Saclay,Essonne,Île-de-France
-Chappes,Puy-de-Dôme,Auvergne-Rhône-Alpes
-Clermont Ferrand,Puy-de-Dôme,Auvergne-Rhône-Alpes
-Toulouse,Haute-Garonne,Languedoc-Roussillon-Midi-Pyrénées
-Bruxelles,Étranger,Étranger
-Limoges,Haute-Vienne,Aquitaine-Limousin-Poitou-Charentes
-Manchester,Étranger,Étranger
+Chappes,Puy-de-Dôme,Auvergne Rhône-Alpes
+Clermont Ferrand,Puy-de-Dôme,Auvergne Rhône-Alpes
+Toulouse,Haute-Garonne,Languedoc-Roussillon Midi-Pyrénées
+Limoges,Haute-Vienne,Aquitaine Limousin Poitou-Charentes
 Brest,Finistère,Bretagne
-Goettingen,Étranger,Étranger
-Marcy L'Etoile,Rhône,Auvergne-Rhône-Alpes
-Lyon,Rhône,Auvergne-Rhône-Alpes
-Barcelone,Étranger,Étranger
+Montpellier,Hérault,Languedoc-Roussillon Midi-Pyrénées
+Reims,Marne,Alsace-Champagne-Ardenne-Lorraine
+Marcy L'Etoile,Rhône,Auvergne Rhône-Alpes
+Lyon,Rhône,Auvergne Rhône-Alpes
+Turku,Étranger,Étranger
+Dijon,Côte-d'Or,Bourgogne Franche-Comté
 Cork,Étranger,Étranger
 Gent,Étranger,Étranger
 Graz,Étranger,Étranger
 Angers,Maine-et-Loire,Pays de la Loire
-Grenoble,Isère,Auvergne-Rhône-Alpes
-Montpellier,Hérault,Languedoc-Roussillon-Midi-Pyrénées
+Grenoble,Isère,Auvergne Rhône-Alpes
 Cambridge,Étranger,Étranger
-Orléans,Loiret,Centre
+Gif Sur Yvette,Essonne,Île-de-France
+Bremen,Étranger,Étranger
+Jouy En Josas,Yvelines,Île-de-France
+Orléans,Loiret,Centre-Val de Loire
 Ploufragan,Côtes-d'Armor,Bretagne
-Namur,Étranger,Étranger
 Nantes,Loire-Atlantique,Pays de la Loire
 Oslo,Étranger,Étranger
 Londres,Étranger,Étranger
+Freiburg,Étranger,Étranger
 Neuilly Sur Seine,Hauts-de-Seine,Île-de-France
+Manchester,Étranger,Étranger
 Versailles,Yvelines,Île-de-France
 Marseille,Bouches-du-Rhône,Provence-Alpes-Côte d'Azur
-Mondonville,Haute-Garonne,Languedoc-Roussillon-Midi-Pyrénées
+Mondonville,Haute-Garonne,Languedoc-Roussillon Midi-Pyrénées
 Vitry Sur Seine,Val-de-Marne,Île-de-France
 Chilly Mazarin,Essonne,Île-de-France
 Glasgow,Étranger,Étranger
-Reims,Marne,Alsace-Champagne-Ardenne-Lorraine
 Rouen,Seine-Maritime,Normandie
+Puteaux,Hauts-de-Seine,Île-de-France
 Leiden,Étranger,Étranger
 Uppsala,Étranger,Étranger
 Rennes,Ille-et-Vilaine,Bretagne
 Vélizy Villacoublay,Yvelines,Île-de-France
-Freiburg,Étranger,Étranger
 Québec,Étranger,Étranger
-Bagnols Sur Cèze,Gard,Languedoc-Roussillon-Midi-Pyrénées
+Bagnols Sur Cèze,Gard,Languedoc-Roussillon Midi-Pyrénées
 Jeddah,Étranger,Étranger
 Orsay,Essonne,Île-de-France
-Strasbourg,Bas-Rhin,Alsace-Champagne-Ardenne-Lorraine
 Issy Les Moulineaux,Hauts-de-Seine,Île-de-France
-Chicago,Étranger,Étranger
 Loos,Nord,Nord-Pas-de-Calais-Picardie
 Biot,Alpes-Maritimes,Provence-Alpes-Côte d'Azur
 Maison Alfort,Loire-Atlantique,Pays de la Loire
 Sophia Antipolis,Alpes-Maritimes,Provence-Alpes-Côte d'Azur
-Pau,Pyrénées-Atlantiques,Aquitaine-Limousin-Poitou-Charentes
+Pau,Pyrénées-Atlantiques,Aquitaine Limousin Poitou-Charentes
 Athens,Étranger,Étranger
 Cologne,Étranger,Étranger
 Croissy Sur Seine,Yvelines,Île-de-France
-Dijon,Côte-d'Or,Bourgogne-Franche-Comté
 Colmar,Haut-Rhin,Alsace-Champagne-Ardenne-Lorraine
-Gif Sur Yvette,Essonne,Île-de-France
+Nîmes,Gard,Languedoc-Roussillon Midi-Pyrénées
 Ithaca,Étranger,Étranger
-Banyuls Sur Mer,Pyrénées-Orientales,Languedoc-Roussillon-Midi-Pyrénées
-Rodez,Aveyron,Languedoc-Roussillon-Midi-Pyrénées
-Poznan,Étranger,Étranger
-Clermont Ferrant,Puy-de-Dôme,Auvergne-Rhône-Alpes
+Banyuls Sur Mer,Pyrénées-Orientales,Languedoc-Roussillon Midi-Pyrénées
+Rodez,Aveyron,Languedoc-Roussillon Midi-Pyrénées
+Clermont Ferrant,Puy-de-Dôme,Auvergne Rhône-Alpes
+Cali,Étranger,Étranger
 Roscoff,Finistère,Bretagne
 Berlin,Étranger,Étranger
 Bergen,Étranger,Étranger
+Nouzilly,Indre-et-Loire,Centre-Val de Loire
 Münster Germany,Étranger,Étranger
 La Bohalle,Maine-et-Loire,Pays de la Loire
-Münster,Étranger,Étranger
+Saint Quentin En Yvelines,Yvelines,Île-de-France
 Dunstaffnage,Étranger,Étranger
+Amiens,Somme,Nord-Pas-de-Calais-Picardie
 Fontenay Le Fleury,Yvelines,Île-de-France
-Jouy En Josas,Yvelines,Île-de-France
 Munich,Étranger,Étranger
 Villefranche Sur Mer,Alpes-Maritimes,Provence-Alpes-Côte d'Azur
+Antony,Hauts-de-Seine,Île-de-France
 Leicester,Étranger,Étranger
 Thiverval Grignon,Yvelines,Île-de-France
-Castanet Tolosan,Haute-Garonne,Languedoc-Roussillon-Midi-Pyrénées
-Auzeville Tolosane,Haute-Garonne,Languedoc-Roussillon-Midi-Pyrénées
+Strasbourg,Bas-Rhin,Alsace-Champagne-Ardenne-Lorraine
+Castanet Tolosan,Haute-Garonne,Languedoc-Roussillon Midi-Pyrénées
+Auzeville Tolosane,Haute-Garonne,Languedoc-Roussillon Midi-Pyrénées
 London,Étranger,Étranger
 Singapore,Étranger,Étranger
 Villejuif,Val-de-Marne,Île-de-France
 Nancy,Meurthe-et-Moselle,Alsace-Champagne-Ardenne-Lorraine
+Cappelle En Pévèle,Nord,Nord-Pas-de-Calais-Picardie
 Velizy Villacoublay,Yvelines,Île-de-France
 Basel,Étranger,Étranger
+Saint Sauveur,Étranger,Étranger
 Aachen,Étranger,Étranger
 Montréal,Étranger,Étranger
+Région De Lyon,Étranger,Étranger
+Bruyères Le Chatel,Essonne,Île-de-France
 Barcelona,Étranger,Étranger
 Nicosie,Étranger,Étranger
+Bruxelles,Étranger,Étranger
+Cea Saclay,Essonne,Île-de-France
 Palaiseau,Essonne,Île-de-France
-Bad Nauheim,Étranger,Étranger
 Babraham,Étranger,Étranger
-Bremen,Étranger,Étranger
 Vancouver,Étranger,Étranger
-Vitry,Rhône,Auvergne-Rhône-Alpes
+Vitry,Rhône,Auvergne Rhône-Alpes
 Reading,Étranger,Étranger
 Biot Sophia Antipolis,Alpes-Maritimes,Provence-Alpes-Côte d'Azur
-Antony,Hauts-de-Seine,Île-de-France
+Bad Nauheim,Étranger,Étranger
 Nice,Alpes-Maritimes,Provence-Alpes-Côte d'Azur
+Maisons Alfort,Val-de-Marne,Île-de-France
 Campinas,Étranger,Étranger
 Jena,Étranger,Étranger
 Clichy La Garenne,Hauts-de-Seine,Île-de-France
+Barcelone,Étranger,Étranger
+Namur,Étranger,Étranger
 Plan Les Ouates,Étranger,Étranger
-Solaize,Rhône,Auvergne-Rhône-Alpes
+Solaize,Rhône,Auvergne Rhône-Alpes
 Villeneuve D'Ascq,Nord,Nord-Pas-de-Calais-Picardie
 Theix,Morbihan,Bretagne
 Heidelberg,Étranger,Étranger
+Cadarache,Gard,Languedoc-Roussillon Midi-Pyrénées
+New York,Étranger,Étranger
 Clichy,Hauts-de-Seine,Île-de-France
 Dundee,Étranger,Étranger
 Caen,Calvados,Normandie
 Créteil,Val-de-Marne,Île-de-France
 Melbourne,Étranger,Étranger
-Labège,Haute-Garonne,Languedoc-Roussillon-Midi-Pyrénées
-Craponne,Rhône,Auvergne-Rhône-Alpes
-Münster   Germany,Étranger,Étranger
+Craponne,Rhône,Auvergne Rhône-Alpes
 Boulogne Billancourt,Hauts-de-Seine,Île-de-France
-Copenhague,Étranger,Étranger
-Lusignan,Vienne,Aquitaine-Limousin-Poitou-Charentes
+Lusignan,Vienne,Aquitaine Limousin Poitou-Charentes
 Brisbane,Étranger,Étranger
-Aubière,Puy-de-Dôme,Auvergne-Rhône-Alpes
+Goettingen,Étranger,Étranger
 Yvelines,Yvelines,Île-de-France
-Neuilly,Nièvre,Bourgogne-Franche-Comté
+Neuilly,Nièvre,Bourgogne Franche-Comté
 New York City,Étranger,Étranger
+Münster,Étranger,Étranger
+Aubière,Puy-de-Dôme,Auvergne Rhône-Alpes
 Cachan,Val-de-Marne,Île-de-France
-Puteaux,Hauts-de-Seine,Île-de-France
+Poitiers,Vienne,Aquitaine Limousin Poitou-Charentes
 Cayenne,Étranger,Étranger
-Poitiers,Vienne,Aquitaine-Limousin-Poitou-Charentes
+Chicago,Étranger,Étranger
 Los Alamos,Étranger,Étranger
 Aulnay Sous Bois,Seine-Saint-Denis,Île-de-France
 Santiago Du Chili,Étranger,Étranger
-Geneva,Étranger,Étranger
 Avignon,Vaucluse,Provence-Alpes-Côte d'Azur
 Champenoux,Meurthe-et-Moselle,Alsace-Champagne-Ardenne-Lorraine
 Wageningen,Étranger,Étranger
-Saint Sauveur,Étranger,Étranger
+Hinxton,Étranger,Étranger
 Zurich,Étranger,Étranger
-Nouzilly,Indre-et-Loire,Centre
+Lausanne,Étranger,Étranger
 Oxford,Étranger,Étranger
 Gand,Étranger,Étranger
 Stockholm,Étranger,Étranger
 Palmerston North,Étranger,Étranger
-New York,Étranger,Étranger
 Sweden,Étranger,Étranger
 Liège,Étranger,Étranger
 Asnières Sur Seine,Hauts-de-Seine,Île-de-France
 Beirut,Étranger,Étranger
 Genève,Étranger,Étranger
+Vienne,Isère,Auvergne Rhône-Alpes
 Amsterdam,Étranger,Étranger
 Milan,Étranger,Étranger
-Maisons Alfort,Val-de-Marne,Île-de-France
+Norwich,Étranger,Étranger
 Kaiserslautern,Étranger,Étranger
+Oxfordshire,Étranger,Étranger
 Karlsruhe,Étranger,Étranger
 Edinburgh,Étranger,Étranger
 Saint Pierre,Étranger,Étranger
 Milano,Étranger,Étranger
 Braunschweig,Étranger,Étranger
-Bruyères Le Chatel,Essonne,Île-de-France
+Chatenay Malabry,Hauts-de-Seine,Île-de-France
 Petit Bourg,Étranger,Étranger
 Santiago,Étranger,Étranger
-Cali,Étranger,Étranger
 Boulogne,Pas-de-Calais,Nord-Pas-de-Calais-Picardie
-Cappelle En Pévèle,Nord,Nord-Pas-de-Calais-Picardie
 Beauvais,Oise,Nord-Pas-de-Calais-Picardie
 Leuven,Étranger,Étranger
-Marcy L'Étoile,Rhône,Auvergne-Rhône-Alpes
-Talence,Gironde,Aquitaine-Limousin-Poitou-Charentes
-Lausanne,Étranger,Étranger
+Labège,Haute-Garonne,Languedoc-Roussillon Midi-Pyrénées
+Marcy L'Étoile,Rhône,Auvergne Rhône-Alpes
+Talence,Gironde,Aquitaine Limousin Poitou-Charentes
 Gosselies,Étranger,Étranger
-Nîmes,Gard,Languedoc-Roussillon-Midi-Pyrénées
-France,Gard,Languedoc-Roussillon-Midi-Pyrénées
-75015,Gard,Île-de-France
+75015,Paris,Île-de-France
+Vandoeuvre Lès Nancy,Meurthe-et-Moselle,Alsace-Champagne-Ardenne-Lorraine
 Rixensart,Étranger,Étranger
+Aix La Chapelle,Étranger,Étranger
 Corvalis,Étranger,Étranger
 Copenhagen,Étranger,Étranger
 Quebec,Étranger,Étranger
-Saint Genès  Champanelle,Puy-de-Dôme,Auvergne-Rhône-Alpes
+Saint Genès Champanelle,Puy-de-Dôme,Auvergne Rhône-Alpes
 Kaust,Étranger,Étranger
 Perth,Étranger,Étranger
 93,Seine-Saint-Denis,Île-de-France
-Tours,Indre-et-Loire,Centre
-Villenave D'Ornon,Gironde,Aquitaine-Limousin-Poitou-Charentes
+Tours,Indre-et-Loire,Centre-Val de Loire
+Villenave D'Ornon,Gironde,Aquitaine Limousin Poitou-Charentes
 92,Hauts-de-Seine,Île-de-France
 Atlanta,Étranger,Étranger
 Mont Saint Aignan,Seine-Maritime,Normandie
 91,Essonne,Île-de-France
-Hinxton   Cambridge   Uk,Étranger,Étranger
+Hinxton Uk,Étranger,Étranger
 Tokyo,Étranger,Étranger
 Louvain,Étranger,Étranger
-Gent   Belgium,Étranger,Étranger
-Vienna,Étranger,Étranger
-Chatenay Malabry,Hauts-de-Seine,Île-de-France
-Hinxton,Étranger,Étranger
-Paris,Paris,Île-de-France
-Cea Saclay,Essonne,Île-de-France
-Hauts De Seine,Hauts-de-Seine,Île-de-France
-Alnarp,Étranger,Étranger
-Brétigny Sur Orge,Essonne,Île-de-France
-Tassin La Demi Lune,Rhône,Auvergne-Rhône-Alpes
-Cestas,Gironde,Aquitaine-Limousin-Poitou-Charentes
 Mayence,Étranger,Étranger
+Gent Belgium,Étranger,Étranger
+Vienna,Étranger,Étranger
+Geneva,Étranger,Étranger
+Monterotondo,Étranger,Étranger
+Brétigny Sur Orge,Essonne,Île-de-France
+Tassin La Demi Lune,Rhône,Auvergne Rhône-Alpes
+Hinton,Étranger,Étranger
+Cestas,Gironde,Aquitaine Limousin Poitou-Charentes
+Copenhague,Étranger,Étranger
 Delft,Étranger,Étranger
+Europe,Étranger,Étranger
 Vigo,Étranger,Étranger
 Plouzané,Finistère,Bretagne
 Compiègne,Oise,Nord-Pas-de-Calais-Picardie
@@ -209,25 +216,17 @@ Rostock,Étranger,Étranger
 Dresden,Étranger,Étranger
 Les Aubrais,Loire-Atlantique,Pays de la Loire
 Göteborg,Étranger,Étranger
-Labege,Haute-Garonne,Languedoc-Roussillon-Midi-Pyrénées
+Labege,Haute-Garonne,Languedoc-Roussillon Midi-Pyrénées
 Bielefeld,Étranger,Étranger
-Région Parisienne,Étranger,Étranger
-Bagnols Sur Ceze,Gard,Languedoc-Roussillon-Midi-Pyrénées
+Bagnols Sur Ceze,Gard,Languedoc-Roussillon Midi-Pyrénées
 Leuven Belgium,Étranger,Étranger
 Louvain La Neuve,Étranger,Étranger
+Poznan,Étranger,Étranger
 Marne La Vallée,Seine-et-Marne,Île-de-France
-Paris France,Paris,Île-de-France
 Évry,Essonne,Île-de-France
 Le Cap,Étranger,Étranger
-Montreal,Étranger,Étranger
 Fontenay Aux Roses,Hauts-de-Seine,Île-de-France
-Europe,Étranger,Étranger
-Cadarache,Gard,Languedoc-Roussillon-Midi-Pyrénées
-Saint Beauzire,Puy-de-Dôme,Auvergne-Rhône-Alpes
-ParisParis,Paris,Île-de-France
-Turku,Étranger,Étranger
-Saint Quentin En Yvelines,Yvelines,Île-de-France
-Oxfordshire,Étranger,Étranger
-Monterotondo,Étranger,Étranger
-Hinton,Étranger,Étranger
-Amiens,Somme,Nord-Pas-de-Calais-Picardie
+Saint Beauzire,Puy-de-Dôme,Auvergne Rhône-Alpes
+Hauts De Seine,Hauts-de-Seine,Île-de-France
+Alnarp,Étranger,Étranger
+Montreal,Étranger,Étranger

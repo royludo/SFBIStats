@@ -2,3 +2,4 @@
 .idea
 output/*
 *.pyc
+resources/mails*
