@@ -50,6 +50,7 @@ def sanitize_city_name(orig_name):
     Ensure that city names only have words, with no -, upper first letters, with ' and /
     (ex: Villefranche/Mer, Villeneuve D'Ascq)
     All numbers initially present are removed, except when it's the only characters.
+    Ensure that words are separated by 1 space only
 
     Will correct these:
         MontréAl -> Montréal
@@ -57,6 +58,7 @@ def sanitize_city_name(orig_name):
         Gif-Sur-Yvette, France -> Gif Sur Yvette
         Chappes (63) -> Chappes
         91000 Evry -> Evry
+        Hinxton   Cambridge -> Hinxton Cambridge
 
     Will leave things like this:
         Evry Puis Saclay En 2015 -> Evry Puis Saclay En
@@ -77,6 +79,8 @@ def sanitize_city_name(orig_name):
         name = orig_name
     else:
         name =  m.group(1).strip().replace('-', ' ').title()
+    # remove multiple spaces
+    name = re.sub('\s+', ' ', name)
     return name.encode('utf-8')
 
 def sanitize_city_name_for_geoloc(orig_name):
@@ -99,29 +103,29 @@ def sanitize_city_name_for_geoloc(orig_name):
                     'cedex': '',
                     'plateau de saclay': 'Saclay',
                     'ile de france': 'Paris',
+                    'france': 'Paris',
                     'montpelllier': 'Montpellier',
                     'cambridege': 'Cambridge',
-                    'evry   orsay': 'Evry',
-                    'lyon   evry': 'Lyon',
-                    'marseille   nice': 'Marseille',
+                    'evry orsay': 'Evry',
+                    'lyon evry': 'Lyon',
+                    'marseille nice': 'Marseille',
                     'lyon villeurbanne': 'Lyon',
                     'clermont fd': 'Clermont Ferrand',
-                    'bordeaux   cestas': 'Bordeaux'}
+                    'hinxton cambridge': 'Hinxton',
+                    'hinxton cambridge uk': 'Hinxton',
+                    'bordeaux cestas': 'Bordeaux'}
     pattern = r'\b({})\b'.format('|'.join(sorted(re.escape(k) for k in replace_dict)))
     name = re.sub(pattern, lambda m: replace_dict.get(m.group(0).lower()), orig_name, flags=re.IGNORECASE)
     # not in the regex because of accents
     name = name.replace(u'Université Paris Saclay', 'Saclay')
     name = name.replace(u"Génopôle D'Evry", 'Evry')
     name = name.replace(u'Île De', 'Paris')
-    name = name.replace(u'   Paris   Région Parisienne', 'Paris')
+    name = name.replace(u' Paris Région Parisienne', 'Paris')
     name = name.replace(u'Région Parisienne', 'Paris')
+    name = re.sub('(\s?Paris\s?)+', 'Paris', name)
     # When several cities, just keep the first one
     name = name.replace('/', '|').split('|')[0]
     name = name.strip()
-
-    # Problem!! ParisParis
-    #if orig_name == 'Ile De France   Paris   Région Parisienne':
-    #    print(name)
 
     return name.encode('utf-8') # don't forget to encode the output
 
