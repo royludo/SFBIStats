@@ -18,7 +18,7 @@ import sfbistats.analysis.summary as sfbi_summary
 import sfbistats.analysis.global_lins as sfbi_global_lins
 import sfbistats.analysis.lexical_analysis as sfbi_lexical_analysis
 import sfbistats.analysis.maps as sfbi_maps
-
+import utils
 
 if __name__ == '__main__':
 
@@ -37,7 +37,7 @@ if __name__ == '__main__':
     print str(input_file)+' '+output_dir
 
     # load the data
-    job_list = load_from_json(input_file)
+    job_list = utils.load_from_json(input_file)
 
     # run the scripts
     sfbi_summary.run(job_list, output_dir)
