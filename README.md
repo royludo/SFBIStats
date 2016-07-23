@@ -6,24 +6,27 @@
 2. USAGE
 3. DETAILS
 4. CONTRIBUTE
-5. CHANGELOG
-6. ACKNOWLEDGEMENTS
+5. ACKNOWLEDGEMENTS
 
 ## 1. PROJECT
 
 This project aims to:
- - give a programmatic access to data related to the recent bioinformatics job market in France.
+ - give an easy, programmatic access to data related to the recent bioinformatics job market in France.
  - provide some [basic analysis and charts](https://www.dropbox.com/sh/b33edivf9tuljfw/AABiurGJNg0i0EdhxoEwouc0a) related to those data.
 
 The data come from the [Société Française de Bioinformatique (SFBI)](http://www.sfbi.fr/), an association who, among other things, gathers job
 offers and posts them on their [website](http://www.sfbi.fr/recherche_emplois) and mail list.
-You will find here information related to more than 1200 job offers that have been posted from april 2012 onward.
+You will find here information related to more than 1500 job offers that have been posted from april 2012 onward.
 The data will be updated every month.
 
 This project concerns data of french origin, and was essentially destined for the french bioinformatics community. 
 English has been used for the code, but the output charts are in french.
 
 Please read the details section before using the charts.
+
+This repository was used for the following articles:
+ - http://bioinfo-fr.net/etat-de-lemploi-bioinformatique-en-france-analyse-des-offres-de-la-sfbi
+ - http://bioinfo-fr.net/etat-de-lemploi-bioinformatique-en-france-analyse-des-offres-de-la-sfbi-2eme-partie
 
 ## 2. USAGE
 
@@ -179,18 +182,7 @@ When you're done, open analyze.py, import your script and add
 to the end of the code.
 Next time you run analyze.py, you will see your own charts added to the others.
 
-### TODO
-
- - finish the maps
- - more doc
- - logging
-
-## 5. CHANGELOG
-
-    20/05/2016
-     - _id field in jobs_anon.json removed
-
-## 6. ACKNOWLEDGEMENTS
+## 5. ACKNOWLEDGEMENTS
 
 Big thanks to the [bioinfo-fr](http://bioinfo-fr.net/) community, who lighted the sparkle of motivation for this project, and Lins` in particular.
 Credits for the original data go to the [SFBI](http://www.sfbi.fr/).
