@@ -16,6 +16,38 @@ from bson import json_util
 
 from ..job_offer import JobOfferAnon
 
+def load_from_json(file):
+    """
+    This function load a json database into a list of dict.
+
+    Parameters
+    ----------
+    file : file handler
+        An already opened json file handler to the serialized job list.
+
+    Returns
+    -------
+    list
+
+    """
+    job_list = list()
+    city_dict = collections.defaultdict(int)
+    for l in file.readlines():
+        # use dict instead of directly object, better with pandas
+        job = JobOfferAnon.from_json(json.loads(l, object_hook=json_util.object_hook)).to_dict()
+        job['city'] = sanitize_city_name(job['city'])
+        job['city'] = sanitize_city_name_for_geoloc(job['city'])
+        city_file = pkg_resources.resource_filename('sfbistats.utils', 'city_locations.csv')
+        dep, reg = city_to_dep_region(job['city'], city_file)
+        job['department'] = dep
+        job['region'] = reg
+        job['duration'] = sanitize_duration(job['duration'])
+        city_dict[job['city']] += 1
+        job_list.append(job)
+    job_list = spell_correct(job_list, city_dict)
+    return job_list
+
+
 def sanitize_city_name(orig_name):
     """
     Ensure that city names only have words, with no -, upper first letters, with ' and /
@@ -321,33 +353,3 @@ def spell_correct(job_list, city_dict):
             job['city'] = replace_dict[job['city']]
     return job_list
 
-def load_from_json(file):
-    """
-    This function load a json database into a list of dict.
-
-    Parameters
-    ----------
-    file : file handler
-        An already opened json file handler to the serialized job list.
-
-    Returns
-    -------
-    list
-
-    """
-    job_list = list()
-    city_dict = collections.defaultdict(int)
-    for l in file.readlines():
-        # use dict instead of directly object, better with pandas
-        job = JobOfferAnon.from_json(json.loads(l, object_hook=json_util.object_hook)).to_dict()
-        job['city'] = sanitize_city_name(job['city'])
-        job['city'] = sanitize_city_name_for_geoloc(job['city'])
-        city_file = pkg_resources.resource_filename('sfbistats.utils', 'city_locations.csv')
-        dep, reg = city_to_dep_region(job['city'], city_file)
-        job['department'] = dep
-        job['region'] = reg
-        job['duration'] = sanitize_duration(job['duration'])
-        city_dict[job['city']] += 1
-        job_list.append(job)
-    job_list = spell_correct(job_list, city_dict)
-    return job_list

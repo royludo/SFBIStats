@@ -17,7 +17,6 @@ import os
 from sfbistats import utils
 from sfbistats import job_offer
 import summary
-import global_lins
 import lexical_analysis
 import maps
 
