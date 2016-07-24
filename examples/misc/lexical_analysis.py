@@ -32,13 +32,13 @@ def get_stopwords():
 
     """
     stopword_dict = dict()
-    f_en = open(pkg_resources.resource_filename('sfbistats.utils', 'stopwords_en.txt'), 'r')
+    f_en = open(pkg_resources.resource_filename('sfbistats.utils', 'stopwords_en.txt'), 'r', encoding='utf-8')
     for line in f_en.readlines():
         stopword_dict[line.strip().lower()] = True
     f_en.close()
-    f_fr = open(pkg_resources.resource_filename('sfbistats.utils', 'stopwords_fr.txt'), 'r')
+    f_fr = open(pkg_resources.resource_filename('sfbistats.utils', 'stopwords_fr.txt'), 'r', encoding='utf-8')
     for line in f_fr.readlines():
-        a = line.strip().lower().decode('utf8')
+        a = line.strip().lower()
         stopword_dict[a] = True
     f_fr.close()
     return stopword_dict
@@ -125,7 +125,7 @@ def build_pos_dic(corpus, stopword_dict={}, separator=u"[\s,.\(\)!?/:;\[\]\{\}\u
         text_length = word_pos
         # print "text length: "+str(text_length)
         # pprint(text_pos_dic)
-        for tkn, pos_list in text_pos_dic.iteritems():
+        for tkn, pos_list in text_pos_dic.items():
             for e in pos_list:
                 if tkn in pos_dic:
                     pos_dic[tkn].append(np.floor(float(e) / text_length * 100))
@@ -136,7 +136,7 @@ def build_pos_dic(corpus, stopword_dict={}, separator=u"[\s,.\(\)!?/:;\[\]\{\}\u
 
 def get_total_words(lex_dic):
     total = 0
-    for k, v in lex_dic.iteritems():
+    for k, v in lex_dic.items():
         total += v
     return total
 

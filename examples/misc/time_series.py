@@ -89,7 +89,7 @@ def legend_displace_factor(column_names):
 
 
 def run(job_list, output_dir):
-    print "Running time_series.py"
+    print("Running time_series.py")
     plt.style.use('fivethirtyeight')
     plt.rcParams['lines.linewidth'] = 0
     plt.rcParams['patch.linewidth'] = 0
