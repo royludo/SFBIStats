@@ -47,12 +47,12 @@ def load_from_json(file):
     job_list = spell_correct(job_list, city_dict)
     return job_list
 
-
 def sanitize_city_name(orig_name):
     """
     Ensure that city names only have words, with no -, upper first letters, with ' and /
     (ex: Villefranche/Mer, Villeneuve D'Ascq)
     All numbers initially present are removed, except when it's the only characters.
+    Ensure that words are separated by 1 space only
 
     Will correct these:
         MontréAl -> Montréal
@@ -60,6 +60,7 @@ def sanitize_city_name(orig_name):
         Gif-Sur-Yvette, France -> Gif Sur Yvette
         Chappes (63) -> Chappes
         91000 Evry -> Evry
+        Hinxton   Cambridge -> Hinxton Cambridge
 
     Will leave things like this:
         Evry Puis Saclay En 2015 -> Evry Puis Saclay En
@@ -80,7 +81,9 @@ def sanitize_city_name(orig_name):
         name = orig_name
     else:
         name =  m.group(1).strip().replace('-', ' ').title()
-    return name.encode('utf-8')
+    # remove multiple spaces
+    name = re.sub('\s+', ' ', name)
+    return name
 
 def sanitize_city_name_for_geoloc(orig_name):
     """
@@ -95,38 +98,38 @@ def sanitize_city_name_for_geoloc(orig_name):
     string
 
     """
-    orig_name = orig_name.decode('utf-8')
+    orig_name = orig_name
     # A dictionary of substitutions
     replace_dict = {'ou': '|', 'or': '|', 'et': '|', 'and': '|', 'puis': '|',
                     '/mer': ' Sur Mer',
                     'cedex': '',
                     'plateau de saclay': 'Saclay',
                     'ile de france': 'Paris',
+                    'france': 'Paris',
                     'montpelllier': 'Montpellier',
                     'cambridege': 'Cambridge',
-                    'evry   orsay': 'Evry',
-                    'lyon   evry': 'Lyon',
-                    'marseille   nice': 'Marseille',
+                    'evry orsay': 'Evry',
+                    'lyon evry': 'Lyon',
+                    'marseille nice': 'Marseille',
                     'lyon villeurbanne': 'Lyon',
                     'clermont fd': 'Clermont Ferrand',
-                    'bordeaux   cestas': 'Bordeaux'}
+                    'hinxton cambridge': 'Hinxton',
+                    'hinxton cambridge uk': 'Hinxton',
+                    'bordeaux cestas': 'Bordeaux'}
     pattern = r'\b({})\b'.format('|'.join(sorted(re.escape(k) for k in replace_dict)))
     name = re.sub(pattern, lambda m: replace_dict.get(m.group(0).lower()), orig_name, flags=re.IGNORECASE)
     # not in the regex because of accents
     name = name.replace(u'Université Paris Saclay', 'Saclay')
     name = name.replace(u"Génopôle D'Evry", 'Evry')
     name = name.replace(u'Île De', 'Paris')
-    name = name.replace(u'   Paris   Région Parisienne', 'Paris')
+    name = name.replace(u' Paris Région Parisienne', 'Paris')
     name = name.replace(u'Région Parisienne', 'Paris')
+    name = re.sub('(\s?Paris\s?)+', 'Paris', name)
     # When several cities, just keep the first one
     name = name.replace('/', '|').split('|')[0]
     name = name.strip()
 
-    # Problem!! ParisParis
-    #if orig_name == 'Ile De France   Paris   Région Parisienne':
-    #    print(name)
-
-    return name.encode('utf-8') # don't forget to encode the output
+    return name
 
 
 def sanitize_duration(job_duration_string):
@@ -143,6 +146,8 @@ def sanitize_duration(job_duration_string):
     m3 = re.search('(\d+).*(semaine|semaines|week|weeks).*', job_duration_string)
     m4 = re.search('(\d+)', job_duration_string.lower())
 
+    m5 = re.search('(indéterminé|indeterminé|indetermine|cdi|inderterminé|full time)', job_duration_string.lower())
+
     if m1:
         dur = int(m1.group(1))
     elif m2:
@@ -151,6 +156,8 @@ def sanitize_duration(job_duration_string):
         dur = int(m3.group(1)) / 4
     elif m4:
         dur = int(m4.group(1))
+    elif m5:
+        dur = ''
     else:
         dur = -1
     return dur
@@ -205,17 +212,18 @@ def city_to_dep_region(name, city_filename):
     """ Returns the department and region from the city name, if located in France.
     Otherwise, returns 'Étranger'. """
 
-    name = name.decode('utf-8')
     city_dict = {}
-    with open(city_filename, 'r') as city_file:
+    with open(city_filename, 'r', encoding='utf-8') as city_file:
         for l in csv.reader(city_file):
+            #l = l.decode('utf-8')
+            #l = map(lambda x: x.decode('utf8'), l)
             city, dep, reg = l
             city_dict[city] = (dep, reg)
 
     if name in city_dict:
         return city_dict[name]
     else:
-        print ('Unknown city:', name)
+        print('Unknown city:', name)
         loc_dic = query_GoogleV3(name)
 
         # check if everything is alright
@@ -269,8 +277,8 @@ def city_to_dep_region(name, city_filename):
             reg = u'Étranger'
         line_list = [name, dep, reg]
         new_line = u','.join(line_list)
-        with open(city_filename, 'a') as city_file:
-            print (new_line.encode('utf-8'), file=city_file)
+        with open(city_filename, 'a', encoding='utf-8') as city_file:
+            print (new_line, file=city_file)
         return dep, reg
 
 
@@ -328,7 +336,7 @@ def levenshtein(source, target):
 def get_close_spelling(city, city_dict):
     leven_list = list()
     for city_check in city_dict.keys():
-        dl = levenshtein(city.decode('utf8'), city_check.decode('utf8'))
+        dl = levenshtein(city, city_check)
         if (len(city) < 10 and dl == 1) or (len(city) > 10 and dl < 4 and dl != 0):
             leven_list.append(city_check)
     return leven_list
