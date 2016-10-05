@@ -99,10 +99,11 @@ def run(job_list, output_dir):
 
     df = pd.DataFrame(job_list, columns=['_id', 'city', 'user', 'submission_date', 'contract_type', 'contract_subtype'])
 
-    df2 = pd.DataFrame({'date': df.submission_date, 'type': df.contract_type}).reset_index().groupby(['type', 'date'])[
-        'index'].count().reset_index(name='count')
-    df2_t = df2.pivot(index='date', columns='type', values='count')
-    df2_t2 = df2_t.resample('1M', how='sum')
+    df2 = pd.DataFrame({'date': df.submission_date, 'type': df.contract_type})
+    df2_g = pd.DataFrame({'count': df2.groupby(['type', 'date']).size()}).reset_index()
+    df2_t = df2_g.pivot(index='date', columns='type', values='count')
+    df2_t.index = pd.to_datetime(df2_t.index)
+    df2_t2 = df2_t.resample('1M').sum()
     df2_t2.columns.name = 'Type'
     ax = df2_t2.plot(kind='area')
     plt.title(u'Évolution des types de poste', y=1.08)
@@ -112,13 +113,13 @@ def run(job_list, output_dir):
     plt.close()
 
     # just CDD
-    df3 = \
-    pd.DataFrame({'date': df.submission_date, 'type': df.contract_subtype}).reset_index().groupby(['type', 'date'])[
-        'index'].count().reset_index(name='count')
-    tmp = df3['type'].isin(['Post-doc / IR', u'CDD Ingénieur', 'CDD autre', 'ATER'])
-    df3 = df3[tmp]
-    df3_t = df3.pivot(index='date', columns='type', values='count')
-    df3_t2 = df3_t.resample('1M', how='sum')
+    df3 = pd.DataFrame({'date': df.submission_date, 'subtype': df.contract_subtype})
+    df3_g = pd.DataFrame({'count': df3.groupby(['subtype', 'date']).size()}).reset_index()
+    tmp = df3_g['subtype'].isin(['Post-doc / IR', u'CDD Ingénieur', 'CDD autre', 'ATER'])
+    df3_g = df3_g[tmp].reset_index()
+    df3_t = df3_g.pivot(index='date', columns='subtype', values='count')
+    df3_t.index = pd.to_datetime(df3_t.index)
+    df3_t2 = df3_t.resample('1M').sum()
     df3_t2.columns.name = 'Type'
     ax = df3_t2.plot(kind='area')
     plt.title(u'Évolution des types de CDD', y=1.08)
@@ -128,13 +129,13 @@ def run(job_list, output_dir):
     plt.close()
 
     # just CDI
-    df3 = \
-    pd.DataFrame({'date': df.submission_date, 'type': df.contract_subtype}).reset_index().groupby(['type', 'date'])[
-        'index'].count().reset_index(name='count')
-    tmp = df3['type'].isin(['CDI autre', 'IE', 'IR', 'PR', 'MdC', 'CR'])
-    df3 = df3[tmp]
-    df3_t = df3.pivot(index='date', columns='type', values='count')
-    df3_t2 = df3_t.resample('1M', how='sum')
+    df3 = pd.DataFrame({'date': df.submission_date, 'subtype': df.contract_subtype})
+    df3_g = pd.DataFrame({'count': df3.groupby(['subtype', 'date']).size()}).reset_index()
+    tmp = df3_g['subtype'].isin(['CDI autre', 'IE', 'IR', 'PR', 'MdC', 'CR'])
+    df3_g = df3_g[tmp]
+    df3_t = df3_g.pivot(index='date', columns='subtype', values='count')
+    df3_t.index = pd.to_datetime(df3_t.index)
+    df3_t2 = df3_t.resample('1M').sum()
     df3_t2.columns.name = 'Type'
     ax = df3_t2.plot(kind='area')
     plt.title(u'Évolution des types de CDI', y=1.08)
@@ -143,8 +144,9 @@ def run(job_list, output_dir):
     plt.savefig(os.path.join(output_dir, 'time_series_3.svg'), bbox_inches='tight')
     plt.close()
 
-    df4 = pd.DataFrame({'date': pd.to_datetime(df.submission_date)}).reset_index().groupby('date')['index'].count()
-    df4_t = df4.resample('1M', how='sum')
+    df4 = pd.DataFrame({'date': pd.to_datetime(df.submission_date)})
+    df4_g = pd.DataFrame({'count': df4.groupby('date').size()})
+    df4_t = df4_g.resample('1M').sum()
     plt.figure()
     ax = df4_t.plot(linewidth=4)
     plt.title(u"Évolution du nombre total d'offre", y=1.08)
@@ -157,12 +159,13 @@ def run(job_list, output_dir):
         contract type proportions
     '''
     # get the interesting fields and count the type for each date
-    df5 = pd.DataFrame({'date': df.submission_date, 'type': df.contract_type}).reset_index().groupby(['date', 'type'])[
-        'index'].count().reset_index(name='count')
+    df5 = pd.DataFrame({'date': df.submission_date, 'type': df.contract_type})
+    df5_g = pd.DataFrame({'count': df5.groupby(['type', 'date']).size()}).reset_index()
     # have all the types as column and each date as one line
-    df5_t = df5.pivot(index='date', columns='type', values='count')
+    df5_t = df5_g.pivot(index='date', columns='type', values='count')
+    df5_t.index = pd.to_datetime(df5_t.index)
     # make it per month
-    df5_t2 = df5_t.resample('1M', how='sum').fillna(0)
+    df5_t2 = df5_t.resample('1M').sum().fillna(0)
     # add a total column to compute ratio
     df5_t2['total'] = df5_t2.CDD + df5_t2.CDI + df5_t2.Stage + df5_t2[u'Thèse']
     # replace all the values by ratios
@@ -176,14 +179,13 @@ def run(job_list, output_dir):
         contract subtype proportions for CDI
     '''
     # get the interesting fields only for CDI
-    df6 = pd.DataFrame({'date': df.submission_date, 'subtype': df.contract_subtype})[
-        df['contract_type'] == 'CDI'].reset_index()
-    # count subtype for each date
-    df6 = df6.groupby(['date', 'subtype'])['index'].count().reset_index(name='count')
+    df6 = pd.DataFrame({'date': df.submission_date, 'subtype': df.contract_subtype})[df['contract_type'] == 'CDI']
+    df6_g = pd.DataFrame({'count': df6.groupby(['subtype', 'date']).size()}).reset_index()
     # have all the types as column and each date as one line
-    df6_t = df6.pivot(index='date', columns='subtype', values='count')
+    df6_t = df6_g.pivot(index='date', columns='subtype', values='count')
+    df6_t.index = pd.to_datetime(df6_t.index)
     # make it per month
-    df6_t2 = df6_t.resample('1M', how='sum').fillna(0)
+    df6_t2 = df6_t.resample('1M').sum().fillna(0)
     # add a total column to compute ratio
     df6_t2['total'] = df6_t2['CDI autre'] + df6_t2.CR + df6_t2.IE + df6_t2.IR + df6_t2.MdC + df6_t2.PR
     # replace all the values by ratios
@@ -197,14 +199,14 @@ def run(job_list, output_dir):
         contract subtype proportions for CDD
     '''
     # get the interesting fields only for CDD
-    df7 = pd.DataFrame({'_id': df._id, 'date': df.submission_date, 'subtype': df.contract_subtype})[
-        df['contract_type'] == 'CDD'].reset_index()
+    df7 = pd.DataFrame({'date': df.submission_date, 'subtype': df.contract_subtype})[df['contract_type'] == 'CDD']
     # count subtype for each date
-    df7 = df7.groupby(['date', 'subtype'])['index'].count().reset_index(name='count')
+    df7_g = pd.DataFrame({'count': df7.groupby(['subtype', 'date']).size()}).reset_index()
     # have all the types as column and each date as one line
-    df7_t = df7.pivot(index='date', columns='subtype', values='count')
+    df7_t = df7_g.pivot(index='date', columns='subtype', values='count')
+    df7_t.index = pd.to_datetime(df7_t.index)
     # make it per month
-    df7_t2 = df7_t.resample('1M', how='sum').fillna(0)
+    df7_t2 = df7_t.resample('1M').sum().fillna(0)
     # add a total column to compute ratio
     df7_t2['total'] = df7_t2.ATER + df7_t2[u'CDD Ingénieur'] + df7_t2['CDD autre'] + df7_t2['Post-doc / IR']
     # replace all the values by ratios
@@ -215,16 +217,17 @@ def run(job_list, output_dir):
                          title=u'Évolution de la proportion des types de CDD')
 
     # education level quantity
-    df8 = pd.DataFrame({'date': df.submission_date, 'type': df.contract_subtype}).reset_index()
+    df8 = pd.DataFrame({'date': df.submission_date, 'type': df.contract_subtype})
     df_bool_master = df8['type'].isin([u'CDD Ingénieur', 'IE'])
     df_bool_phd = df8['type'].isin(['Post-doc / IR', 'PR', 'MdC', 'CR', 'IR', 'ATER'])
     df_master = df8[df_bool_master]
     df_master['type'] = 'Master'
     df_phd = df8[df_bool_phd]
     df_phd['type'] = 'PhD'
-    df8 = pd.concat([df_phd, df_master]).groupby(['type', 'date'])['index'].count().reset_index(name='count')
+    df8 = pd.DataFrame({'count': pd.concat([df_phd, df_master]).groupby(['type', 'date']).size()}).reset_index()
     df8_t = df8.pivot(index='date', columns='type', values='count')
-    df8_t2 = df8_t.resample('1M', how='sum').fillna(0)
+    df8_t.index = pd.to_datetime(df8_t.index)
+    df8_t2 = df8_t.resample('1M').sum().fillna(0)
     df8_t2.columns.name = 'Niveau'
     ax = df8_t2.plot(kind='area')
     ax.set_xlabel('Date')
