@@ -1,5 +1,4 @@
 # coding=utf-8
-from __future__ import division, print_function, unicode_literals
 
 import os
 import email
@@ -138,7 +137,7 @@ class EmlParser(object):
 
     def get_link_list(self):
         link_list = list()
-        for filename, dic in self.mails.iteritems():
+        for filename, dic in self.mails.items():
             if dic['category'] == 'formatted':
                 text = dic['email_text']
                 http_link = self.__extract_link(text)
