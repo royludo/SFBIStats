@@ -5,9 +5,8 @@ import pymongo
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.log import configure_logging
 import argparse
-import spider
-from sfbi_parser import EmlParser
-import logging
+from sfbistats.loader import spider
+from sfbistats.loader.sfbi_parser import EmlParser
 
 
 

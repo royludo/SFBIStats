@@ -12,7 +12,7 @@ setup(name='sfbistats',
                 'sfbistats.loader'],
       install_requires=['numpy',
                         'pymongo',
-                        'geopy'],
+                        'geopy', 'scrapy'],
       package_data={'': ['utils/*.txt',
                          'utils/*.csv']},
       zip_safe=False)

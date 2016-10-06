@@ -1,6 +1,6 @@
 from __future__ import unicode_literals, division, print_function
 import re
-from HTMLParser import HTMLParser
+from html.parser import HTMLParser
 
 import scrapy
 
