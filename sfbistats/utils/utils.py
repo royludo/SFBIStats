@@ -157,7 +157,7 @@ def sanitize_duration(job_duration_string):
     elif m4:
         dur = int(m4.group(1))
     elif m5:
-        dur = ''
+        dur = 0
     else:
         dur = -1
     return dur
