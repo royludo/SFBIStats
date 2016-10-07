@@ -52,6 +52,7 @@ class HTMLStripper(HTMLParser):
         see http://stackoverflow.com/a/925630
     '''
     def __init__(self):
+        super().__init__()
         self.reset()
         self.fed = []
     def handle_data(self, d):

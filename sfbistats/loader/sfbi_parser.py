@@ -4,39 +4,35 @@ import os
 import email
 from pprint import pprint
 import re
+import mailbox
+from collections import Counter
 
 class EmlParser(object):
 
-    def __init__(self, mail_directory):
+    def __init__(self, mails, stats):
+        self.mails = mails
+        self.stats = stats
+
+    @classmethod
+    def from_maildir(cls, mail_directory):
         """
         check encodings, categorize mails, and try to correct encodings problems
         """
 
         # keep tabs on some encoding related stuff
-        stats = dict()
-        stats['format'] = dict()
-        stats['format']['recent_job_count'] = 0
-        stats['format']['anarchic_count'] = 0
-        stats['format']['recent_weird_count'] = 0
-        stats['format']['corrected_count'] = 0
-        stats['format']['recent_job_encoding'] = dict()
-        stats['format']['anarchic_encoding'] = dict()
-        stats['format']['recent_weird_encoding'] = dict()
-        stats['format']['corrected_count_from_charset'] = dict()
-
+        stats = EmlParser.init_stats()
 
         # categories of mails
         # filename-> encoding, category
         mails = dict()
 
-
         weirderList = list()
 
         emlList = os.listdir(mail_directory)
         for filename in emlList:
-            #print ">>> " + filename
+            print(">>> " + filename)
             try:
-                f = open(os.path.join(mail_directory, filename), 'r')
+                f = open(os.path.join(mail_directory, filename), 'r', encoding='utf-8')
             except:
                 print ("Could not open "+filename+" in " + mail_directory)
                 continue
@@ -58,41 +54,47 @@ class EmlParser(object):
             mail_dict['original_encoding'] = charset
             mail_dict['encoding'] = charset
 
-            self.__categorize_mail(mail_dict)
+            mail_dict['category'] = EmlParser.__categorize_mail(text)
             # keep some stats
             charset = mail_dict['encoding']
-            if mail_dict['category'] == 'formatted':
-                stats['format']['recent_job_count']+=1
-                if charset in stats['format']['recent_job_encoding']:
-                    stats['format']['recent_job_encoding'][charset] += 1
-                else:
-                    stats['format']['recent_job_encoding'][charset] = 1
-            elif mail_dict['category'] == 'anarchic':
-                stats['format']['anarchic_count'] += 1
-                if charset in stats['format']['anarchic_encoding']:
-                    stats['format']['anarchic_encoding'][charset] += 1
-                else:
-                    stats['format']['anarchic_encoding'][charset] = 1
-            else:
-                # could be corrected with:
-                # text = text.decode('latin1').encode('utf8')
-                stats['format']['recent_weird_count'] += 1
-                if charset in stats['format']['recent_weird_encoding']:
-                    stats['format']['recent_weird_encoding'][charset] += 1
-                else:
-                    stats['format']['recent_weird_encoding'][charset] = 1
+            EmlParser.update_stats(stats, charset, mail_dict['category'])
 
-
-        self.stats = stats
-        self.mails = mails
         pprint(stats)
+        return cls(mails, stats)
 
-    def __categorize_mail(self, mail_dict):
-        text = mail_dict['email_text']
+    @classmethod
+    def from_mbox(cls, file):
 
+        # keep tabs on some encoding related stuff
+        stats = EmlParser.init_stats()
+
+        mails = dict()
+
+        mbox = mailbox.mbox(file)
+        for key, msg in mbox.items():
+            print('key -> '+str(key))
+            try:
+                charset, text = EmlParser.get_one_charset_payload(msg)
+            except:#case where charset is None, broken stuff
+                continue
+            try:
+                text = text.decode(charset, errors='replace')
+            except:
+                text = text.decode('latin1', errors='replace')
+            mail_dict = dict()
+            mails[key] = mail_dict
+            mail_dict['email_text'] = text
+            mail_dict['category'] = EmlParser.__categorize_mail(text)
+            print(charset+' '+mail_dict['category'])
+            EmlParser.update_stats(stats, charset, mail_dict['category'])
+
+        pprint(stats)
+        return cls(mails, stats)
+
+    def __categorize_mail(mail_text):
         #first determine if mail is recent and formatted, or ancient and anarchic
         flags = dict.fromkeys(["f1", "f2", "f3", "f4", "f5", "f6"], 0)
-        for line in text.splitlines(True):
+        for line in mail_text.splitlines(True):
             #print (">"+line)
             if re.match('^Type de poste : ', line):
                 flags["f1"] = 1
@@ -111,13 +113,11 @@ class EmlParser(object):
         flagsum = flags["f1"]+ flags["f2"]+ flags["f3"]+ flags["f4"]+ flags["f5"]+ flags["f6"]
 
         if flagsum == 6:
-            mail_dict['category'] = 'formatted'
+            return 'formatted'
         elif flagsum == 0:
-            mail_dict['category'] = 'anarchic'
+            return 'anarchic'
         else:
-            mail_dict['category'] = 'weird'
-
-        #pprint(mail_dict)
+            return 'weird'
 
     def __extract_link(self, content):
         """
@@ -144,4 +144,57 @@ class EmlParser(object):
                 link_list.append(http_link)
         return link_list
 
+    @staticmethod
+    def get_one_charset_payload(msg):
+        """
+        Returns one charset and payload from a mail, multipart or not.
+        Takes the first charset that is defined in a mutlipart message, and returns this part's payload
+        Charset can be None in some weird case that should be dismissed.
+        Parameters
+        ----------
+        msg: email.message
 
+        Returns
+        -------
+        string: charset of mail
+        string: payload
+
+        """
+        if msg.is_multipart():
+            for part in msg.walk():
+                if part.get_content_charset() is not None:
+                    return part.get_content_charset(), part.get_payload(decode=True)
+
+        else:
+            if msg.get_content_charset() is None:
+                raise ValueError('Charset is None, message too weird.')
+            return msg.get_content_charset(), msg.get_payload(decode=True)
+
+    @staticmethod
+    def init_stats():
+        stats = dict()
+        stats['format'] = dict()
+        stats['format']['recent_job_count'] = 0
+        stats['format']['anarchic_count'] = 0
+        stats['format']['recent_weird_count'] = 0
+        stats['format']['corrected_count'] = 0
+        stats['format']['recent_job_encoding'] = Counter()
+        stats['format']['anarchic_encoding'] = Counter()
+        stats['format']['recent_weird_encoding'] = Counter()
+        stats['format']['corrected_count_from_charset'] = Counter()
+
+        return stats
+
+    @staticmethod
+    def update_stats(stats, charset, category):
+        if category == 'formatted':
+            stats['format']['recent_job_count'] += 1
+            stats['format']['recent_job_encoding'].update([charset])
+        elif category == 'anarchic':
+            stats['format']['anarchic_count'] += 1
+            stats['format']['anarchic_encoding'].update([charset])
+        else:
+            # could be corrected with:
+            # text = text.decode('latin1').encode('utf8')
+            stats['format']['recent_weird_count'] += 1
+            stats['format']['recent_weird_encoding'].update([charset])

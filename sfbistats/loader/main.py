@@ -50,7 +50,7 @@ if __name__ == '__main__':
     configure_logging({'LOG_FILE': 'loader.log'})
 
     print ("Parsing mails...")
-    parser = EmlParser(eml_dir)
+    parser = EmlParser.from_mbox(eml_dir)
     link_list = parser.get_link_list()
 
     process = CrawlerProcess({
