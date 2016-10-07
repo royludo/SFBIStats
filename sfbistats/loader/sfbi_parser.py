@@ -72,7 +72,6 @@ class EmlParser(object):
 
         mbox = mailbox.mbox(file)
         for key, msg in mbox.items():
-            print('key -> '+str(key))
             try:
                 charset, text = EmlParser.get_one_charset_payload(msg)
             except:#case where charset is None, broken stuff
@@ -85,7 +84,6 @@ class EmlParser(object):
             mails[key] = mail_dict
             mail_dict['email_text'] = text
             mail_dict['category'] = EmlParser.__categorize_mail(text)
-            print(charset+' '+mail_dict['category'])
             EmlParser.update_stats(stats, charset, mail_dict['category'])
 
         pprint(stats)
@@ -126,10 +124,17 @@ class EmlParser(object):
         flag = 0
         link = ''
         for line in content.splitlines():
+            # in rare cases link is on the same line
+            m = re.search('Voir la description complète du poste sur (http:\/\/(www.)?sfbi.fr(\S+))', line)
+            if m is not None :
+                flag = 1
+                link = m.group(1)
+                break
             if re.match('Voir la description complète du poste sur', line):
                 flag = 1
-            if re.match('^http:\/\/(www.)?sfbi.fr', line):
+            if re.match('^http:\/\/(www.)?sfbi.fr(\S+)', line):
                 link = line
+                break
         if flag:
             return link
         else:
@@ -142,7 +147,10 @@ class EmlParser(object):
                 text = dic['email_text']
                 http_link = self.__extract_link(text)
                 link_list.append(http_link)
-        return link_list
+        # there are duplicate mails, that give undesired duplicated links in the final list.
+        uniq = Counter(link_list)
+        uniq_link_list = list(uniq)
+        return uniq_link_list
 
     @staticmethod
     def get_one_charset_payload(msg):
