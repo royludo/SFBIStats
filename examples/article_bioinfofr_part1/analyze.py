@@ -16,7 +16,7 @@ import os
 
 from sfbistats import utils
 from sfbistats import job_offer
-import global_lins
+import examples.article_bioinfofr_part1.global_lins as global_lins
 
 if __name__ == '__main__':
     # parse and check arguments
