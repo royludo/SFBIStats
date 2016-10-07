@@ -50,7 +50,7 @@ class JobOffer(object):
         :param document:
         :return:
         """
-        print (document)
+        print(document)
 
     @staticmethod
     def from_job_string_list(job_string_list, http_link):
@@ -62,7 +62,7 @@ class JobOffer(object):
         job.http_link = http_link
         # the mail initial object, job and announce title
         # ex: 'Bioinformatics developer', 'Working on annotation pipeline'...
-        job.title = job_string_list[1].encode('utf8')
+        job.title = job_string_list[1]
 
         # the sfbi user who submitted the announce
         submission_string = job.seek_info('^Soumis par', job_string_list, 0)
@@ -146,7 +146,7 @@ class JobOffer(object):
                 "\n- validity date: " + str(self.validity_date) +
                 "\n- description: " + self.description +
                 "\n- http link: " + self.http_link
-                ).encode('utf8')
+                )
 
     def to_dict(self):
         return {"title": self.title,
@@ -174,14 +174,14 @@ class JobOffer(object):
         """
         i = 0
         for e in job_string_list:
-            m_desc = re.match('Description du poste:', e.encode('utf8'))
+            m_desc = re.match('Description du poste:', e)
             # we arrived at the Description anarchic field, the rest doesn't interest us
             if m_desc:
                 return None
 
-            m = re.match(pattern, e.encode('utf8'))
+            m = re.match(pattern, e)
             if m and i != len(job_string_list) + 1:
-                return job_string_list[i + offset].encode('utf8')
+                return job_string_list[i + offset]
             i += 1
         return None
 
@@ -194,12 +194,12 @@ class JobOffer(object):
         flag = 0
         result = ''
         for e in job_string_list:
-            m = re.match('Description', e.encode('utf8'))
+            m = re.match('Description', e)
             if m:
                 flag = 1
                 continue
             if flag == 1:
-                result += e.encode('utf8')
+                result += e
         return result
 
 
