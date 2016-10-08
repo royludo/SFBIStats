@@ -29,16 +29,18 @@ Please read the details section before using the charts.
 
 ## 2. USAGE
 
-We highly recommend to use the [conda environment manager](http://conda.pydata.org/docs/) to install and use this project.
+We highly recommend to use the [conda environment manager](http://conda.pydata.org/docs/) to install and use this 
+project. Not only does it provide a clean environment to work in, it also makes it really easy to install all the 
+necessary packages.
 
 ### 2.1 Setup
 
-The following procedures assume you have already installed conda.
-If you don't, here is the [miniconda download page](http://conda.pydata.org/miniconda.html).
+The following procedure assumes you have already installed conda.
+If not, here is the [miniconda download page](http://conda.pydata.org/miniconda.html).
 
 #### 2.1.1 Create the virtual environment
 
-Make use of the provided environment definition file `env.yml`
+Make use of the provided environment definition file `env.yml`.
 
 ```bash
 wget https://raw.githubusercontent.com/royludo/SFBIStats/master/env.yml
@@ -46,12 +48,16 @@ conda env create -f env.yml
 ```
 
 This will setup a complete environment called sfbistatsenv with the core package requirements already installed.
-Don't forget `source activate sfbistatsenv`
+Alternatively, you can use `env_full.yml`. It contains the packages required by the code in the `examples` directory
+as well. If you decide to use `env.yml`, refer to the READMEs in each example's directory for the requirements that you
+will have to install yourself.
+In both cases, once the environment is created, don't forget `source activate sfbistatsenv`.
 
 #### 2.1.2 Get the code
 
-Clone the repository directly in your environment. You will end up with a folder `sfbistatsenv/SFBIStats` containing 
-all the project.
+Clone the repository directly in your environment.
+`git clone https://github.com/royludo/SFBIStats.git`
+You will end up with a folder `sfbistatsenv/SFBIStats` containing all the project.
 
 #### 2.1.4 Install the package
 
@@ -62,8 +68,8 @@ Go in the project's directory.
 
 You probably want to use the data and create some charts. The examples folders contains scripts that make use of the 
 SFBI jobs data to produce charts as seen [here](http://bioinfo-fr.net/etat-de-lemploi-bioinformatique-en-france-analyse-des-offres-de-la-sfbi) or [here](https://www.dropbox.com/sh/b33edivf9tuljfw/AABiurGJNg0i0EdhxoEwouc0a).
-Each folder is different, and has its own dependencies. Please refer to the README provided in each folder for instructions
-on how to install and run each example.
+Each folder is different, and has its own dependencies. Please refer to the README provided in each folder for
+instructions on how to install and run each example. If you used `env_full.yml` you can directly run them.
 
 ## 3. DETAILS
 

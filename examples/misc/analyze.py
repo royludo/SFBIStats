@@ -29,8 +29,8 @@ if __name__ == '__main__':
     if not os.path.isdir(output_dir):
         raise ValueError('output_dir argument ' + str(output_dir)+' is not a directory.')
     output_dir = os.path.abspath(output_dir)
-    #print(str(input_file)+' '+output_dir)
 
+    print("Loading and sanitizing data...")
     # load the data
     job_list = utils.load_from_json(input_file)
 
