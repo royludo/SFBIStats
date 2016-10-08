@@ -6,8 +6,10 @@
 2. USAGE
 3. DETAILS
 4. CONTRIBUTE
-5. CHANGELOG
-6. ACKNOWLEDGEMENTS
+5. ROADMAP
+6. CHANGELOG
+7. ACKNOWLEDGEMENTS
+8. CONTACT
 
 ## 1. PROJECT
 
@@ -15,10 +17,10 @@ This project aims to:
  - give a programmatic access to data related to the recent bioinformatics job market in France.
  - provide some [basic analysis and charts](https://www.dropbox.com/sh/b33edivf9tuljfw/AABiurGJNg0i0EdhxoEwouc0a) related to those data.
 
-The data come from the [Société Française de Bioinformatique (SFBI)](http://www.sfbi.fr/), an association who, among other things, gathers job
+The data come from the [Société Française de Bioinformatique (SFBI)](http://www.sfbi.fr/), an association who, among other activities, gathers job
 offers and posts them on their [website](http://www.sfbi.fr/recherche_emplois) and mail list.
-You will find here information related to more than 1200 job offers that have been posted from april 2012 onward.
-The data will be updated every month.
+You will find here information related to more than 1600 job offers that have been posted from april 2012 onward.
+The data will be updated regularly (every 2-3 months).
 
 This project concerns data of french origin, and was essentially destined for the french bioinformatics community. 
 English has been used for the code, but the output charts are in french.
@@ -27,61 +29,47 @@ Please read the details section before using the charts.
 
 ## 2. USAGE
 
-### 2.1 Setup the environment
+We highly recommend to use the [conda environment manager](http://conda.pydata.org/docs/) to install and use this 
+project. Not only does it provide a clean environment to work in, it also makes it really easy to install all the 
+necessary packages.
 
-The following procedures assume you have the [conda environment manager](http://conda.pydata.org/docs/) installed.
-If you don't, here is the [miniconda download page](http://conda.pydata.org/miniconda.html).
+### 2.1 Setup
 
-#### 2.1.1 The quick way
+The following procedure assumes you have already installed conda.
+If not, here is the [miniconda download page](http://conda.pydata.org/miniconda.html).
 
-Make use of the provided environment definition file `env.yml`
+#### 2.1.1 Create the virtual environment
+
+Make use of the provided environment definition file `env.yml`.
 
 ```bash
 wget https://raw.githubusercontent.com/royludo/SFBIStats/master/env.yml
 conda env create -f env.yml
 ```
 
-This will setup a complete environment called sfbistatsenv with all the requirements already installed.
-Don't forget `source activate sfbistatsenv`
+This will setup a complete environment called sfbistatsenv with the core package requirements already installed.
+Alternatively, you can use `env_full.yml`. It contains the packages required by the code in the `examples` directory
+as well. If you decide to use `env.yml`, refer to the READMEs in each example's directory for the requirements that you
+will have to install yourself.
+In both cases, once the environment is created, don't forget `source activate sfbistatsenv`.
 
-Then go to 2.1.3
+#### 2.1.2 Get the code
 
-#### 2.1.2 The less quick way
+Clone the repository directly in your environment.
+`git clone https://github.com/royludo/SFBIStats.git`
+You will end up with a folder `sfbistatsenv/SFBIStats` containing all the project.
 
-Create the environment:
+#### 2.1.4 Install the package
 
-`conda create -n sfbistatsenv python=2.7`
+Go in the project's directory.
+`python setup.py install`
 
-Install the requirements:
+### 2.2 Run the examples
 
-```bash
-conda install matplotlib
-conda install pandas
-conda install pymongo
-conda install PIL
-conda install basemap
-pip install geopy
-pip install wordcloud
-```
-
-Continue with 2.1.3
-
-#### 2.1.3 Get the code
-
-Clone the repository directly in your environment. You should end up with something like `sfbistatsenv/SFBIStats/sfbistats` containing the actual code.
-
-#### 2.1.4 Make Python aware of your project
-
-Make the project's packages available to python:
-
-`export PYTHONPATH="$PYTHONPATH:/path/to/the/envs/sfbistatsenv/SFBIStats"`
-
-### 2.2 Run the script
-
-```bash
-mkdir output
-python ./sfbistats/analysis/analyze.py --json ./resources/jobs_anon.json --output_dir ./output
-```
+You probably want to use the data and create some charts. The examples folders contains scripts that make use of the 
+SFBI jobs data to produce charts as seen [here](http://bioinfo-fr.net/etat-de-lemploi-bioinformatique-en-france-analyse-des-offres-de-la-sfbi) or [here](https://www.dropbox.com/sh/b33edivf9tuljfw/AABiurGJNg0i0EdhxoEwouc0a).
+Each folder is different, and has its own dependencies. Please refer to the README provided in each folder for
+instructions on how to install and run each example. If you used `env_full.yml` you can directly run them.
 
 ## 3. DETAILS
 
@@ -128,7 +116,8 @@ json.loads(jobs_anon.json, object_hook=json_util.object_hook)
 
 See the [json_util doc](http://api.mongodb.org/python/1.4/api/pymongo/json_util.html) as pointed out [on this stackoverflow thread](http://stackoverflow.com/a/11286988).
 
-The data have been scraped from web pages, and are delivered raw. Sanitization of the fields is left to users.
+The data have been scraped from web pages, and are delivered raw. Sanitization of the fields is left to users. But feel
+free to reuse the functions in `sfbistats/utils/utils.py` for that.
 
 ### Charts
 
@@ -151,46 +140,32 @@ lexical_analysis 1-11:
 Generated with the [word_cloud module](https://github.com/amueller/word_cloud) using the titles of the job offers.
 Types and subtypes of contracts are specified in each image title. 
 
-### Code
-
-You will probably be interested by the content of the analysis package only. The main script is analyze.py. It calls
-the other python modules which produce the charts. 
-Beware that some functions in lexical_analysis.py can not be used with the provided data.
-
 ## 4. CONTRIBUTE
 
 If you want to transform the charts with your own awesome style, if you have a better way to get the data (or more 
 data), or if you feel like some different kinds of charts could be useful, then don't hesitate! Fork, code, and tell us
 about it. We will happily accept any kind of contribution to this project!
 
-### Example: creating other charts
+## 5. ROADMAP
 
-Feel like the horizontal bar chart could be better if it was... vertical? No problem.
-Create your own python module (let's say, myscript.py) and put your code inside a function that looks like
+ - remake maps the same way as [jacklabelette](https://github.com/jacklabelette/CartographieJeBif)
+ - go full machine learning on all the mails as done [here](https://github.com/ProjetM1Big2016)
+ - make efforts to get the authorization to release the content of the mails
+ 
+## 6. CHANGELOG
 
-`def run(job_list, output_dir):`
+07/10/2016
+ - reorganized the repo's architecture and moved all the code from python 2 to python 3
+ - scripts used for articles and everything that is not related to getting the data has been put in the example directory
+ - core code to get and parse mails stays in sfbistats
+ - started experiments with machine learning 
 
-Now you have a list of jobs and a place to output your nice new charts!
-Process the data the way you want and save your work in output_dir.
-When you're done, open analyze.py, import your script and add
+## 7. ACKNOWLEDGEMENTS
 
-`myscript.run(job_list, output_dir)`
-
-to the end of the code.
-Next time you run analyze.py, you will see your own charts added to the others.
-
-### TODO
-
- - finish the maps
- - more doc
- - logging
-
-## 5. CHANGELOG
-
-    20/05/2016
-     - _id field in jobs_anon.json removed
-
-## 6. ACKNOWLEDGEMENTS
-
-Big thanks to the [bioinfo-fr](http://bioinfo-fr.net/) community, who lighted the sparkle of motivation for this project, and Lins` in particular.
+Big thanks to the [bioinfo-fr](http://bioinfo-fr.net/) community, who lighted the sparkle of motivation for this
+project, and [nigiord](https://github.com/nigiord) in particular.
 Credits for the original data go to the [SFBI](http://www.sfbi.fr/).
+
+## 8. CONTACT
+
+\#bioinfo-fr on freenode. Nick is fragmeister.

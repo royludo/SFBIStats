@@ -1,12 +1,12 @@
 # coding=utf-8
+from __future__ import division, print_function, unicode_literals
 
 import pymongo
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.log import configure_logging
 import argparse
-import spider
-from sfbi_parser import EmlParser
-import logging
+from sfbistats.loader import spider
+from sfbistats.loader.sfbi_parser import EmlParser
 
 
 
@@ -33,9 +33,9 @@ class MongoDBStorage(object):
     clean mongodb stuff
 '''
 def clear_db(client):
-    print "Start cleaning DB"
+    print ("Start cleaning DB")
     client.drop_database(db_name)
-    print "DB " + db_name + " now clean"
+    print ("DB " + db_name + " now clean")
 
 if __name__ == '__main__':
 
@@ -49,8 +49,8 @@ if __name__ == '__main__':
     collection_name = 'jobs'
     configure_logging({'LOG_FILE': 'loader.log'})
 
-    print "Parsing mails..."
-    parser = EmlParser(eml_dir)
+    print ("Parsing mails...")
+    parser = EmlParser.from_mbox(eml_dir)
     link_list = parser.get_link_list()
 
     process = CrawlerProcess({

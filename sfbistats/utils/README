@@ -1,0 +1,5 @@
+city_locations.csv: used to store geopy data, to avoid querying geocoders.
+
+Stopwords files are used by lexical_anaysis.py
+stopwords_en.txt: list taken from http://taporware.ualberta.ca/~taporware/cgi-bin/prototype/glasgowstoplist.txt with punctuation removed
+stopwords_fr.txt: from http://sites.univ-provence.fr/veronis/data/antidico.txt, with "d'un" and "d'une" added
