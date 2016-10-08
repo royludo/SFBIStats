@@ -139,7 +139,7 @@ def sanitize_duration(job_duration_string):
     when several numbers are present, the first (=the minimum) is returned
     if just a number and nothing else, we'll consider it as months
     return -1 if can't parse correctly
-    return nothing if not applicable (ex: CDI)
+    return 0 if not applicable (ex: CDI)
     """
     m1 = re.search('(\d+).*(mois|month|months).*', job_duration_string)
     m2 = re.search('(\d+).*(année|années|an|ans|year|years).*', job_duration_string)
@@ -262,7 +262,8 @@ def city_to_dep_region(name, city_filename):
                       (('Champagne-Ardenne','Alsace','Lorraine'), 'Alsace-Champagne-Ardenne-Lorraine'),
                       (('Bourgogne',u'Franche-Comté'),u'Bourgogne-Franche-Comté'),
                       (('Auvergne',u'Rhône-Alpes'),u'Auvergne-Rhône-Alpes'),
-                      (('Aquitaine','Limousin','Poitou-Charentes'),'Aquitaine-Limousin-Poitou-Charentes'),
+                      (('Aquitaine','Limousin','Poitou-Charentes'),'Aquitaine Limousin Poitou-Charentes'),
+                      (['Aquitaine-Limousin-Poitou-Charentes'],'Aquitaine Limousin Poitou-Charentes'),
                       (('Languedoc-Roussillon',u'Midi-Pyrénées'),u'Languedoc-Roussillon-Midi-Pyrénées'),
                       (('Nord-Pas-de-Calais','Picardie'),'Nord-Pas-de-Calais-Picardie'),
                       (['Nord-Pas-de-Calais Picardie'],'Nord-Pas-de-Calais-Picardie')]
