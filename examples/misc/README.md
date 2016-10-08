@@ -5,7 +5,7 @@ Basic charts used mostly to display what can be done and to summarize the data.
 ```bash
 conda install matplotlib
 conda install pandas
-conda install PIL
+conda install pillow
 conda install basemap
 pip install geopy
 pip install wordcloud

@@ -8,15 +8,11 @@ Load the data and then run the modules who produce the plots.
 """
 from __future__ import unicode_literals, print_function
 
-import json
 import argparse
-from bson import json_util
 import os
 
-
 from sfbistats import utils
-from sfbistats import job_offer
-import examples.article_bioinfofr_part1.global_lins as global_lins
+import global_lins
 
 if __name__ == '__main__':
     # parse and check arguments

@@ -12,10 +12,10 @@ import argparse
 import os
 
 from sfbistats import utils
-from examples.misc import summary
-from examples.misc import lexical_analysis
-from examples.misc import maps
-from examples.misc import time_series
+import summary
+import lexical_analysis
+import maps
+import time_series
 
 if __name__ == '__main__':
     # parse and check arguments
