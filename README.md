@@ -6,8 +6,10 @@
 2. USAGE
 3. DETAILS
 4. CONTRIBUTE
-5. CHANGELOG
-6. ACKNOWLEDGEMENTS
+5. ROADMAP
+6. CHANGELOG
+7. ACKNOWLEDGEMENTS
+8. CONTACT
 
 ## 1. PROJECT
 
@@ -15,10 +17,10 @@ This project aims to:
  - give a programmatic access to data related to the recent bioinformatics job market in France.
  - provide some [basic analysis and charts](https://www.dropbox.com/sh/b33edivf9tuljfw/AABiurGJNg0i0EdhxoEwouc0a) related to those data.
 
-The data come from the [Société Française de Bioinformatique (SFBI)](http://www.sfbi.fr/), an association who, among other things, gathers job
+The data come from the [Société Française de Bioinformatique (SFBI)](http://www.sfbi.fr/), an association who, among other activities, gathers job
 offers and posts them on their [website](http://www.sfbi.fr/recherche_emplois) and mail list.
-You will find here information related to more than 1200 job offers that have been posted from april 2012 onward.
-The data will be updated every month.
+You will find here information related to more than 1600 job offers that have been posted from april 2012 onward.
+The data will be updated regularly (every 2-3 months).
 
 This project concerns data of french origin, and was essentially destined for the french bioinformatics community. 
 English has been used for the code, but the output charts are in french.
@@ -108,7 +110,8 @@ json.loads(jobs_anon.json, object_hook=json_util.object_hook)
 
 See the [json_util doc](http://api.mongodb.org/python/1.4/api/pymongo/json_util.html) as pointed out [on this stackoverflow thread](http://stackoverflow.com/a/11286988).
 
-The data have been scraped from web pages, and are delivered raw. Sanitization of the fields is left to users.
+The data have been scraped from web pages, and are delivered raw. Sanitization of the fields is left to users. But feel
+free to reuse the functions in `sfbistats/utils/utils.py` for that.
 
 ### Charts
 
@@ -137,8 +140,26 @@ If you want to transform the charts with your own awesome style, if you have a b
 data), or if you feel like some different kinds of charts could be useful, then don't hesitate! Fork, code, and tell us
 about it. We will happily accept any kind of contribution to this project!
 
-## 5. ACKNOWLEDGEMENTS
+## 5. ROADMAP
+
+ - remake maps the same way as [jacklabelette](https://github.com/jacklabelette/CartographieJeBif)
+ - go full machine learning on all the mails as done [here](https://github.com/ProjetM1Big2016)
+ - make efforts to get the authorization to release the content of the mails
+ 
+## 6. CHANGELOG
+
+07/10/2016
+ - reorganized the repo's architecture and moved all the code from python 2 to python 3
+ - scripts used for articles and everything that is not related to getting the data has been put in the example directory
+ - core code to get and parse mails stays in sfbistats
+ - started experiments with machine learning 
+
+## 7. ACKNOWLEDGEMENTS
 
 Big thanks to the [bioinfo-fr](http://bioinfo-fr.net/) community, who lighted the sparkle of motivation for this
-project, and Lins` in particular.
+project, and [nigiord](https://github.com/nigiord) in particular.
 Credits for the original data go to the [SFBI](http://www.sfbi.fr/).
+
+## 8. CONTACT
+
+\#bioinfo-fr on freenode. Nick is fragmeister.

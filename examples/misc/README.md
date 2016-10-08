@@ -1,3 +1,5 @@
+Basic charts used mostly to display what can be done and to summarize the data.
+
 ## 1. INSTALL
 
 ```bash
