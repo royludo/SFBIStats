@@ -56,12 +56,15 @@ In both cases, once the environment is created, don't forget `source activate sf
 #### 2.1.2 Get the code
 
 Clone the repository directly in your environment.
+
 `git clone https://github.com/royludo/SFBIStats.git`
+
 You will end up with a folder `sfbistatsenv/SFBIStats` containing all the project.
 
 #### 2.1.4 Install the package
 
 Go in the project's directory.
+
 `python setup.py install`
 
 ### 2.2 Run the examples
