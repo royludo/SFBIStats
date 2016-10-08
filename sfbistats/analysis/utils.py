@@ -9,48 +9,12 @@ import re
 import geopy
 import numpy as np
 import csv
-import pkg_resources
-import collections
-from bson import json_util
-import json
-import sfbistats.job_offer as sfbi_job
-
-def load_from_json(file):
-    """
-
-    Parameters
-    ----------
-    file : file handler
-        An already opened json file handler to the serialized job list.
-
-    Returns
-    -------
-    list
-
-    """
-    job_list = list()
-    city_dict = collections.defaultdict(int)
-    for l in file.readlines():
-        # use dict instead of directly object, better with pandas
-        job = sfbi_job.JobOfferAnon.from_json(json.loads(l, object_hook=json_util.object_hook)).to_dict()
-        job['city'] = sanitize_city_name(job['city'])
-        job['city'] = sanitize_city_name_for_geoloc(job['city'])
-        city_file = pkg_resources.resource_filename('sfbistats.analysis', 'city_locations.csv')
-        dep, reg = city_to_dep_region(job['city'], city_file)
-        job['department'] = dep
-        job['region'] = reg
-        job['duration'] = sanitize_duration(job['duration'])
-        city_dict[job['city']] += 1
-        job_list.append(job)
-    job_list = spell_correct(job_list, city_dict)
-    return job_list
 
 def sanitize_city_name(orig_name):
     """
     Ensure that city names only have words, with no -, upper first letters, with ' and /
     (ex: Villefranche/Mer, Villeneuve D'Ascq)
     All numbers initially present are removed, except when it's the only characters.
-    Ensure that words are separated by 1 space only
 
     Will correct these:
         MontréAl -> Montréal
@@ -58,7 +22,6 @@ def sanitize_city_name(orig_name):
         Gif-Sur-Yvette, France -> Gif Sur Yvette
         Chappes (63) -> Chappes
         91000 Evry -> Evry
-        Hinxton   Cambridge -> Hinxton Cambridge
 
     Will leave things like this:
         Evry Puis Saclay En 2015 -> Evry Puis Saclay En
@@ -79,8 +42,6 @@ def sanitize_city_name(orig_name):
         name = orig_name
     else:
         name =  m.group(1).strip().replace('-', ' ').title()
-    # remove multiple spaces
-    name = re.sub('\s+', ' ', name)
     return name.encode('utf-8')
 
 def sanitize_city_name_for_geoloc(orig_name):
@@ -103,29 +64,29 @@ def sanitize_city_name_for_geoloc(orig_name):
                     'cedex': '',
                     'plateau de saclay': 'Saclay',
                     'ile de france': 'Paris',
-                    'france': 'Paris',
                     'montpelllier': 'Montpellier',
                     'cambridege': 'Cambridge',
-                    'evry orsay': 'Evry',
-                    'lyon evry': 'Lyon',
-                    'marseille nice': 'Marseille',
+                    'evry   orsay': 'Evry',
+                    'lyon   evry': 'Lyon',
+                    'marseille   nice': 'Marseille',
                     'lyon villeurbanne': 'Lyon',
                     'clermont fd': 'Clermont Ferrand',
-                    'hinxton cambridge': 'Hinxton',
-                    'hinxton cambridge uk': 'Hinxton',
-                    'bordeaux cestas': 'Bordeaux'}
+                    'bordeaux   cestas': 'Bordeaux'}
     pattern = r'\b({})\b'.format('|'.join(sorted(re.escape(k) for k in replace_dict)))
     name = re.sub(pattern, lambda m: replace_dict.get(m.group(0).lower()), orig_name, flags=re.IGNORECASE)
     # not in the regex because of accents
     name = name.replace(u'Université Paris Saclay', 'Saclay')
     name = name.replace(u"Génopôle D'Evry", 'Evry')
     name = name.replace(u'Île De', 'Paris')
-    name = name.replace(u' Paris Région Parisienne', 'Paris')
+    name = name.replace(u'   Paris   Région Parisienne', 'Paris')
     name = name.replace(u'Région Parisienne', 'Paris')
-    name = re.sub('(\s?Paris\s?)+', 'Paris', name)
     # When several cities, just keep the first one
     name = name.replace('/', '|').split('|')[0]
     name = name.strip()
+
+    # Problem!! ParisParis
+    #if orig_name == 'Ile De France   Paris   Région Parisienne':
+    #    print(name)
 
     return name.encode('utf-8') # don't forget to encode the output
 
