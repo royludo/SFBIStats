@@ -6,8 +6,6 @@ Basic charts used mostly to display what can be done and to summarize the data.
 conda install matplotlib
 conda install pandas
 conda install pillow
-conda install basemap
-pip install geopy
 pip install wordcloud
 ```
 

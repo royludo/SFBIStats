@@ -14,7 +14,6 @@ import os
 from sfbistats import utils
 import summary
 import lexical_analysis
-import maps
 import time_series
 
 if __name__ == '__main__':
@@ -38,6 +37,5 @@ if __name__ == '__main__':
     # run the scripts
     summary.run(job_list, output_dir)
     lexical_analysis.run(job_list, output_dir)
-    #maps.run(job_list, output_dir)
     time_series.run(job_list, output_dir)
     print("Complete")

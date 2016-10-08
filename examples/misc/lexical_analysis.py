@@ -210,6 +210,7 @@ def plot_tendencies(word_list, pos_dic, bin_size, output_dir, file_name):
 
 
 def run(job_list, output_dir):
+    print("Running lexical_analysis.py")
     stopword_dict = get_stopwords()
     # add some stuff that isn't in the stopwords lists
     stopword_dict['-'] = True
