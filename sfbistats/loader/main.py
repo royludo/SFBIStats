@@ -3,9 +3,8 @@ from __future__ import division, print_function, unicode_literals
 
 import pymongo
 import argparse
-import spider
-from sfbi_parser import EmlParser
-import logging
+from sfbistats.loader import spider
+from sfbistats.loader.sfbi_parser import EmlParser
 
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.log import configure_logging
@@ -51,7 +50,7 @@ if __name__ == '__main__':
     configure_logging({'LOG_FILE': 'loader.log'})
 
     print ("Parsing mails...")
-    parser = EmlParser(eml_dir)
+    parser = EmlParser.from_mbox(eml_dir)
     link_list = parser.get_link_list()
 
     process = CrawlerProcess({

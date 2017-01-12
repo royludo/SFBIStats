@@ -16,11 +16,43 @@ from bson import json_util
 
 from ..job_offer import JobOfferAnon
 
+def load_from_json(file):
+    """
+    This function load a json database into a list of dict.
+
+    Parameters
+    ----------
+    file : file handler
+        An already opened json file handler to the serialized job list.
+
+    Returns
+    -------
+    list
+
+    """
+    job_list = list()
+    city_dict = collections.defaultdict(int)
+    for l in file.readlines():
+        # use dict instead of directly object, better with pandas
+        job = JobOfferAnon.from_json(json.loads(l, object_hook=json_util.object_hook)).to_dict()
+        job['city'] = sanitize_city_name(job['city'])
+        job['city'] = sanitize_city_name_for_geoloc(job['city'])
+        city_file = pkg_resources.resource_filename('sfbistats.utils', 'city_locations.csv')
+        dep, reg = city_to_dep_region(job['city'], city_file)
+        job['department'] = dep
+        job['region'] = reg
+        job['duration'] = sanitize_duration(job['duration'])
+        city_dict[job['city']] += 1
+        job_list.append(job)
+    job_list = spell_correct(job_list, city_dict)
+    return job_list
+
 def sanitize_city_name(orig_name):
     """
     Ensure that city names only have words, with no -, upper first letters, with ' and /
     (ex: Villefranche/Mer, Villeneuve D'Ascq)
     All numbers initially present are removed, except when it's the only characters.
+    Ensure that words are separated by 1 space only
 
     Will correct these:
         MontréAl -> Montréal
@@ -28,6 +60,7 @@ def sanitize_city_name(orig_name):
         Gif-Sur-Yvette, France -> Gif Sur Yvette
         Chappes (63) -> Chappes
         91000 Evry -> Evry
+        Hinxton   Cambridge -> Hinxton Cambridge
 
     Will leave things like this:
         Evry Puis Saclay En 2015 -> Evry Puis Saclay En
@@ -48,7 +81,9 @@ def sanitize_city_name(orig_name):
         name = orig_name
     else:
         name =  m.group(1).strip().replace('-', ' ').title()
-    return name.encode('utf-8')
+    # remove multiple spaces
+    name = re.sub('\s+', ' ', name)
+    return name
 
 def sanitize_city_name_for_geoloc(orig_name):
     """
@@ -63,38 +98,38 @@ def sanitize_city_name_for_geoloc(orig_name):
     string
 
     """
-    orig_name = orig_name.decode('utf-8')
+    orig_name = orig_name
     # A dictionary of substitutions
     replace_dict = {'ou': '|', 'or': '|', 'et': '|', 'and': '|', 'puis': '|',
                     '/mer': ' Sur Mer',
                     'cedex': '',
                     'plateau de saclay': 'Saclay',
                     'ile de france': 'Paris',
+                    'france': 'Paris',
                     'montpelllier': 'Montpellier',
                     'cambridege': 'Cambridge',
-                    'evry   orsay': 'Evry',
-                    'lyon   evry': 'Lyon',
-                    'marseille   nice': 'Marseille',
+                    'evry orsay': 'Evry',
+                    'lyon evry': 'Lyon',
+                    'marseille nice': 'Marseille',
                     'lyon villeurbanne': 'Lyon',
                     'clermont fd': 'Clermont Ferrand',
-                    'bordeaux   cestas': 'Bordeaux'}
+                    'hinxton cambridge': 'Hinxton',
+                    'hinxton cambridge uk': 'Hinxton',
+                    'bordeaux cestas': 'Bordeaux'}
     pattern = r'\b({})\b'.format('|'.join(sorted(re.escape(k) for k in replace_dict)))
     name = re.sub(pattern, lambda m: replace_dict.get(m.group(0).lower()), orig_name, flags=re.IGNORECASE)
     # not in the regex because of accents
     name = name.replace(u'Université Paris Saclay', 'Saclay')
     name = name.replace(u"Génopôle D'Evry", 'Evry')
     name = name.replace(u'Île De', 'Paris')
-    name = name.replace(u'   Paris   Région Parisienne', 'Paris')
+    name = name.replace(u' Paris Région Parisienne', 'Paris')
     name = name.replace(u'Région Parisienne', 'Paris')
+    name = re.sub('(\s?Paris\s?)+', 'Paris', name)
     # When several cities, just keep the first one
     name = name.replace('/', '|').split('|')[0]
     name = name.strip()
 
-    # Problem!! ParisParis
-    #if orig_name == 'Ile De France   Paris   Région Parisienne':
-    #    print(name)
-
-    return name.encode('utf-8') # don't forget to encode the output
+    return name
 
 
 def sanitize_duration(job_duration_string):
@@ -104,12 +139,14 @@ def sanitize_duration(job_duration_string):
     when several numbers are present, the first (=the minimum) is returned
     if just a number and nothing else, we'll consider it as months
     return -1 if can't parse correctly
-    return nothing if not applicable (ex: CDI)
+    return 0 if not applicable (ex: CDI)
     """
     m1 = re.search('(\d+).*(mois|month|months).*', job_duration_string)
     m2 = re.search('(\d+).*(année|années|an|ans|year|years).*', job_duration_string)
     m3 = re.search('(\d+).*(semaine|semaines|week|weeks).*', job_duration_string)
     m4 = re.search('(\d+)', job_duration_string.lower())
+
+    m5 = re.search('(indéterminé|indeterminé|indetermine|cdi|inderterminé|full time)', job_duration_string.lower())
 
     if m1:
         dur = int(m1.group(1))
@@ -119,6 +156,8 @@ def sanitize_duration(job_duration_string):
         dur = int(m3.group(1)) / 4
     elif m4:
         dur = int(m4.group(1))
+    elif m5:
+        dur = 0
     else:
         dur = -1
     return dur
@@ -173,17 +212,18 @@ def city_to_dep_region(name, city_filename):
     """ Returns the department and region from the city name, if located in France.
     Otherwise, returns 'Étranger'. """
 
-    name = name.decode('utf-8')
     city_dict = {}
-    with open(city_filename, 'r') as city_file:
+    with open(city_filename, 'r', encoding='utf-8') as city_file:
         for l in csv.reader(city_file):
+            #l = l.decode('utf-8')
+            #l = map(lambda x: x.decode('utf8'), l)
             city, dep, reg = l
             city_dict[city] = (dep, reg)
 
     if name in city_dict:
         return city_dict[name]
     else:
-        print ('Unknown city:', name)
+        print('Unknown city:', name)
         loc_dic = query_GoogleV3(name)
 
         # check if everything is alright
@@ -222,7 +262,8 @@ def city_to_dep_region(name, city_filename):
                       (('Champagne-Ardenne','Alsace','Lorraine'), 'Alsace-Champagne-Ardenne-Lorraine'),
                       (('Bourgogne',u'Franche-Comté'),u'Bourgogne-Franche-Comté'),
                       (('Auvergne',u'Rhône-Alpes'),u'Auvergne-Rhône-Alpes'),
-                      (('Aquitaine','Limousin','Poitou-Charentes'),'Aquitaine-Limousin-Poitou-Charentes'),
+                      (('Aquitaine','Limousin','Poitou-Charentes'),'Aquitaine Limousin Poitou-Charentes'),
+                      (['Aquitaine-Limousin-Poitou-Charentes'],'Aquitaine Limousin Poitou-Charentes'),
                       (('Languedoc-Roussillon',u'Midi-Pyrénées'),u'Languedoc-Roussillon-Midi-Pyrénées'),
                       (('Nord-Pas-de-Calais','Picardie'),'Nord-Pas-de-Calais-Picardie'),
                       (['Nord-Pas-de-Calais Picardie'],'Nord-Pas-de-Calais-Picardie')]
@@ -237,8 +278,8 @@ def city_to_dep_region(name, city_filename):
             reg = u'Étranger'
         line_list = [name, dep, reg]
         new_line = u','.join(line_list)
-        with open(city_filename, 'a') as city_file:
-            print (new_line.encode('utf-8'), file=city_file)
+        with open(city_filename, 'a', encoding='utf-8') as city_file:
+            print (new_line, file=city_file)
         return dep, reg
 
 
@@ -296,7 +337,7 @@ def levenshtein(source, target):
 def get_close_spelling(city, city_dict):
     leven_list = list()
     for city_check in city_dict.keys():
-        dl = levenshtein(city.decode('utf8'), city_check.decode('utf8'))
+        dl = levenshtein(city, city_check)
         if (len(city) < 10 and dl == 1) or (len(city) > 10 and dl < 4 and dl != 0):
             leven_list.append(city_check)
     return leven_list
@@ -321,33 +362,3 @@ def spell_correct(job_list, city_dict):
             job['city'] = replace_dict[job['city']]
     return job_list
 
-def load_from_json(file):
-    """
-    This function load a json database into a list of dict.
-
-    Parameters
-    ----------
-    file : file handler
-        An already opened json file handler to the serialized job list.
-
-    Returns
-    -------
-    list
-
-    """
-    job_list = list()
-    city_dict = collections.defaultdict(int)
-    for l in file.readlines():
-        # use dict instead of directly object, better with pandas
-        job = JobOfferAnon.from_json(json.loads(l, object_hook=json_util.object_hook)).to_dict()
-        job['city'] = sanitize_city_name(job['city'])
-        job['city'] = sanitize_city_name_for_geoloc(job['city'])
-        city_file = pkg_resources.resource_filename('sfbistats.utils', 'city_locations.csv')
-        dep, reg = city_to_dep_region(job['city'], city_file)
-        job['department'] = dep
-        job['region'] = reg
-        job['duration'] = sanitize_duration(job['duration'])
-        city_dict[job['city']] += 1
-        job_list.append(job)
-    job_list = spell_correct(job_list, city_dict)
-    return job_list

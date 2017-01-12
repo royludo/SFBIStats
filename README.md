@@ -6,8 +6,10 @@
 2. USAGE
 3. DETAILS
 4. CONTRIBUTE
-5. CHANGELOG
-6. ACKNOWLEDGEMENTS
+5. ROADMAP
+6. CHANGELOG
+7. ACKNOWLEDGEMENTS
+8. CONTACT
 
 ## 1. PROJECT
 
@@ -15,99 +17,62 @@ This project aims to:
  - give a programmatic access to data related to the recent bioinformatics job market in France.
  - provide some [basic analysis and charts](https://www.dropbox.com/sh/b33edivf9tuljfw/AABiurGJNg0i0EdhxoEwouc0a) related to those data.
 
-The data come from the [Société Française de Bioinformatique (SFBI)](http://www.sfbi.fr/), an association who, among other things, gathers job
+The data come from the [Société Française de Bioinformatique (SFBI)](http://www.sfbi.fr/), an association who, among other activities, gathers job
 offers and posts them on their [website](http://www.sfbi.fr/recherche_emplois) and mail list.
-You will find here information related to more than 1400 job offers that have been posted from april 2012 onward.
-The data are regularly updated.
+You will find here information related to more than 1600 job offers that have been posted from april 2012 onward.
+The data will be updated regularly (every 2-3 months).
 
 This project concerns data of french origin, and was essentially destined for the french bioinformatics community. 
-English has been used for the code, but the examples are in French.
+English has been used for the code, but the output charts are in french.
 
 Please read the details section before using the charts.
 
 ## 2. USAGE
 
-### 2.1 Clone the repository and install the package
+We highly recommend to use the [conda environment manager](http://conda.pydata.org/docs/) to install and use this 
+project. Not only does it provide a clean environment to work in, it also makes it really easy to install all the 
+necessary packages.
 
-SFBIStats has been tested for python >= 2.7 and >= 3.4.1.
-```bash
-git clone https://github.com/royludo/SFBIStats
-cd ./SFBIStats
-sudo python setup.py install
-```
-This will download the package and install it in /usr/lib, with
-the required dependencies (numpy, pymongo and geopy).
-For a local installation, use the keyword develop instead of install.
+### 2.1 Setup
 
-You can also use a virtual environment.
-In that case, you should activate the environment before running the setup.py script.
-See below for a way to set up a miniconda environment.
+The following procedure assumes you have already installed conda.
+If not, here is the [miniconda download page](http://conda.pydata.org/miniconda.html).
 
-### 2.2 OPTIONAL - Setting up a miniconda environment
+#### 2.1.1 Create the virtual environment
 
-The following procedures assume you have the [conda environment manager](http://conda.pydata.org/docs/) installed.
-If you don't, here is the [miniconda download page](http://conda.pydata.org/miniconda.html).
-
-#### 2.2.1 The quick way
-
-Make use of the provided environment definition file `env.yml`
+Make use of the provided environment definition file `env.yml`.
 
 ```bash
 wget https://raw.githubusercontent.com/royludo/SFBIStats/master/env.yml
 conda env create -f env.yml
 ```
 
-This will setup a complete environment called sfbistatsenv with all the requirements already installed.
-Don't forget `source activate sfbistatsenv`.
-Then go back to 2.1.
+This will setup a complete environment called sfbistatsenv with the core package requirements already installed.
+Alternatively, you can use `env_full.yml`. It contains the packages required by the code in the `examples` directory
+as well. If you decide to use `env.yml`, refer to the READMEs in each example's directory for the requirements that you
+will have to install yourself.
+In both cases, once the environment is created, don't forget `source activate sfbistatsenv`.
 
-#### 2.2.2 The less quick way
+#### 2.1.2 Get the code
 
-Create the environment:
+Clone the repository directly in your environment.
 
-`conda create -n sfbistatsenv python=2.7`
+`git clone https://github.com/royludo/SFBIStats.git`
 
-Install the requirements:
+You will end up with a folder `sfbistatsenv/SFBIStats` containing all the project.
 
-```bash
-conda install pymongo
-pip install geopy
-```
-Then go back to 2.1.
+#### 2.1.4 Install the package
 
-### 2.3 Run the examples
+Go in the project's directory.
 
-The examples directory contains scripts that generate the figures presented on [bioinfo-fr](http://bioinfo-fr.net).
-This requires two additional packages:
-```bash
-(sudo) pip install matplotlib
-(sudo) pip install pandas
-```
-or 
-```bash
-conda install matplotlib
-conda install pandas
-```
+`python setup.py install`
 
-Once their are installed, you can generate the figures from the first article via:
-```bash
-mkdir output
-python ./examples/article_bioinfofr_part1/analyze.py --json ./resources/jobs_anon.json --output_dir ./output
-```
+### 2.2 Run the examples
 
-The second example use jupyter notebook, which can be installed with the command:
-```bash
-(sudo) pip install jupyter
-```
-
-Then, just run the notebook:
-```bash
-cd ./examples/article_bioinfofr_part2/
-jupyter notebook
-```
-
-The misc directory contains several other (unpublished) figures that requires some extra packages, among which
-PIL, basemap and wordcloud.
+You probably want to use the data and create some charts. The examples folders contains scripts that make use of the 
+SFBI jobs data to produce charts as seen [here](http://bioinfo-fr.net/etat-de-lemploi-bioinformatique-en-france-analyse-des-offres-de-la-sfbi) or [here](https://www.dropbox.com/sh/b33edivf9tuljfw/AABiurGJNg0i0EdhxoEwouc0a).
+Each folder is different, and has its own dependencies. Please refer to the README provided in each folder for
+instructions on how to install and run each example. If you used `env_full.yml` you can directly run them.
 
 ## 3. DETAILS
 
@@ -154,7 +119,8 @@ json.loads(jobs_anon.json, object_hook=json_util.object_hook)
 
 See the [json_util doc](http://api.mongodb.org/python/1.4/api/pymongo/json_util.html) as pointed out [on this stackoverflow thread](http://stackoverflow.com/a/11286988).
 
-The data have been scraped from web pages, and are delivered raw. Sanitization of the fields is left to users.
+The data have been scraped from web pages, and are delivered raw. Sanitization of the fields is left to users. But feel
+free to reuse the functions in `sfbistats/utils/utils.py` for that.
 
 ### Charts
 
@@ -177,19 +143,32 @@ lexical_analysis 1-11:
 Generated with the [word_cloud module](https://github.com/amueller/word_cloud) using the titles of the job offers.
 Types and subtypes of contracts are specified in each image title. 
 
-### Code
-
-You will probably be interested by the content of the analysis package only. The main script is analyze.py. It calls
-the other python modules which produce the charts. 
-Beware that some functions in lexical_analysis.py can not be used with the provided data.
-
 ## 4. CONTRIBUTE
 
 If you want to transform the charts with your own awesome style, if you have a better way to get the data (or more 
 data), or if you feel like some different kinds of charts could be useful, then don't hesitate! Fork, code, and tell us
 about it. We will happily accept any kind of contribution to this project!
 
-## 5. ACKNOWLEDGEMENTS
+## 5. ROADMAP
 
-Big thanks to the [bioinfo-fr](http://bioinfo-fr.net/) community, who lighted the sparkle of motivation for this project, and Lins` in particular.
+ - remake maps the same way as [jacklabelette](https://github.com/jacklabelette/CartographieJeBif)
+ - go full machine learning on all the mails as done [here](https://github.com/ProjetM1Big2016)
+ - make efforts to get the authorization to release the content of the mails
+ 
+## 6. CHANGELOG
+
+07/10/2016
+ - reorganized the repo's architecture and moved all the code from python 2 to python 3
+ - scripts used for articles and everything that is not related to getting the data has been put in the example directory
+ - core code to get and parse mails stays in sfbistats
+ - started experiments with machine learning 
+
+## 7. ACKNOWLEDGEMENTS
+
+Big thanks to the [bioinfo-fr](http://bioinfo-fr.net/) community, who lighted the sparkle of motivation for this
+project, and [nigiord](https://github.com/nigiord) in particular.
 Credits for the original data go to the [SFBI](http://www.sfbi.fr/).
+
+## 8. CONTACT
+
+\#bioinfo-fr on freenode. Nick is fragmeister.

@@ -33,7 +33,7 @@ def minimal_hbar(ss, figsize=(6, 3)):
 
 
 def run(job_list, output_dir):
-    print "Running summary.py"
+    print("Running summary.py")
     contract_subtype_level = {'Post-doc / IR': 'PhD',
                               'PR': 'PhD',
                               'MdC': 'PhD',
@@ -56,7 +56,7 @@ def run(job_list, output_dir):
     submission_date_series = pd.Series(df.submission_date)
     summary_file.write("From " + str(submission_date_series.min()) + " to " + str(submission_date_series.max()) + '\n')
     summary_file.write("Total jobs: " + str(len(df.index)) + "\n")
-    summary_file.write(pd.Series(df.contract_type).value_counts().to_string(header=False).encode('utf8') + "\n")
+    summary_file.write(pd.Series(df.contract_type).value_counts().to_string(header=False) + "\n")
 
     # general types ratios pie chart
     df_contract_type_count = pd.Series(df.contract_type).value_counts(sort=True)

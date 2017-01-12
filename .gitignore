@@ -1,5 +1,8 @@
 *.pyc
 output/*
+.idea
+resources/mails*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

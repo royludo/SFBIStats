@@ -1,6 +1,7 @@
 from __future__ import unicode_literals, division, print_function
 import re
-from HTMLParser import HTMLParser
+from html.parser import HTMLParser
+from html import unescape
 
 import scrapy
 
@@ -13,7 +14,6 @@ class JobSpider(scrapy.Spider):
 
     def __init__(self, start_urls=None):
         super(JobSpider, self).__init__()
-        #print ("start_urls "+str(start_urls))
         self.start_urls = start_urls
 
 
@@ -22,7 +22,6 @@ class JobSpider(scrapy.Spider):
             given html code, get the interesting section
         '''
         flag = 0
-        parser = HTMLParser()
         stripper = HTMLStripper()
         # decode is important for utf-8 content, else -> errors
         for line in response.body.decode(response.encoding).splitlines():
@@ -36,7 +35,7 @@ class JobSpider(scrapy.Spider):
                 #interesting content
                 if flag:
                     # make sure the stripper object doesn't strip the escaped html string (&...)
-                    line = parser.unescape(line)
+                    line = unescape(line)
                     stripper.feed(line)
         # now get rif of remaining blank lines created by removing the html tags
         final_list = list()
@@ -52,6 +51,7 @@ class HTMLStripper(HTMLParser):
         see http://stackoverflow.com/a/925630
     '''
     def __init__(self):
+        super().__init__()
         self.reset()
         self.fed = []
     def handle_data(self, d):
