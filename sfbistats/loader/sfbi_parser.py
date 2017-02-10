@@ -125,14 +125,14 @@ class EmlParser(object):
         link = ''
         for line in content.splitlines():
             # in rare cases link is on the same line
-            m = re.search('Voir la description complète du poste sur (http:\/\/(www.)?sfbi.fr(\S+))', line)
+            m = re.search('Voir la description complète du poste sur (https?:\/\/(www.)?sfbi.fr(\S+))', line)
             if m is not None :
                 flag = 1
                 link = m.group(1)
                 break
             if re.match('Voir la description complète du poste sur', line):
                 flag = 1
-            if re.match('^http:\/\/(www.)?sfbi.fr(\S+)', line):
+            if re.match('^https?:\/\/(www.)?sfbi.fr(\S+)', line):
                 link = line
                 break
         if flag:
