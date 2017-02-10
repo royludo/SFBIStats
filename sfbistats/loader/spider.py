@@ -5,7 +5,7 @@ from html import unescape
 
 import scrapy
 
-from job_offer import JobOffer
+from ..job_offer import JobOffer
 
 
 class JobSpider(scrapy.Spider):

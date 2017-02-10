@@ -2,12 +2,12 @@
 from __future__ import division, print_function, unicode_literals
 
 import pymongo
-from scrapy.crawler import CrawlerProcess
-from scrapy.utils.log import configure_logging
 import argparse
 from sfbistats.loader import spider
 from sfbistats.loader.sfbi_parser import EmlParser
 
+from scrapy.crawler import CrawlerProcess
+from scrapy.utils.log import configure_logging
 
 
 class MongoDBStorage(object):
