@@ -157,6 +157,9 @@ about it. We will happily accept any kind of contribution to this project!
  
 ## 6. CHANGELOG
 
+10/02/2017
+ - nothing much, job update
+
 07/10/2016
  - reorganized the repo's architecture and moved all the code from python 2 to python 3
  - scripts used for articles and everything that is not related to getting the data has been put in the example directory
