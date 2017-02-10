@@ -259,10 +259,10 @@ def city_to_dep_region(name, city_filename):
 
         # Conversion to new regions
         conv_table = [(('Haute-Normandie','Basse-Normandie'), 'Normandie'),
-                      (('Champagne-Ardenne','Alsace','Lorraine'), 'Alsace-Champagne-Ardenne-Lorraine'),
+                      (('Champagne-Ardenne','Alsace','Lorraine', 'Grand Est'), 'Alsace-Champagne-Ardenne-Lorraine'),
                       (('Bourgogne',u'Franche-Comté'),u'Bourgogne-Franche-Comté'),
-                      (('Auvergne',u'Rhône-Alpes'),u'Auvergne-Rhône-Alpes'),
-                      (('Aquitaine','Limousin','Poitou-Charentes'),'Aquitaine Limousin Poitou-Charentes'),
+                      (('Auvergne',u'Rhône-Alpes', u'Auvergne-Rhône-Alpes'),u'Auvergne Rhône-Alpes'),
+                      (('Aquitaine','Limousin','Poitou-Charentes', 'Nouvelle-Aquitaine'),'Aquitaine Limousin Poitou-Charentes'),
                       (['Aquitaine-Limousin-Poitou-Charentes'],'Aquitaine Limousin Poitou-Charentes'),
                       (('Languedoc-Roussillon',u'Midi-Pyrénées'),u'Languedoc-Roussillon-Midi-Pyrénées'),
                       (('Nord-Pas-de-Calais','Picardie'),'Nord-Pas-de-Calais-Picardie'),
