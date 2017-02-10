@@ -254,13 +254,13 @@ def run(job_list, output_dir):
                          'type': df.contract_type})  # .reset_index().groupby(['date'])['index'].count().reset_index(name='count')
     df10 = df10.set_index(pd.DatetimeIndex(df10['date']))
     df10['month'] = df10.index.month
-    df10 = (df10['2013':'2015'].groupby(['month', 'type'])['month'].count() / 3).reset_index(name='count')
+    df10 = (df10['2013':'2016'].groupby(['month', 'type'])['month'].count() / 4).reset_index(name='count')
     df10_t = df10.pivot(index='month', columns='type', values='count').fillna(0)
     df10_t.columns.name = 'Type'
     ax = df10_t.plot(linewidth=4)
     ax.set_xlabel('Mois')
     ax.set_ylabel("Nombre d'offres")
-    plt.title(u'Moyennes mensuelles 2013-2015', y=1.08)
+    plt.title(u'Moyennes mensuelles 2013-2016', y=1.08)
     ax.legend(loc='center right', bbox_to_anchor=(1.25, 0.5))
     plt.savefig(os.path.join(output_dir, 'time_series_10.svg'), bbox_inches='tight')
     plt.close()
@@ -271,13 +271,13 @@ def run(job_list, output_dir):
     df11 = df11[tmp]
     df11 = df11.set_index(pd.DatetimeIndex(df11['date']))
     df11['month'] = df11.index.month
-    df11 = (df11['2013':'2015'].groupby(['month', 'type'])['month'].count() / 3).reset_index(name='count')
+    df11 = (df11['2013':'2016'].groupby(['month', 'type'])['month'].count() / 4).reset_index(name='count')
     df11_t = df11.pivot(index='month', columns='type', values='count').fillna(0)
     df11_t.columns.name = 'Type'
     ax = df11_t.plot(linewidth=4)
     ax.set_xlabel('Mois')
     ax.set_ylabel("Nombre d'offres")
-    plt.title(u'Moyennes mensuelles 2013-2015 pour les CDD', y=1.08)
+    plt.title(u'Moyennes mensuelles 2013-2016 pour les CDD', y=1.08)
     ax.legend(loc='center right', bbox_to_anchor=(1.4, 0.5))
     plt.savefig(os.path.join(output_dir, 'time_series_11.svg'), bbox_inches='tight')
     plt.close()
@@ -288,14 +288,14 @@ def run(job_list, output_dir):
     df12 = df12[tmp]
     df12 = df12.set_index(pd.DatetimeIndex(df12['date']))
     df12['month'] = df12.index.month
-    df12 = (df12['2013':'2015'].groupby(['month', 'type'])['month'].count() / 3).reset_index(name='count')
+    df12 = (df12['2013':'2016'].groupby(['month', 'type'])['month'].count() / 4).reset_index(name='count')
     df12_t = df12.pivot(index='month', columns='type', values='count').fillna(0)
     df12_t.columns.name = 'Type'
     ax = df12_t.plot(linewidth=4)
     plt.legend(loc=7)
     ax.set_xlabel('Mois')
     ax.set_ylabel("Nombre d'offres")
-    plt.title(u'Moyennes mensuelles 2013-2015 pour les CDI', y=1.08)
+    plt.title(u'Moyennes mensuelles 2013-2016 pour les CDI', y=1.08)
     ax.legend(loc='center right', bbox_to_anchor=(1.3, 0.5))
     plt.savefig(os.path.join(output_dir, 'time_series_12.svg'), bbox_inches='tight')
     plt.close()
