@@ -115,7 +115,9 @@ def sanitize_city_name_for_geoloc(orig_name):
                     'clermont fd': 'Clermont Ferrand',
                     'hinxton cambridge': 'Hinxton',
                     'hinxton cambridge uk': 'Hinxton',
-                    'bordeaux cestas': 'Bordeaux'}
+                    'bordeaux cestas': 'Bordeaux',
+                    'montpellier perpignan': 'Montpellier',
+                    'nice sophia antipolis': 'Nice'}
     pattern = r'\b({})\b'.format('|'.join(sorted(re.escape(k) for k in replace_dict)))
     name = re.sub(pattern, lambda m: replace_dict.get(m.group(0).lower()), orig_name, flags=re.IGNORECASE)
     # not in the regex because of accents
@@ -184,6 +186,13 @@ def query_GoogleV3(name):
     print('Querying for location:', name)
     service = geopy.GoogleV3(domain='maps.google.fr', timeout=5)
     loc = service.geocode(name, exactly_one=True)
+    if loc is None:  # extreme case, google doesn't return anything
+        # try to split and query separate terms
+        names = name.split()
+        if len(names) == 1:
+            raise NameError(name, 'Could not get any result from google API')
+        else:
+            loc = service.geocode(names[0], exactly_one=True)
     address_dict = loc.raw['address_components']
     print(address_dict)
     d = dict()
@@ -258,20 +267,25 @@ def city_to_dep_region(name, city_filename):
         print ('Found:', ', '.join([dep, reg, country]))
 
         # Conversion to new regions
-        conv_table = [(('Haute-Normandie','Basse-Normandie'), 'Normandie'),
-                      (('Champagne-Ardenne','Alsace','Lorraine', 'Grand Est'), 'Alsace-Champagne-Ardenne-Lorraine'),
-                      (('Bourgogne',u'Franche-Comté'),u'Bourgogne-Franche-Comté'),
-                      (('Auvergne',u'Rhône-Alpes', u'Auvergne-Rhône-Alpes'),u'Auvergne Rhône-Alpes'),
-                      (('Aquitaine','Limousin','Poitou-Charentes', 'Nouvelle-Aquitaine'),'Aquitaine Limousin Poitou-Charentes'),
-                      (['Aquitaine-Limousin-Poitou-Charentes'],'Aquitaine Limousin Poitou-Charentes'),
-                      (('Languedoc-Roussillon',u'Midi-Pyrénées'),u'Languedoc-Roussillon-Midi-Pyrénées'),
-                      (('Nord-Pas-de-Calais','Picardie'),'Nord-Pas-de-Calais-Picardie'),
-                      (['Nord-Pas-de-Calais Picardie'],'Nord-Pas-de-Calais-Picardie')]
+        conv_table = [(('haute normandie','basse normandie'), 'Normandie'),
+                      (('champagne ardenne','alsace','lorraine', 'alsace champagne ardenne lorraine', 'grand est'), 'Grand-Est'),
+                      (('bourgogne',u'franche comté', u'bourgogne franche comté'),u'Bourgogne-Franche-Comté'),
+                      (('auvergne',u'rhône alpes', u'auvergne rhône alpes'),u'Auvergne-Rhône-Alpes'),
+                      (('aquitaine','limousin','poitou charentes', 'aquitaine limousin poitou charentes', 'nouvelle aquitaine'), 'Nouvelle-Aquitaine'),
+                      (('languedoc roussillon',u'midi pyrénées', u'languedoc roussillon midi pyrénées'), 'Occitanie'),
+                      (('nord pas de calais','picardie','nord pas de calais picardie', 'hauts de france'), 'Hauts-de-France'),
+                      (('pays de la loire'), 'Pays-de-la-Loire'),
+                      (('centre'), 'Centre-Val-de-Loire'),
+                      ((u'provence alpes côte d\'azur'), u'Provence-Alpes-Côte-d\'Azur'),
+                      ((u'île de france', 'ile de france'), u'Île-de-France')]
         newregions_dict = {}
         for keylist in conv_table:
             newregions_dict.update(dict.fromkeys(keylist[0], keylist[1]))
-        if reg in newregions_dict:
-            reg = newregions_dict[reg]
+        normalize_reg = reg.lower().replace('-', ' ')
+        old_reg = reg
+        if normalize_reg in newregions_dict:
+            reg = newregions_dict[normalize_reg]
+        print(old_reg+"     "+normalize_reg+"      "+reg)
 
         if country != 'France':
             dep = u'Étranger'
