@@ -19,7 +19,7 @@ This project aims to:
 
 The data come from the [Société Française de Bioinformatique (SFBI)](http://www.sfbi.fr/), an association who, among other activities, gathers job
 offers and posts them on their [website](http://www.sfbi.fr/recherche_emplois) and mail list.
-You will find here information related to more than 1600 job offers that have been posted from april 2012 onward.
+You will find here information related to more than 2000 job offers that have been posted from april 2012 onward.
 The data will be updated regularly (every 2-3 months).
 
 This project concerns data of french origin, and was essentially destined for the french bioinformatics community. 
@@ -154,11 +154,16 @@ about it. We will happily accept any kind of contribution to this project!
  - remake maps the same way as [jacklabelette](https://github.com/jacklabelette/CartographieJeBif)
  - go full machine learning on all the mails as done [here](https://github.com/ProjetM1Big2016)
  - make efforts to get the authorization to release the content of the mails
+ - provide an interface to visualize the data dynamically, maybe with plotly/dash
  
 ## 6. CHANGELOG
 
+27/07/2017
+ - job update
+ - use the definitive new region names
+
 10/02/2017
- - nothing much, job update
+ - job update
 
 07/10/2016
  - reorganized the repo's architecture and moved all the code from python 2 to python 3
