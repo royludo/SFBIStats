@@ -67,7 +67,7 @@ if __name__ == '__main__':
     })
 
     process.crawl(spider.JobSpider, start_urls=link_list)
-    process.start() # the script will block here until the crawling is finished
+    process.start()  # the script will block here until the crawling is finished
 
     #clear_db(mongo_client)
 

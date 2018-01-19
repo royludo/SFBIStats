@@ -74,12 +74,15 @@ class EmlParser(object):
         for key, msg in mbox.items():
             try:
                 charset, text = EmlParser.get_one_charset_payload(msg)
-            except:#case where charset is None, broken stuff
+            except:  # case where charset is None, broken stuff
                 continue
             try:
                 text = text.decode(charset, errors='replace')
             except:
-                text = text.decode('latin1', errors='replace')
+                try:
+                    text = text.decode('latin1', errors='replace')
+                except:  # case where text is None, broken stuff
+                    continue
             mail_dict = dict()
             mails[key] = mail_dict
             mail_dict['email_text'] = text
@@ -124,9 +127,15 @@ class EmlParser(object):
         flag = 0
         link = ''
         for line in content.splitlines():
+            # some mails contain corrupted changed links because of some outlook shit that happened
+            # during the second half of october 2017. Detect and skip them.
+            if re.search('safelinks\.protection\.outlook\.com', line):
+                flag = 0
+                break
+
             # in rare cases link is on the same line
             m = re.search('Voir la description complète du poste sur (https?:\/\/(www.)?sfbi.fr(\S+))', line)
-            if m is not None :
+            if m is not None:
                 flag = 1
                 link = m.group(1)
                 break
@@ -146,7 +155,8 @@ class EmlParser(object):
             if dic['category'] == 'formatted':
                 text = dic['email_text']
                 http_link = self.__extract_link(text)
-                link_list.append(http_link)
+                if http_link is not None:
+                    link_list.append(http_link)
         # there are duplicate mails, that give undesired duplicated links in the final list.
         uniq = Counter(link_list)
         uniq_link_list = list(uniq)
