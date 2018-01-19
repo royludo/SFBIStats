@@ -19,8 +19,8 @@ This project aims to:
 
 The data come from the [Société Française de Bioinformatique (SFBI)](http://www.sfbi.fr/), an association who, among other activities, gathers job
 offers and posts them on their [website](http://www.sfbi.fr/recherche_emplois) and mail list.
-You will find here information related to more than 2000 job offers that have been posted from april 2012 onward.
-The data will be updated regularly (every 2-3 months).
+You will find here information related to more than 2500 job offers that have been posted from april 2012 onward.
+The data will be updated regularly (every 4-5 months).
 
 This project concerns data of french origin, and was essentially destined for the french bioinformatics community. 
 English has been used for the code, but the output charts are in french.
@@ -157,6 +157,9 @@ about it. We will happily accept any kind of contribution to this project!
  - provide an interface to visualize the data dynamically, maybe with plotly/dash
  
 ## 6. CHANGELOG
+
+19/01/2018
+ - job update
 
 27/07/2017
  - job update
